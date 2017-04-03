@@ -176,13 +176,13 @@ body {font-size: 120%}
 Javascript:
 
 function <name> () {
-    <func body>
+    <function body>
 }
 
 or 
 
 var <name> = function () {
-    <func body>
+    <function body>
 }
 
 Function scopes:
