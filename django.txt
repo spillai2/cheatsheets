@@ -1,0 +1,89 @@
+Django steps:
+1) django-admin startproject portaladmin
+    Creates the project portaladmin
+        Creates a subdirectory with the same name within the main directory. The subdir contains project specfic files like settings.py. Main contains manage.py
+        (Older versions do not create the subdir. The project files like settings.py are directly withing the main directory along with manage.py)
+        
+2) python manage.py runserver 10.20.82.10:8000
+    Runs the development server, if IP specified the server can be accessed from other servers, otherwise it is localhost access only.
+    Access as http://10.20.82.10:8000/interface/
+   
+3) python manage.py startapp interface
+    Creates the app interface within portaladmin
+        The logic is that there can be multiple 'apps' within the same project. App specific files like views.py, urls.py etc are in the app directory. If the app requires database access, enter database credentials in settings.py, which is in the project dir since it is for the entire project.
+        ###
+        eg. to access a MySQL db
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+                'NAME': 'portal',                      # Or path to database file if using sqlite3.
+                'USER': 'portal',                      # Not used with sqlite3.
+                'PASSWORD': 'portal',                  # Not used with sqlite3.
+                'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+                'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+            }
+        }
+        ###
+        
+4) Creating a view
+    Edit file <app>/views.py to either directly add a message or point to an html file to display
+    
+    ###
+    def somemethod(<http request>):
+        <abstract data structure> = <result of some logic>
+        return render(request, <path to html file>, <adt>)
+    ###
+    
+    Then for mapping urls edit both the app's url.py and the projects url.py. The project's url.py simply includes the app's url.py, mapping the app to its urls file.
+    
+    ### apps url.py, format is <url pattern>, <method to call>, <controller>
+    from django.conf.urls import *
+    from interface import views
+
+    urlpatterns = patterns('',
+        url(r'^$', views.user_login, name='index'),
+        url(r'^register/$', views.register, name='register'),
+        url(r'^login/$', views.user_login, name='login'),
+        .
+        .
+        ) # 
+     ###  
+     
+    ### project urls.py
+    urlpatterns = patterns('',
+        url(r'^admin/', include(admin.site.urls)),
+        url(r'^interface/', include('interface.urls')), # includes the project urls file
+        )
+    ###
+    
+    Older versions use packages django.conf.urls.defaults whereas newer ones use django.conf.urls
+    
+5) To add templates and static files (css, js etc)
+    Create a templates and static directory inside the main project dir. Then create app subdirs within those main dirs.
+    Edit settings.py to dynamically fetch the path to the templates and static directories (os.path.abspath for older versions)
+    Create template (html) files
+    Update views function (index for eg.)
+    
+    
+The final directory structure is as follows:
+
+    portaladmin
+        #sub dirs as follows
+        portaladmin
+            #general project files like
+            settings.py
+            urls.py
+        interface
+            #app-specific files like
+            views.py - controller logic methods with each method mapped to a template file
+            urls.py  - URL names mapped to corresponding controller method   
+            models.py - database classes that correspond to db tables
+        static
+            #general
+            all css, js and image files
+        templates
+            #sub dir app
+            interface
+                all the html template files for that app
+        manage.py
+       

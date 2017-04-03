@@ -1,0 +1,153 @@
+Eclipse steps:
+1) Create a new project (File->New->Java project) and give it a name. Everything goes inside the project. Eclipse creates bin and src folders within the project folder for the compiled classes and the source code respectively. It will also create a JRE folder that will contain all the libaries required for the JVM to run (as .jar files).
+
+2) Create a new class (File->New->Class) and give it a class name as well as 'package' name. Packages in Java are used to better organize multi-file projects and for data protection. It’s not unusual for a project to have several hundreds of Java classes. Keeping them all in one directory is never a good idea. Hence the files will be located in various directories and sub-directories. Java developers use so-called reverse-domain name conventions. Let’s say you work on a project called Sales for a company called Acme, which has an Internet site at acme.com . Then every package name will start with the reverse URL of the company, followed by the project name: com.acme.sales. All Java classes that belong to this package would be stored in the following directory structure: com/acme/sales. If some of the Java classes are specific to domestic sales, while others are used in international sales, you will create two more sub-directories: com/acme/sales/domestic and com/acme/sales/international. 
+
+Also, check off the box to generate the main method. When 'Finish'ed, you will end up within the block of code for the main method:
+
+public static void main(String[] args) {
+    ....
+}
+
+public - any external class can access this method
+static - you don't need to instantiate an object to use this method
+void - no return value
+main - name of the method
+ 
+3) Write code eg. (within main)
+
+    System.out.println("Hello world");
+    
+Saving the code automatically compiles it and generates a class file. Clicking the green 'Run' button executes the class file.    
+
+Real world applications have multiple classes each representing one workflow in the process. For example an app to calculate taxes will have multiple classes - one for calculating tax, one for the customer, one for forms etc. None of them are executable - for that you need one which contains a main method. That class should be able to create an instance of the main tax class.
+
+**********
+switch statement:
+
+switch (<variable>) {
+    case <one possible value of variable>:
+        <do something>
+        break;
+    case <another possible value>:
+        <do something>
+        break;
+    case <another possible value>:
+        <do something>
+        break;
+    default:
+        <do something>
+} 
+**********
+
+Inheritance
+Create a new class based on an existing class
+
+class class2 extends class1 {
+    <Add something that doesn't exist in class1>;
+}
+
+class2 (subclass) has all features of class1 (superclass) plus anything new that is added specifically for it. The subclass will have access to all variables and methods in the superclass except those defined as private. To use the sublcass, the main method should instantiate it, not the superclass. Methods from both the super and sub classes are then accessible.
+
+Method overriding:
+A method with the same name in the sublcass overrides the method in the super class.
+
+Method overloading:
+Having a class with more than one method having the same name but different argument lists. Methods can also be overloaded in descendant classes. Eg. a class LoanCalculator can have a method calcPayment that takes 3 args and its subclass MyLoanCalculator can have a calcPayment that take 3 args.
+
+Constructor:
+Special class method for creating an instance of a class. If one doesn't exist in the class, Java automatically creates a no-argument constructor for it. This method has the same name as the name of the class. Typically, a constructor will take a set of arguments that it uses to initialize some class variables. Once a constructor with args is defined, the args will need to be passed at instantiation.
+
+Keyword 'super':
+Used to call the original ancestor method when it is overridden in a child class.
+
+Keyword 'this':
+refers to an instance of the class from its own method. For eg. a constructor can set some class variables using this. 
+this.grossIncome = 50000;
+when a class has several overloaded constructors with different numbers of arguments, 'this' can be used to call a specific version. For eg. a constructor that accepts 2 args can call from within it, a constructor that accepts 3 args.
+
+Three key features of OOP: Inheritance, Encapsulation and Polymorphism
+
+Java packages help organize class files (since there will be many of them for a real-world project) meaningfully. Reverse-domain is the naming convention followed. To place a class file in a package, add the package statement at the beginning of the class:
+for eg.
+package com.acme.accounting
+class Tax {
+    .......
+}
+
+Java provided classes are also organized into packages. eg. java.lang.double (java.lang is the package). To create an instance of a java provided class:
+
+import java.net.URL;
+URL myURL = new URL("http://www.acme.com");
+
+if you need to import several classes from a package:
+import java.net.*
+
+java.lang is imported by default (only package to do so), so no need to explicitly import it in code.
+
+Encapsulation:
+Ability to hide and protect data stored in objects.
+
+Access levels:
+private - most restrictive, methods and variables accessible only within the class
+package - default, classes located in the same package can access
+protected - visible from current class and subclasses
+public - accessible from everywhere
+
+variables, methods and classes declared as 'final' cannot be modified/overriden in subclasses.
+
+'Interfaces' contain method signatures that can be 'implemented' by classes. It is a way of imparting structure/rules for different developers working on the same project. Interfaces can also contain 'final' declarations of variables.
+
+'Object' is the super class of all classes. Objects can be declared as their own specific class or any super class that they belong to (called upcasting). If upcasted, the object will have access to fewer variables and methods (only super class methods/variables). One reason to do this is to be able to create data structures like arrays with a mix of objects (sub classes) which is possible if declared as a super class. 'Downcasting' refers to turning an object into a lower/sub class - done by:
+(subclass) object.
+
+Example implementing interfaces: pay raises for employees and contractors
+1) An interface 'Payable' that defines one function 'increasePay' that returns a boolean and takes as argument the percent of increase asked for.
+2) A Person class that takes (in the constructor) the name of a person and assigns to a private variable and a method getName that prints out the name - simple.
+3) Two classes Employee and Contractor that extends Person and also implements Payable. As Person, these subclasses take a name in the constructor - but assigns it to parent class (using 'super'), also implements the method 'increasePay' that it gets from Payable. It prints out what percent the increase is.
+4) A class with the main method - creates a Person array but adding elements that are either Employee or Contractor (can do that since it is defined as Person, which is a super class of both), loops through it and depending on if it is an Employee or Contractor (using instanceof), requests 'increasePay' of the respective class.
+
+Abstract classes: Classes that cannot be instantiated. Define method signatures here 
+
+Polymorphism - key feature of OOP. The same method is implemented differently in different classes - you can call the same method for each object, which one to call is automatically figured out without the programmer having to check for type of object. Method signatures are defined in the parent abstract class or in an interface and the methods themselves are in the sub classes. Choice of abstarct class vs interface depends on how similar the subcalsses are. If they are very similar, better to define in a parent abstract class. If they are not very similar and hence can't extend the same parent class or they already have another parent class, go with interfaces.  
+ 
+GUI:
+Swing - GUI library. Platform independent.
+Swing classes are all in javax.swing, which can be extended in many ways.
+
+Simple window with title and border can be done with one of these classes - JFrame which is a container that can hold UI controls like buttons etc. Instantiate the container first and add UI elements to it. Swing comes with layout managers that will help arrange all these controls appropriately.
+
+Here is the workflow:
+
+1) Create a JPanel
+JPanel jp = new JPanel();
+
+2) Assign a layout manager
+FlowLayout fl = new FlayLayout;
+jp.setLayout(fl);
+
+3) Instantiate some swing controls and add them to the panel (eg. for a simple calculator adding two numbers)
+JLabel label = new JLabel("First number:");
+JTextField field = new JTextField(10);
+JButton go = new JButton("Add");
+jp.add(label);
+jp.add(field);
+jp.add(go);
+
+4) Create the top level container and add the panel to it
+JFrame frame = new JFrame("My first calculator");
+frame.setContentPane(jp);
+
+5) Set the frame's size and make it visible
+frame.setSize(400,100);
+frame.setVisible(true);
+
+Another layout manager is GridLayout, which partitions the window into rows and columns as defined at its creation.
+GridLayout gl = new GridLayout(4,2); // will create 4 rows and 2 columns and arrange elements along it.
+All cells have the same size.
+
+Different layouts can be combined in one frame.
+
+Other layouts are BoxLayout, GridBagLayout, CardLayout (tabbed view - where when a tab is clicked, the content of the window changes to )
+
+BorderLayout divides the container into 5 areas - north, south, east, west and center.

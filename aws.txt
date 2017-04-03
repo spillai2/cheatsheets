@@ -1,0 +1,164 @@
+Multiple services under different category headers:
+Compute, Developer Tools, Analytics etc.
+New services are added all the time.
+
+Critical services to know:
+AWS Global Infrastructure
+Networking and Content Delivery
+Compute
+Storage
+Databases
+Security & Identity
+Management Tools
+Messaging
+Desktop and App Streaming
+
+1) AWS Global Infratsructure
+The physical infrastructure on which AWS runs - classified into regions and availability zones.
+Globally 14 regions and 38 availability zones - 2016
+More planned to be added in 2017
+A region is a geographical area that consists of 2 or more availability zones.
+An availability zone is simply a Data Center. Availability zones in a region will be close to each other, but not dependent on each other. Kind of like a backup, hence at least 2 AZs in a region.
+
+Edge locations are CDN End Points fro CloudFront. CDNs cache large data files in data centers making them easily available. The first time a large data file is accessed from a remote location, it has to travel all the way - but the next time another user from the same region accesses the same file it will be cached locally. 66 Edge locations in 2016.
+
+North America has 5 regions, the largest in the world
+
+2) Networking and Content delivery:
+VPC - Virtual Private Cloud (virtual data center) Very important for exam.
+Route53 - Amazons DNS server. 53 is the DNS port.
+CloudFront - part of CDN.
+Direct Connect - dedicated connection to AWS (for security, pushing large data sets etc).
+
+3) Compute:
+EC2 - Elastic Compute Cloud, Virtual machines on the cloud 
+EC2 Container Service - scalable container management service that manages Docker containers.
+Elastic Beanstalk - If you know nothing about AWS and you want to run your app, you can upload your app into this, it takes care of everything.
+Lambda - serverless, upload code and it responds to events.
+Lightsail - out of the box service.
+
+4) Storage:
+S3 (simple storage service) - virtual disk in the cloud to store objects (files). Not used to install and app. Dropbox used it first.
+Glacier - archive files when instant access is not needed. Low cost, take 
+EFS - Elastic file servers, block-based storage, install dbs apps etc and share with multiple VMs
+Storage Gateway - install on premises, communicate with S3
+
+5) Databases:
+RDS - Relational database service (MySQL, Postgres, Oracle, SQL server etc.)
+DynamoDB - NoSQL scalable DB
+Redshift - Data warehousing solution
+Elasticache - caching your most frequently accessed data
+
+6) Migration services:
+Snowball - Tool/appliance for migrating terabytes worth of data. Do it yourself and send to Amazon. Snowball Edge can be used to have AWS on premises.
+DMS - database migration services. Migrate dbs to the cloud. It handles all the data transfer. Supports all major DBs.
+SMS: server migration services, to migrate VMs/serves onto the cloud.
+
+7) Analytics:
+Athena: allows running SQL queries on S3 (CSV files, JSON files etc), turns your flat files into databases
+EMR - elastic map reduce, to process large amounts of data using Hadoop.
+Cloud Search - search capabilities to your web app
+Elastic Search - same, but based on open source
+Kinesis - streaming and analyzing real time data, financial data etc
+Data Pipeline - service that allows data from one place to another.
+Quick Sight - business analytics tool
+
+8) Security and Identity:
+IAM - Identity Access Management. Fundamental entity in AWS.
+Inspector - Agent you install on your VMs.
+Certificate Manager - free SSL certificates
+Directory Service - connect an AD to AWS
+WAF - Wen Appln Firewall. Appln level support to your app (SQL injection, cross-site scripting)
+Artifacts - Compliance documents
+
+9) Management Tools:
+CloudWatch - Monitor how your apps are doing, CPU , disk usage etc.
+CloudFormation - Turning infrastructure into code instead of physical hardware like firewall etc. Very important.
+CloudTrail - auditing changes to AWS environment.
+Opsworks -
+Config - automatic monitoring of your envnt.
+Service Catalog
+Trusted Advisor - optimization, security fixes etc
+
+10) Application services:
+Step Functions - what is going on inside your app
+SWF - Simple workflow services, coordinating your requests with what needs to be dono your AWS accounte
+API Gateway - create, publish, maintain your apps
+AppStream - streaming desktop apps to clients
+Elastic Transcoder - changes video formats to suit device
+
+11) Developer Tools:
+CodeCommit - Github, store code in the cloud
+CodeBuild - compiling code
+CodeDeploy - deploy to your EC2 instance
+CodePipeline - keep track of diff versions of your code
+
+12)Misc
+Mobile Services:
+Mobile Hub
+Cognito
+Device farm
+Mobile Analytics
+Pinpoint
+
+Business Productivity:
+
+IoT:
+Devices to communicate and share data amongst themselves
+Desktop & App Streaming:
+Workspaces - Desptop in the cloud
+AppStream
+
+Artificial Intelligence:
+Alexa - voice recognition service
+Polly- text to speech service
+Machine Learning
+Rekognition - pic and facial recognition
+
+Messaging:
+SNS
+SQS
+SES
+------------------------------------
+Identity access management (IAM)
+Allows you to manage users and their level of access to the AWS Console.
+Gives you centralized access of your AWS account.
+Shared Access to your AWS account.
+Users, Groups and Roles
+Policies (defined in JSON) can be applied to all three
+.
+.
+.
+------------------------------------
+Storage:
+S3 Simple Storage Service
+Object based storage - flat file storage as opposed to block based, which is used for servers/databases etc. 
+Cloudberry provides windows explorer like interface to S3
+Files can be 0-5TB in size, stored as buckets
+Buckets must be named uniquely
+Bucket has an URL assocaited with it usually of the format https://s3-<dns depending on amazon region>/<bucket name>
+Once you have the URL you can upload the file and get an http response code that tells you if your upload was successful
+
+Data Consistency in S3
+- Read and Write consistency for PUTS of new Objects: you can read the object right away 
+- updates might take a short while to propagate - you will get either the new version or the old, not partial ones - called atomic)
+
+Object based storage, key-value store
+- key is the name of the object and value is the data itself
+- Version ID (for versioning)
+- Metadata (Data about the data you are storing)
+- Subresources
+    - access control lists (who can access)
+    - Torrent
+
+99.9% availability, 99.9999...% durability
+Tiered storage
+Lifecycle management (upto 30 days at one place, then move elsewhere and after 90 days archive)
+Encryption
+
+Storage Tiers
+S3 - stored across multiple facilities
+S3-IA - Infrequently accessed data, lower fee than regular S3, but charged a retrieval fee
+Reduced Redundancy Storage - eg.thumbnail storage
+Glacier - Very cheap, used only for archival only, takes 3-5 hrs to restore
+

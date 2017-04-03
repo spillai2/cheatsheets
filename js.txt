@@ -1,0 +1,573 @@
+REST - Representational state transfer - resource based
+Uniform interface
+Stateless
+Client-server
+Cacheable
+Layered system
+Code on demand
+
+Resource based - nouns/things instead of verbs/actions. Call an URI to dictate operation, with http doing the operation. Resources identified by the URIs. Multiple URIs can refer to the same resource.
+
+Representation - how resources get manipulated in a request.Resource provides the representation to the caller based on the request. Representations are usually JSON or XML. In other words results are returned in JSON or XML format.
+
+Eg.
+Resource - person (Sanjeev)
+Service/request - contact info (GET)
+Representation - JSON or XML format eg. { name: Sanjeev, address:xxxx, phone:xxx}
+
+Uniform interface:
+simplifies client-server interaction.
+HTTP verbs like GET, POST, PUT, DELETE
+Resource names in terms of URIs
+HTTP response - result we get back
+
+Stateless:
+Server contains no client state. All info needed is part of the message (the http verbs and the URI)
+There are services that are designed in a RESTful manner (like Oauth), which contain state.
+
+Client-server:
+Disconnected - the client may not have a direct connect to assets on the server like a database
+
+Cacheable:
+Server responses are cacheable (explicitly or implicitly).
+
+Layered system:
+Multiple layers, there could be software, hardware or middleware intermediaries - client doesn't know where the request is going or about the layers, just how to request (API) and the nature of what it gets back. Improves scalability.
+
+Code on demand:
+server extends client by sending over logic and having it execute on the client. eg. javascript or java applets
+
+The HTTP request has 5 parts:
+1) Verb (GET, POST, PUT, DELETE etc)
+2) URI - URI of the resource on which the operation is performed
+3) HTTP VERSION, mostly v1.1
+4) Request Header - key/value pairs that contain details like client type, formats client supports, cache settings etc.
+5) Request Body
+
+HTTP response has:
+1) HTTP version
+2) Response code
+3) Response header
+4) Response body
+
+Each resource should have its own URI (at least one). The service uses the URIs to to address its resources. The job of the URI is to identify a resource and tie it to the request. It is the verb that does the actual operation.
+
+Common HTTP responses: 200 - ok, 404 - not found, 403 - forbidden, 500 - Internal Server Error
+----------------------------------------------------------------------------------------------
+
+Web front-end frameworks:
+3 tier architecture:
+Presentation layer - how the interface is presented to the user (HTML, CSS, Javascript)
+Business logic layer - data validation and processing (implemented in programming languages like ASP.NET, Python or Java)
+Data access layer - database for storage, API for data access (DBMS like oracle/MySQL)
+
+A recent trend is to implement the full stack (all three layers above) in a single language like Javascript
+1) Front end will be implemented in a javascript framework like AngularJS
+2) Server in NodeJS 
+3) Database in MongoDB
+A REST API delivers content from the server to the client
+
+Front end UI framework - Bootstrap
+Collection of ready to use HTML, CSS and JS templates for components of a web page - like forms, buttons, tables etc.
+Goal: responsive web design regardless of browser or device used (mobile is becoming very popular) with a consistent look and feel
+first designed by a couple of Twitter employees in 2011 for internal used and then made open-source.
+CDN - content distribution network.
+'min' in the file names of bootstrap files stand for minified
+
+Enclose all the content of the page in a 'container' class eg. <div class='container'>...</div>
+class='row' helps divide the content into rows
+rows must always be contained in rows
+class='jumbotron' for showcasing key content
+possible for jumbotron to have its own container so that the content will span the entire webpage
+
+'viewport' enables us to identify the attributes of the device that is loading the webpage and adapt the code accordingly.
+<meta name='viewport' content="width=device-width, initial-scale=1">
+
+Responsive
+Mobile first
+Fluid
+
+Each row is divided into 12 equal columns (grid system). You cna have your contents to occupy any number of these 12 columns. For eg.
+
+<div class='row'>
+    <div class='col-sm-5'>
+content of the second class occupies the first 5 columns. 'sm' is one of the 4 different classes provided by bootstrap to target different devices - 'xs', 'sm', 'md' and 'lg'
+----------------------------------------------------------------------------------------------
+<!doctype = html>
+<head>
+<meta charset='utf-8'>
+<title>...</title>
+</head>
+
+Block level elements create a new line by default, Inline level elements dont (and can be contained within BLEs)
+div and span:
+div is the most generic BLE, while span is the most generic ILE. A BLE (flow content) cannot be inside an ILE (phrasing content)
+
+HTML5 heading tags: <header>, <article>
+
+Characters to be escaped always: <, >, & (use &lt;, &gt;, &amp; instead)
+
+HTML defines the structure of the content - CSS defines the presentation (UX)
+
+CSS rule:
+p {color: blue;}
+p is the selector and inside the curly braces are are the property:value pairs.
+Stylesheet is a collection of these CSS rules (in a file)
+Can be specified in the HTML file itself with a <style> tag in the <head> tag.
+
+Different selectors:
+1) element: eg.<p> p { color: blue }- only the element is affected
+2) class: .blue {color: blue}. Class name starts with a dot. To implement, the class has to be called as an attribute in HTML. eg. <p class=blue> (leave out dot)
+3) id: starts with #. Refers to an id within the HTML document. eg. #name { color: blue } refers to <div id='name'>...</div> in the document.
+
+CSS lets you group multiple selectors into one rule-
+div, .blue {
+    color: blue
+} 
+applies the color blue to all divs and the blue class.
+
+ids are unique, can only apply it once in a document.
+
+combining selectors:
+eg.
+p.big{font-size:20} //select all p's with a class attribute 'big'
+
+child selector:
+article > p {...} //read left to right, every 'p' element that is a direct child of (within) an article will be affected by the rule - all other p elements including ones that are within article but not a direct child will be unaffected.
+
+descendant selector:
+article p {...} // every p element that is within an article element, direct child or not (hence descendent)
+
+Also, doesn't need to be a selector, can be a class or id:
+.colored p{}, article < .colored{} etc.
+
+In those cases where the above rules are not sufficient - for eg. styling a page based on user interaction, we use pseudo-class selectors. Format:
+selector:pseudo-class{}
+eg. of pseudo-class selectors - link, visited, hover, active
+a:link, a:visited {}
+a:hover, a:active {}
+n-th child helps you target a specific element:
+header li:nth-child(3) {} // targets the 3rd li element within the header 
+
+<link rel="stylesheet" href="styles.css">
+
+styles can also be added directly to a given element eg. <p style='text-align: center'>. Called inline styling.
+
+Cascade algorithm - how to use styles coming from different sources
+Concepts:
+origin, merge, inheritance, specificity
+origin - when in conflict the last declaration wins.
+merge - Declarations merge when targeted at the same element and when not in conflict. For eg. if a certain color and background are set to a <p> element and later on the color is changed to something else, the background will stay the same as there is no conflict.
+inheritance - when a property is specified for an element, all its child elements in the DOM tree will inherit that property.
+specificity - selector with the highest 'score' wins. For eg. spcifying a style attribute in the element itself takes precedence over other declarations.
+style, ID, class/pseudo-class, number of elements in that order
+for eg.
+div #myp { color:blue } vs div.big p { color:green }
+First one gets a score of 0101 (0 for style, 1 for ID, 0 for class and 1 for element) and the second gets 0012. So first one wins.
+A low score can still win when a !important attribute is added to the rule.
+
+Styling text - main properties used are 1) font-family (Ariel etc) 2) font-style (italic etc) 3) color 4)font-weight 5) font-size (in pixels, like 16 px default)
+6) text-transform (eg. capitalize, lowercase, uppercase etc) 7) text-align
+
+relative styling eg. 
+body {font-size: 120%}
+----------------------------------------------------------------------------------------------
+
+Javascript:
+
+function <name> () {
+    <func body>
+}
+
+or 
+
+var <name> = function () {
+    <func body>
+}
+
+Function scopes:
+1) Global - variables and functions defined here available everywhere
+2) Lexical - vars abd funcs (func within func) available only within the function
+
+Each function invocation creates an Execution context which has the following components:
+    1. Its own variable environment
+    2. Special 'this' object
+    3. Reference to the outer environment within which he function is stored (global has no outer environment since it is the outermost environment)
+
+Scope chain: variable searched for in its current scope first, then outer scopes until global. If not found anywhere it is left as undefined
+
+Built in data types:
+7 types: 6 primitive and one object
+Object is a collection of key-value pairs
+Primitive - single immutable value eg. Boolean, undefined, null, number (only numeric data types, double precision 64 bit float, no integer type in JS), string, symbol (new type released in 2015, not really used)
+
+var x= 4, y=5 //can assign multiple variables with one 'var'
+
+Equality === ensures that the types compared are the same (== does not and can compare a string to a number for eg.)
+
+object type -
+var company = new Object(); // Object instantiated
+company.name = 'Novartis';
+
++ does string concatenation eg. console.log('The name of the company is ' + company.name)
+
+object attributes can also be accessed with the bracket notation - eg. company['name']
+
+Object literal - 
+var Novartis = {
+    name: 'Novartis'
+    ceo: {
+        name: 'Sanjeev',
+        favcolor: 'Blue'
+    },
+    stock: 110
+};
+
+The value of a key within an object can be another object (nested as many times as we want)
+
+Functions are first-class data types: meaning you can do whatever you do with a variable or object with a function. For eg. you can assign an attribute to a function.
+
+Passing arguments by value as opposed to by reference: when passed by value, the original value stays the same. when passed by reference the original value changes since it is pointing to a reference location.
+
+'this' in the function execution context refers to the global window object that the function is running in.
+'prototype' is a way to create a function for a general object
+
+var arr = new Array()
+
+Closures:
+When an inner function is returned, JS preserves its outer lexical environment in its memory space - so arguments passed to the outer function are preserved even if the function itself has gone out of scope.
+
+Fake Namespaces: Create objects to separate function namespaces that might otherwise overlap due to common variable names.
+
+Immediately Invoked Function Expressions (IIFEs): where you have a () after a function declaration, which means the function will also be executed at the same time as it is declared.
+
+To include a JS script in an HTML document:
+<script src='<path to js file>'></script>
+-------------------------
+
+DOM manipulation:
+Based on the tree structure of an HTML document. Each point is a node, either an element node if it contains an HTML tag or a text node if it contains text. Element nodes can contain text nodes. These nodes can be manipulated by JS. The 'document' object contains the entire HTML page (contained within the 'window' object) eg. window.document. The document object is our stepping stone to get inside and access individual elements of an HTML page. 
+
+Fetching an id:
+document.getElementById('<id>')
+
+To assign a task to a button:
+<button onclick=sayHello()>...</button>
+
+Simple task - get an input value that is typed into a box in the HTML page. For eg. clicking a button (as above) after entering something in a text box next to it will output the entered value on the browser.
+
+function sayHello () {
+    var name = document.getElementById('<id of the input box>').value; // get the value entered in the text box
+    var message = "Hello " + name + "!"; // create a message to display
+    // output into a pre-declared div
+    document.getElementById('<id of the div>').innerHTML = message; // innerHTML allows you to output content directly into the HTML at a specific ID. 
+}
+
+To select and change a CSS selector:
+var title = document.querySelector('h1').textContent; // getter - will select the first <h1> tag in the page and fetch its value with the textContent method
+title += "Add something more ";
+document.querySelector('h1').textContent = value; // setter - sets the new value to the h1 tag
+
+--------------------
+To add a node to a page after fetching what is typed in a form:
+
+HTML:
+<form action='#'>
+<textarea id=textArea rows=5 cols=30></textarea>
+
+JS:
+window.onload=initAll;
+
+function initAll() {
+    document.getElementByTagName('form')[0].onsubmit = addNode;
+}
+
+function addNode {
+    var inText = document.getElementById('textArea').value;
+    var newText = document.createTextNode(inText);
+    var newp = document.createElement('p');
+    newp.appendChild(newText)
+    var docBody = document.getElementByTagName('body')[0];
+    docBody.appendchild(newp);
+    return false;
+
+}
+
+To delete nodes:
+docBody.removeChild(node)
+replaceChild() - to replace
+--------------------
+
+Handling events:
+event handlers bind functions to certain events (like a mouse click 'onclick' or a mouse over 'onmouseover')
+The event can be defined in the HTML itself (as with the button element above) - but that brings behavior into HTML that is supposed to be only for content. Also, a 'this' inside the function points to the window.
+
+A better way is to defined it within JS itself:
+
+document.querySelector('button').onclick = sayHello // setting the onclick property of the button object to the value of sayHello
+document.querySelector('button').addEventListener('click', sayHello) // adds an event listener to the button and says on seeing the click event, execute sayHello
+ 
+addEventListener can also be defined at the document level with parameter 'DOMContentLoaded' and then have specific even functions defined inside it:
+
+The 'event' argument:
+is passed on to all event listening functions. There is a whole list of events.
+
+Adding nodes (add a new paragraph):
+var inText = document.getElementById("<id>")
+var newText = document.createTextNode(inText)
+var newP = document.createElement("p")
+var newNode = newP.appendChild(newText)
+var body = document.getElementByTagName("body")[0]
+body.appendChild(newNode)
+
+The function createTextNode() creates a new text node that can be appended. createElement() creates a new element node. The text node can then be appended to the element node and the new element node can then be appended to the body all using the function appendChild(). Names are self explanatory.
+
+To delete nodes:
+last 'p' node
+var allps = getElementsByTagName('p')
+var last = allps.item(allps.length - 1)
+var body = document.getElementByTagName("body")[0]
+body.removeChild(last)
+
+removeChild() deletes the node.
+insertBefore() inserts next before a specific element.
+replaceChild() replaces a node with another
+
+Object literal mode:
+in standard procedural mode you attach properties to object as follows:
+var instance = new Object;
+instance.prop1 = 'value1';
+instance.prop2 = 'value2';
+
+in object literal mode, it becomes (similar to CSS):
+
+var instance {
+    prop1: 'value1',
+    prop2: 'value2'
+    afunc: function() {
+       <do something>
+    }
+}
+
+------------------
+
+HTTP basics:
+HTTP is the language/protocol that the client uses to communicate with the browser.
+Hyper Text Transfer Protocol - request/response stateless protocol
+
+URN - Uniform Resource Name (does not tell us how to get the resource)
+URI - Uniform Resource Identifier eg. official_web_site/index.html
+URL - Uniform Resource Locator - also tells you how to get the resource eg. http://mysite.com/official_web_site/index.html
+
+HTTP Request Methods:
+GET - the data is passed as part of the URI
+POST - data sent as part of the message body, not the URI (and it will be processed or stored at the server)
+
+AJAX - Asynchronous Javascript and XML (but XML is hardly used, instead it is usually plain text or JSON)
+Traditional web pages send requests to the server and based on the response generates a new page even if contents are mostly the same. In AJAX the request is made by javascript and it fetches just the data that needs to be refreshed and inserts into the web page without regenerating the whole page. Leads to much faster response and uses much less bandwidth.
+
+Synchronous - one instruction executed at a time vs Asynchronous - multiple instructions at the same time. When an Ajax request is made to the HTTP Requester as part of some JS code, the JS will continue executing without waiting for the response to the AJAX request. Along with the request a JS response handler function is also passed which will handle the response when available, while the rest of the code executes.
+
+Good to separate out ajax functions into a separate js file. In the html file load the ajax.js file first and then a regular js file that calls functions in the ajax file. The ajax file is an IIFE that accepts the 'window' arugument. Within it an empty object is created that you can attach functions to and this object is what is exposed to the outside world (so that the regular js file can call the ajax functions)
+
+var ajaxUtils = {};
+
+//Get an HTTP request object (doesn't need to be attached to ajaxUtils since we dont want this available outside):
+function getRequestObj {
+    if (window.XMLHttpRequest) { // available on browsers that support Ajax, XMLHttpRequest is the most important - most current ajax object available
+        return (new XMLHttpRequest());
+    }
+}
+
+Next is the worker function that can be called from outside (other js file) and that needs to be attached to the ajax object:
+ajaxUtils.sendRequest = function (requestURL, responseHandler) {
+    //Use the request object to make a request in the main function:
+    var request = getRequestObj();
+    request.open(GET, requestURL, true); //true for asynchronous
+    request.send(null); // for POST, pass parameters instead of null
+
+    request.onreadystatechange {
+        function() {
+            handleresponse(request, responseHandler);
+        }
+    }
+}
+
+global.$ajaxUtils = ajaxUtils; // exposes the ajax object to the outside world
+
+In the general js file:
+
+document.eventListener('DOMContentLoaded', 
+    function (event) {
+        document.querySelector('button').addEventListener('click', function () {
+            ajaxUtils.sendRequest('path to file that contains data we need', function (request) { // first argument is the request, second is responsehandler
+                var something = request.responseText;
+                <do something with var something, like print it out into a div in the HTML>;
+            )}
+        }
+)
+
+Processing JSON (Javascript Object Notation) 
+Lightweight data interchange format, simple text representation, great for passing data from server to client
+Same as the object literal format except that the property names and string values must be in double quotes
+JSON is not a JS object though they look the same - one needs to be converted to the other:
+from JSON string to object - var obj = JSON.parse(string)
+other way around - var string = JSON.stringify(obj)
+
+$ in JQuery is the same as document.addEventListener('DOMContentloaded'), so 
+$(function() {...}) is the same as document.addEventListener('DOMContentloaded', function () {...})
+another function of the $ sign is to act as a query selecto for eg. $('#navbar').onblur is the same as document.queryselector('#navbar').addEventlistener('blur')
+
+The following function will hide a collapsable menu (collapses when screen width falls below a limit), when mouse clicks outside the expanded menu
+
+$(function() {
+    $('#navbar').onblur ( function(event) { // when id navbar blurs
+        var screenwidth = window.innerWidth;
+        if (screenwidth < 768) {
+            $("#collapsable-nav").collapse('hide'); // hide the id collapsable-nav
+        }
+    });
+})
+
+SPA: Single page application
+Minimal display on first invocation. Have empty divs in the main html file that will hold the main content, which in turn is stored in other html files. In the JS file, a function that call the content is made available to the global environment.
+-----------------------------------------
+Very basic Ajax setup (say printing out a text file when the user clicks on a link):
+
+//On the html side:
+<script src=ajaxscript.js></script>
+<a id='someid' href="path to text file">Fetch file</a>
+<div id='puttexthere'></div>
+
+//In the js script:
+window.onload = initAll; 
+var xhr = False; //initializing variable for future XMLHttpRequest object
+
+function initAll () {
+    document.getElementById('someid').onclick = getFile; //when link is clicked, call the function that gets the file to display
+}
+
+function getFile () {
+    makeRequest(this.href); // call another function that requests the file and pass the href target (in this case "path to text file"
+    return False;
+}
+
+function makeRequest(url) {
+    if (window.XMLHttpRequest) { // XMLHttpRequest is a browser window property
+        xhr = new XMLHTTPRequest; // create a new XMLHTTPRequest object and assign it to the variable previously declared
+    }
+    
+    if (xhr){
+        xhr.open('GET', url, true); // open the request with parameters, 'true' says asynchronous is true
+        xhr.send(null); //if POST parameters are passed here
+        xhr.onreadystatechange = showContents; // when the response comes back, call function to display text
+    } 
+    else {
+        document.getElementById('puttexthere').innerHTML = "Sorry your browser does not support this feature";
+    }
+    
+}
+
+function showContents {
+    if (xhr.readyState==4) {
+        if (xhr.status = 200) {
+            var outMsg = xhr.responseText; //use 'responseXML if fetching XML, have a function to filter output (also check if not empty by length of nodes)
+        }
+        else {
+            var outMsg = "There was a problem with the request " + xhr.status
+        }
+        document.getElementById('puttexthere').innerHTML = outMsg;
+    }
+}
+-----------------------------------------
+jQuery is a javascript library that provides a lot of code for useful web features as easily usable functions. It is lightweight, with an active development community, follows a plugin architecture, is fast and easy to use.
+
+Basics:
+Load from CDN by saying in the HTML file:
+script src=<url to the CDN's jquery.js>
+
+$(document).ready(function(args) { <do something> }
+ready() is the same as 'onload' in regular js except onload is an event handler that needs to be assigned a function where as ready is a jquery function that expects the function as an argument.
+
+To fetch an an id or an element:
+$("#idname")
+$("a") fetches an anchor tag
+
+$("a").click(function(event) {
+		$("#colorMe").attr("class", $(this).attr("id"));
+		event.preventDefault();
+});
+
+means when the anchor tag is clicked, update the class attribute of the colorMe id with whatever value is fetched from the clicked on tag.
+
+$("a").hover(function() {
+		$(this).css({
+			"color": $(this).attr("id"),
+			"background-color": "silver"
+		});
+});
+
+Modify the css of an element using jquery. In this case, when a anchor is hovered over, its text and background color are changed based on which anchor is hovered over. A 'mouseout' even handling function can be added to restore the defaults.
+
+Autocomplete:
+Very useful feature of jQuery. Eg. autocomplete a field where one is asked to enter one's state
+
+$(function(){
+    var stateList = "Alabama*Alaska*....*Wyoming"; // a string with state names separated by *
+    $("#searchField").autocomplete({
+		source: stateList.split("*")
+	});
+}
+
+Means the id searchField uses the build in autocomplete function which uses as 'source' (which needs to be passed an array) the string above split at *
+
+One of the main reasons for jQuery's success is jQuery UI which it uses to handle common UI elements.
+The UI has functions like 'toggle' (that accepts two functions as arguments for 2 states) that allows a feature to switch between 2 states, for elements like links. It also has functions like 'effect' that can briefly highlight what is new.
+
+Accordian menu:
+use jquery-ui.css, jquery-ui.js and jquery along with your own js file:
+
+$(document).ready(function() {
+    $(<id that refers to the menu>).accordian({
+        animated: false,
+        autoheight: false,
+        header: <class that defines the menu headers>
+    )}
+});
+
+The 'accordian' function does all the work!
+
+Modal dialog:
+$(document).ready(function() {
+	$("#id").dialog({ // the 'id' is the basis of the dialog 
+		modal: true,
+		resizable: false,
+		overlay: {
+			opacity: 0.4,
+			background: "black"
+		},
+		buttons: {
+			"OK": function() {
+				$(this).dialog("close");
+			}
+		}
+	});
+});
+
+Tables: display and sorting
+
+To enable striping of tables:
+$("tr:even").addClass("even"); // changes the color of the even rows based in what the CSS definition of even is
+
+To highlight the row that the mouse hovers over:
+$("tr").mouseover(function() {
+    $(this.addClass('over'); // the row displays whatever is defined for class 'tr.over' in the CSS
+}
+
+To sort tables:
+Not readily available in jQuery, so use a plug-in - say something called 'tablesorter'
+
+$("<id of the table>").tablesorter({
+    sortList: [[1,0]], // applies an ascending sort (0) on the second column (1)
+    widgets: ["zebra"]
+});
