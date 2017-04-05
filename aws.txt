@@ -122,6 +122,7 @@ SES
 ------------------------------------
 Identity access management (IAM)
 Allows you to manage users and their level of access to the AWS Console.
+Multi factor authentication for root account - need multiple devices for security
 Gives you centralized access of your AWS account.
 Shared Access to your AWS account.
 Users, Groups and Roles
@@ -136,7 +137,7 @@ Object based storage - flat file storage as opposed to block based, which is use
 Cloudberry provides windows explorer like interface to S3
 Files can be 0-5TB in size, stored as buckets
 Buckets must be named uniquely
-Bucket has an URL assocaited with it usually of the format https://s3-<dns depending on amazon region>/<bucket name>
+Bucket has an URL associated with it usually of the format https://s3-<dns depending on amazon region>/<bucket name>
 Once you have the URL you can upload the file and get an http response code that tells you if your upload was successful
 
 Data Consistency in S3
@@ -162,3 +163,12 @@ S3-IA - Infrequently accessed data, lower fee than regular S3, but charged a ret
 Reduced Redundancy Storage - eg.thumbnail storage
 Glacier - Very cheap, used only for archival only, takes 3-5 hrs to restore
 
+Creating an S3 bucket is pretty straightforward using the interface. Create bucket, upload file (for eg. a static HTML file).
+Set permissions to public and you can view the file in a browser.
+
+2 types of Permissions:
+1) users - for AWS users
+2) public - for the public
+permissions can be set at bucket level or object/file level  
+
+Versioning - If versioning is enabled at object creation (or later). Change the file and upload again (has to be same file name). It will appear as a single file but will show multiple versions in the version drop down. Not a good idea to upload large files that are frequently updated as each version will bloat the storage. Deleted versions are lost for good, but deleted objects (with all versions present at the time of deletion) can be restored.
