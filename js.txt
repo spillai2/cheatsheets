@@ -235,6 +235,7 @@ Passing arguments by value as opposed to by reference: when passed by value, the
 var arr = new Array()
 
 Closures:
+Functions assigned to a variable that can be passed around as data. Leads to an important feature called memoization.
 When an inner function is returned, JS preserves its outer lexical environment in its memory space - so arguments passed to the outer function are preserved even if the function itself has gone out of scope.
 
 Fake Namespaces: Create objects to separate function namespaces that might otherwise overlap due to common variable names.
