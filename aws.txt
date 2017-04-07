@@ -172,3 +172,8 @@ Set permissions to public and you can view the file in a browser.
 permissions can be set at bucket level or object/file level  
 
 Versioning - If versioning is enabled at object creation (or later). Change the file and upload again (has to be same file name). It will appear as a single file but will show multiple versions in the version drop down. Not a good idea to upload large files that are frequently updated as each version will bloat the storage. Deleted versions are lost for good, but deleted objects (with all versions present at the time of deletion) can be restored.
+
+Cross region replication - S3 buckets can be replicated across regions, but not within the same region. Versioning has to be enabled in bothe the source and destination buckets. Files are not replicated automatically at the time of replication, only at time of updates at the source (at which time all versions are replicated, not just the updated version). You can only replicate to one bucket, not to multiple buckets. Delete markers (which sort of hide the object when deleted) are replicated at the object level. 
+
+Life cycle management:
+Setting up rules to manage the lifecycle of the object after it has been created. For eg. move to 'Infrequently accessed' after 30 days, into 'Glacier' after 60 days and expire in 90 days.
