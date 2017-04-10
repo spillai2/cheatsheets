@@ -415,6 +415,16 @@ JSON is not a JS object though they look the same - one needs to be converted to
 from JSON string to object - var obj = JSON.parse(string)
 other way around - var string = JSON.stringify(obj)
 
+-------------------
+jQuery:
+The $ in jQuery gets you the root jQuery object. 
+So $(<identifier>) will get you that particular identifier, like getDocumentByID.
+$.method() is how you call methods like Ajax calls
+$(document).ready - means grab the root document and when that is ready (document.onLoad?)
+$(document).ready(function{}) - execute function when document is ready
+But jQuery provides a shortcut since document.ready is used everywhere - you can leave it out and say:
+$(function{})
+
 $ in JQuery is the same as document.addEventListener('DOMContentloaded'), so 
 $(function() {...}) is the same as document.addEventListener('DOMContentloaded', function () {...})
 another function of the $ sign is to act as a query selecto for eg. $('#navbar').onblur is the same as document.queryselector('#navbar').addEventlistener('blur')
