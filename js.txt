@@ -423,7 +423,12 @@ $.method() is how you call methods like Ajax calls
 $(document).ready - means grab the root document and when that is ready (document.onLoad?)
 $(document).ready(function{}) - execute function when document is ready
 But jQuery provides a shortcut since document.ready is used everywhere - you can leave it out and say:
-$(function{})
+$(function{}).
+Most important feature is to find any element on an HTML page using CSS selectors. Just embed the element in the object fetched by $. For eg. to fetch every <h1> tag in a page, do:
+$('h1')
+To fetch a class called 'myClass', do:
+$('.myClass') - just as it is defined in CSS
+If multiple elements are returned as is often the case, whatever process/function that follows is applied to all the elements and this is pretty powerful.
 
 $ in JQuery is the same as document.addEventListener('DOMContentloaded'), so 
 $(function() {...}) is the same as document.addEventListener('DOMContentloaded', function () {...})
