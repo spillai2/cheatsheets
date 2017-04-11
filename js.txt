@@ -1,3 +1,15 @@
+HTTP basics:
+HTTP is the language/protocol that the client uses to communicate with the browser.
+Hyper Text Transfer Protocol - request/response stateless protocol
+
+URN - Uniform Resource Name (does not tell us how to get the resource)
+URI - Uniform Resource Identifier eg. official_web_site/index.html
+URL - Uniform Resource Locator - also tells you how to get the resource eg. http://mysite.com/official_web_site/index.html
+
+HTTP Request Methods:
+GET - the data is passed as part of the URI
+POST - data sent as part of the message body, not the URI (and it will be processed or stored at the server)
+
 REST - Representational state transfer - resource based
 Uniform interface
 Stateless
@@ -53,46 +65,10 @@ HTTP response has:
 Each resource should have its own URI (at least one). The service uses the URIs to to address its resources. The job of the URI is to identify a resource and tie it to the request. It is the verb that does the actual operation.
 
 Common HTTP responses: 200 - ok, 404 - not found, 403 - forbidden, 500 - Internal Server Error
-----------------------------------------------------------------------------------------------
 
-Web front-end frameworks:
-3 tier architecture:
-Presentation layer - how the interface is presented to the user (HTML, CSS, Javascript)
-Business logic layer - data validation and processing (implemented in programming languages like ASP.NET, Python or Java)
-Data access layer - database for storage, API for data access (DBMS like oracle/MySQL)
+****************************************************************************
+Basic HTML, CSS
 
-A recent trend is to implement the full stack (all three layers above) in a single language like Javascript
-1) Front end will be implemented in a javascript framework like AngularJS
-2) Server in NodeJS 
-3) Database in MongoDB
-A REST API delivers content from the server to the client
-
-Front end UI framework - Bootstrap
-Collection of ready to use HTML, CSS and JS templates for components of a web page - like forms, buttons, tables etc.
-Goal: responsive web design regardless of browser or device used (mobile is becoming very popular) with a consistent look and feel
-first designed by a couple of Twitter employees in 2011 for internal used and then made open-source.
-CDN - content distribution network.
-'min' in the file names of bootstrap files stand for minified
-
-Enclose all the content of the page in a 'container' class eg. <div class='container'>...</div>
-class='row' helps divide the content into rows
-rows must always be contained in rows
-class='jumbotron' for showcasing key content
-possible for jumbotron to have its own container so that the content will span the entire webpage
-
-'viewport' enables us to identify the attributes of the device that is loading the webpage and adapt the code accordingly.
-<meta name='viewport' content="width=device-width, initial-scale=1">
-
-Responsive
-Mobile first
-Fluid
-
-Each row is divided into 12 equal columns (grid system). You cna have your contents to occupy any number of these 12 columns. For eg.
-
-<div class='row'>
-    <div class='col-sm-5'>
-content of the second class occupies the first 5 columns. 'sm' is one of the 4 different classes provided by bootstrap to target different devices - 'xs', 'sm', 'md' and 'lg'
-----------------------------------------------------------------------------------------------
 <!doctype = html>
 <head>
 <meta charset='utf-8'>
@@ -171,8 +147,38 @@ Styling text - main properties used are 1) font-family (Ariel etc) 2) font-style
 
 relative styling eg. 
 body {font-size: 120%}
-----------------------------------------------------------------------------------------------
+****************************************************************************
 
+Bootstrap
+
+Front end UI framework - Bootstrap
+Collection of ready to use HTML, CSS and JS templates for components of a web page - like forms, buttons, tables etc.
+Goal: responsive web design regardless of browser or device used (mobile is becoming very popular) with a consistent look and feel
+first designed by a couple of Twitter employees in 2011 for internal used and then made open-source.
+CDN - content distribution network.
+'min' in the file names of bootstrap files stand for minified
+
+Enclose all the content of the page in a 'container' class eg. <div class='container'>...</div>
+class='row' helps divide the content into rows
+rows must always be contained in rows
+class='jumbotron' for showcasing key content
+possible for jumbotron to have its own container so that the content will span the entire webpage
+
+'viewport' enables us to identify the attributes of the device that is loading the webpage and adapt the code accordingly.
+<meta name='viewport' content="width=device-width, initial-scale=1">
+
+Responsive
+Mobile first
+Fluid
+
+Each row is divided into 12 equal columns (grid system). You cna have your contents to occupy any number of these 12 columns. For eg.
+
+<div class='row'>
+    <div class='col-sm-5'>
+content of the second class occupies the first 5 columns. 'sm' is one of the 4 different classes provided by bootstrap to target different devices - 'xs', 'sm', 'md' and 'lg'
+
+****************************************************************************
+JS basics
 Javascript:
 
 function <name> () {
@@ -350,20 +356,26 @@ var instance {
     }
 }
 
-------------------
+****************************************************************************
 
-HTTP basics:
-HTTP is the language/protocol that the client uses to communicate with the browser.
-Hyper Text Transfer Protocol - request/response stateless protocol
+Web front-end frameworks:
+3 tier architecture:
+Presentation layer - how the interface is presented to the user (HTML, CSS, Javascript)
+Business logic layer - data validation and processing (implemented in programming languages like ASP.NET, Python or Java)
+Data access layer - database for storage, API for data access (DBMS like oracle/MySQL)
 
-URN - Uniform Resource Name (does not tell us how to get the resource)
-URI - Uniform Resource Identifier eg. official_web_site/index.html
-URL - Uniform Resource Locator - also tells you how to get the resource eg. http://mysite.com/official_web_site/index.html
+A recent trend is to implement the full stack (all three layers above) in a single language like Javascript
+1) Front end will be implemented in a javascript framework like AngularJS
+2) Server in NodeJS 
+3) Database in MongoDB
+A REST API delivers content from the server to the client
+***************************************************************************
 
-HTTP Request Methods:
-GET - the data is passed as part of the URI
-POST - data sent as part of the message body, not the URI (and it will be processed or stored at the server)
+SPA: Single page application
+Minimal display on first invocation. Have empty divs in the main html file that will hold the main content, which in turn is stored in other html files. In the JS file, a function that call the content is made available to the global environment.
 
+****************************************************************************
+Ajax
 AJAX - Asynchronous Javascript and XML (but XML is hardly used, instead it is usually plain text or JSON)
 Traditional web pages send requests to the server and based on the response generates a new page even if contents are mostly the same. In AJAX the request is made by javascript and it fetches just the data that needs to be refreshed and inserts into the web page without regenerating the whole page. Leads to much faster response and uses much less bandwidth.
 
@@ -415,39 +427,6 @@ JSON is not a JS object though they look the same - one needs to be converted to
 from JSON string to object - var obj = JSON.parse(string)
 other way around - var string = JSON.stringify(obj)
 
--------------------
-jQuery:
-The $ in jQuery gets you the root jQuery object. 
-So $(<identifier>) will get you that particular identifier, like getDocumentByID.
-$.method() is how you call methods like Ajax calls
-$(document).ready - means grab the root document and when that is ready (document.onLoad?)
-$(document).ready(function{}) - execute function when document is ready
-But jQuery provides a shortcut since document.ready is used everywhere - you can leave it out and say:
-$(function{}).
-Most important feature is to find any element on an HTML page using CSS selectors. Just embed the element in the object fetched by $. For eg. to fetch every <h1> tag in a page, do:
-$('h1')
-To fetch a class called 'myClass', do:
-$('.myClass') - just as it is defined in CSS
-If multiple elements are returned as is often the case, whatever process/function that follows is applied to all the elements and this is pretty powerful.
-
-$ in JQuery is the same as document.addEventListener('DOMContentloaded'), so 
-$(function() {...}) is the same as document.addEventListener('DOMContentloaded', function () {...})
-another function of the $ sign is to act as a query selecto for eg. $('#navbar').onblur is the same as document.queryselector('#navbar').addEventlistener('blur')
-
-The following function will hide a collapsable menu (collapses when screen width falls below a limit), when mouse clicks outside the expanded menu
-
-$(function() {
-    $('#navbar').onblur ( function(event) { // when id navbar blurs
-        var screenwidth = window.innerWidth;
-        if (screenwidth < 768) {
-            $("#collapsable-nav").collapse('hide'); // hide the id collapsable-nav
-        }
-    });
-})
-
-SPA: Single page application
-Minimal display on first invocation. Have empty divs in the main html file that will hold the main content, which in turn is stored in other html files. In the JS file, a function that call the content is made available to the global environment.
------------------------------------------
 Very basic Ajax setup (say printing out a text file when the user clicks on a link):
 
 //On the html side:
@@ -495,7 +474,9 @@ function showContents {
         document.getElementById('puttexthere').innerHTML = outMsg;
     }
 }
------------------------------------------
+
+****************************************************************************
+jQuery:
 jQuery is a javascript library that provides a lot of code for useful web features as easily usable functions. It is lightweight, with an active development community, follows a plugin architecture, is fast and easy to use.
 
 Basics:
@@ -505,9 +486,54 @@ script src=<url to the CDN's jquery.js>
 $(document).ready(function(args) { <do something> }
 ready() is the same as 'onload' in regular js except onload is an event handler that needs to be assigned a function where as ready is a jquery function that expects the function as an argument.
 
-To fetch an an id or an element:
-$("#idname")
-$("a") fetches an anchor tag
+The $ in jQuery gets you the root jQuery object. 
+So $(<identifier>) will get you that particular identifier, like getDocumentByID.
+$.method() is how you call methods like Ajax calls
+$(document).ready - means grab the root document and when that is ready (document.onLoad?)
+$(document).ready(function{}) - execute function when document is ready
+But jQuery provides a shortcut since document.ready is used everywhere - you can leave it out and say:
+$(function{}).
+
+CSS based selectors:
+Most important feature is to find any element on an HTML page using CSS selectors. Just embed the element in the object fetched by $. For eg. to fetch every <h1> tag in a page, do:
+$('h1')
+To fetch a class called 'myClass', do:
+$('.myClass') - just as it is defined in CSS, similarly for ids:
+$('#myID')
+
+If multiple elements are returned as is often the case, whatever process/function that follows is applied to all the elements and this is pretty powerful.
+
+Attribute based selectors:
+Equality:
+$('[attribute="value"]) - selects all attributes with 'value'
+Starts with:
+$('[attribute ^= "value"]) - selects all attributes that start with 'value'
+Contains:
+$('[attribute *= "value"]) - selects all attributes that contain 'value'
+Thus giving regex type ways of selecting
+
+Positional (hierarchy-based) selectors:
+Direct child selection:
+$('header > h1') - select an h1 that is the direct child of a header
+Descendant:
+$('header h1') - select an h1 that is a descendant of a header
+
+$ in JQuery is the same as document.addEventListener('DOMContentloaded'), so 
+$(function() {...}) is the same as document.addEventListener('DOMContentloaded', function () {...})
+another function of the $ sign is to act as a query selecto for eg. $('#navbar').onblur is the same as document.queryselector('#navbar').addEventlistener('blur')
+
+The following function will hide a collapsable menu (collapses when screen width falls below a limit), when mouse clicks outside the expanded menu
+
+$(function() {
+    $('#navbar').onblur ( function(event) { // when id navbar blurs
+        var screenwidth = window.innerWidth;
+        if (screenwidth < 768) {
+            $("#collapsable-nav").collapse('hide'); // hide the id collapsable-nav
+        }
+    });
+})
+
+
 
 $("a").click(function(event) {
 		$("#colorMe").attr("class", $(this).attr("id"));
