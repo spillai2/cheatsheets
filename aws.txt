@@ -177,3 +177,9 @@ Cross region replication - S3 buckets can be replicated across regions, but not 
 
 Life cycle management:
 Setting up rules to manage the lifecycle of the object after it has been created. For eg. move to 'Infrequently accessed' after 30 days, into 'Glacier' after 60 days and expire in 90 days.
+
+CloudFront:
+A CDN (Content Delivery Network) is a system of distributed servers that deliver web content to users based on their geopgraphical location.
+Edge location: location where content will be cached.
+Origin: origin of all files that the CDN will distribute. This can be an S3 bucket, an EC2 instance, an elastic load balancer etc.
+The CloudFront is used to deliver content using a global network of edge locations automatically routing requests to the nearest edge location. It is optimized to work with S3, EC2 and other amazon services.
