@@ -1,0 +1,9 @@
+Node enables server-side capabilities to be written in JS. Written in C++ with an embedded V8 JS engine (one that converts JS code to machine code, also written in C++), so you can write server-side code in C++ and make it available to JS! For eg. JS can't open or read files/dbs on the server, but a C++ function doing the same can be made available through Node. This makes JS a full stack development platform along with HTML and CSS.
+
+Ideal for IO-intensive operations, not so much for CPU intensive ones.
+
+The MEAN stack in the most popular way of developing web apps using Node
+M - MongoDB for backend database (since it stores its data in JSON format, there is a natural compatibility)
+E - Express.js is a server-side/back-end framework for implementing Node (like Django for Python of ASP.NET for C#)
+A - Angular.js is a client-side/front-end framework for JS
+N - Node.js itself
