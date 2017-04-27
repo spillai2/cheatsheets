@@ -1,0 +1,45 @@
+Learning properties from samples of available data and then try to predict properties of unknown data. Samples could have single (univariate) or multiple features/properties (multivariate).
+
+Supervised learning: Training data comes with the properties we want to predict. A couple of main types -
+1) Classification: Training data belongs to two or more classes and are labeled so. Using that info try to predict what classes sample data belongs to. eg. hand written digit recognition.
+2) Regression: Predict a feature/features as a function of other features. Eg.length of a fish as a function of its age and weight.
+
+Unsupervised learning: Training data does not come with attributes. Instead find patterns/groups within it based solely on the data.
+1) Clustering
+ (discovering groups)
+2) Density estimation (distribution of data with the input space)
+3) Dimensionality reduction (for the purpose of visualization)
+
+Data split into training and testing. Learn from training data and test on testing data.
+
+Feature scaling:
+When numerical features are not on the same scale, for eg. age and salary, the larger scale - in this case salary, will greatly nullify the effect of the smaller scale variable. Feature scaling converts such features into similar scales:
+2 types of feature scaling:
+1) Standardization: convert to units of Standard Deviation. (x - mean_of_x)/sd_of_x
+2) Normalization: (x - min_of_x)/ range_of_x , where range_of_x is max(x) - min(x)
+Usually converts all values to a range between -1 and +1
+
+Simple linear regression:
+One input variable used to predict a single output variable. Equation for line:
+y = b0 + b1x
+b0 is the y-intercept
+b1 is the slope
+Simple linear regression draws all possible lines with a given data set, calculates the sum of squares of the distances of all the points from the respective lines and picks the line with the lowest SS.
+
+Python
+1) Read data set using pandas
+data = pandas.read_csv(<filename>)
+2) Split into X and Y values
+x = data.iloc[:,<col#>].values
+3) Split into test and training sets using scikit learns function for it
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=<fraction needed>, random_state=0)
+4) Create a linear regression object from scikit learn's linear_model
+from sklearn.linear_model import LinearRegression
+regressor = LinearRegression() # this object is the machine we are creating
+5) Train the model/object with training data
+regressor.fit(x_train, y_train) # in this step, the machine learns and creates an eqn
+6) Test on the test data
+y_pred = regressor.predict(x_test)
+7) Visualizing results using matplotlib's pyplot module
+plt.scatter(X_train, y_train, color='red') # plotting actual/observed data points
+plt.plot(X_train, regressor.predict(X_train), color='blue') # draw the regression line
