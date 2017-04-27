@@ -518,6 +518,25 @@ $('header > h1') - select an h1 that is the direct child of a header
 Descendant:
 $('header h1') - select an h1 that is a descendant of a header
 
+CSS based selectors have limitations when it comes to dynamic HTML since it only captures what is present at the time of the selection. To overcome this, jQuery provides ways to dynamically traverse the DOM.
+To walk down the hierarchy:
+children(optionalSelector) - will fetch all the direct children of the selector or all children when no selector is supplied
+find(selector) - will fetch all children that match the selector, not just direct children.
+
+To walk up the hierarchy:
+parent - direct parent
+parents - all parents
+
+$('<selector>').attr('<some attribute>', '<new attribute def>'); // will change the an attribute of the selector found to something else. For eg. change the font color.
+
+$('<selector>').children().attr('<some attribute>', '<new attribute def>'); // will do the same (change the attribute) for all direct children.
+
+substitute children() with find('<selector>') and it will change for all children
+
+Same with parent/parents. For eg. if you want to change the font color of the direct parent of a selector (say an id):
+$('#demo').parent().attr('style', 'color:red')
+parents() will change the color of all the parents of that selector, not just the direct parent.
+
 $ in JQuery is the same as document.addEventListener('DOMContentloaded'), so 
 $(function() {...}) is the same as document.addEventListener('DOMContentloaded', function () {...})
 another function of the $ sign is to act as a query selecto for eg. $('#navbar').onblur is the same as document.queryselector('#navbar').addEventlistener('blur')

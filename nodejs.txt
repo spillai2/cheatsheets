@@ -7,3 +7,185 @@ M - MongoDB for backend database (since it stores its data in JSON format, there
 E - Express.js is a server-side/back-end framework for implementing Node (like Django for Python of ASP.NET for C#)
 A - Angular.js is a client-side/front-end framework for JS
 N - Node.js itself
+
+The data from the database is exposed by way of a REST-ful API created by Express/Node. A client created by Angular consumes this data.
+
+The first step is to create and scaffold a project (build the skeleton):
+
+express <project name>
+
+will create a project dir by that name with the following substructure:
+
+bin
+   www
+public
+   images
+   javascripts
+routes
+   index.js
+   users.js
+views
+   error.jade
+   index.jade
+   layout
+app.js
+package.json
+
+The key to understand is that the app is fully self-contained, all that is required to run the app is within the project itself.
+
+'bin' contains the executable that runs the app. 'public' is synonymous with public in most web app architectures storing images and client-side js files. 
+'routes' defined the end points of the app - each end point has its own js file that has the handler of that end point. 'views' contains files that define the UI, basically HTML, but Express uses templating engines to define the HTML (for embedding variables etc.) and by default it uses Jade, so files have a .jade extension.
+'app.js' is the entry point and defines the logic
+'package.json' - contains a list of dependencies for the app that npm can install. Any new dependency should be defined here (like a database driver). The dependencies are installed in a newly created directory called 'node_modules'. This can be done by running npm as follows:
+
+npm install <module> --save
+The --save option edits package.json and adds monk to the list
+
+Node apps usually run on port 3000. Nodemon is a module that automatically restarts the webserver when code changes are detected. To start app enter in the app/project directory:
+
+nodemon
+
+localhost:3000 will now show the default index page
+
+----------------------------
+
+The next step with a full-stack web app is to create an API that will expose the contents of a database (in this case a sample MongoDB database)
+
+app.js is where the logic lies. The first part is a set of 'require' statements importing modules (just like 'import' in python). The second is a set of requires of the routes defined in the 'routes' directory - like index etc. The <route>.js file is usually defined as a router.get() method that defines the route and the route handler and then passes it onto the module.
+
+All route handlers have the same signature/parameters - the request, response and 'next'. The response variable is what represents what is sent back to the browser and comes with a set of methods like render, send, json, redirect etc. For just rendering a page like an index page, function render is used as follows:
+
+res.render('index', { title: 'Express' });
+
+To create a new RESTful API that will expose the contents of our database, a new route (.js file) will need to be defined in the routes folder. That route will use the database driver to connect to the db, fetch the data (which can be an entire table/collection or a query) and return the data in whatever format (JSON is easier since Mongo stores as JSON), for eg:
+
+*******
+var monk = require('monk');
+var db = monk('localhost:27017/<db>');
+
+router.get('/', function(req, res) {
+	var collection = db.get(<collection/table name>);
+	collection.find({}, function(err, <collection/table>) {
+		if (err) throw err;
+		res.json(<collection/table>;
+	})
+});
+module.exports = router;
+*******
+
+Here, the collection object that db first gets provides a number of methods to work with the documents in that collection - like insert, update, find, remove etc. In the example above, we use find to get all the documents. The first argument for find is the criteria for filtering, which in this case is all, hence {}. The second arg is the callback method that is executed when the results are returned from the database. The function follows an 'error-first' approach - if an error is returned it will be thrown and the program exited, else return the data.
+
+As a last step, we need to tell app.js about the new API route, which involves adding a require line at the top and adding an app.use line to use the module fetched by require.
+
+app.use('<path>', <route>); # here path defines the end point
+
+Now, localhost:3000/<path> will display the data from the <collection/table> in JSON format. 
+----------------------------
+
+Adding a front end framework (Angular)
+Angular is popular for SPAs.
+
+First step is to add Angular scripts to our app. This is usually added to views/layout.jade, which defines the default layout for the app (the other .jade files are for the specific routes and inherit from layout.jade).
+
+script(src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.5/angular.js') # framework
+script(src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.5/angular-resource.js') # for consuming RESTful APIs
+script(src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.5/angular-route.js') # for routing
+
+Next create a new js file for the app in public/javascript (all front end js code goes in there) and add a reference to it in layout.jade
+
+script(src='/javascripts/<app>.js')
+
+Now, add Angular to the app - involves 2 steps:
+1) add an ng-app attribute to the HTML (layout.jade) - when the Angular script is loaded it looks for this attribute in the DOM and then hooks itself into the app. So in layout.jade:
+
+doctype html
+html(ng-app='<name of app>')
+
+2) create and angular module for the application
+In <app>.js:
+
+var app = angular.module('Vidzy', []);
+
+The [] is to pass dependecies, left empty when there are none.
+
+Next step is to rebuild the home page (or any route) using the new Angular setup. Angular/client will do all the work for render the views as opposed to the server. We will store all the view under 'public/partials' instead of under 'views' as .jade files. Create a plain HTML file in here called home.html for the home page. Now tell Angular to render this page as opposed to the default index.jade - use Angular routes for this. In javascript/<app>.js pass 'ngRoute' as a dependency:
+
+var app = angular.module('Vidzy', ['ngRoute']); # used to configure routes
+
+Then configure the route using app.config function which takes an array of arguments - usually a dependency and a function that does something with that dependency. In this case, the dependency is $routeProvider service which is part of ngRoute. We use the 'when' method of $routeProvider to say when it encounters a certain endpoint in the URL use a certain template file (home.html in this case).
+
+----------------------------
+Controller:
+
+The controller is also defined in the <app>.js file. Just like ngRoute is a dependency (for defining routes), we add another dependency called ngResource which is for consuming RESTful APIs.
+
+var app = angular.module('<app>', ['ngResource', 'ngRoute']
+
+Then create a controller using app.controller, just as we used app.config to configure a route:
+
+app.controller('HomeCtrl', ['$scope', '$resource',
+	function($scope, $resource) {
+		var Videos = $resource('/api/videos');
+		Videos.query(function(videos){
+			$scope.videos = videos;
+	}]);
+
+The first arg is the name of the controller (Ctrl is added to the name of the controller as standard practice), the second arg is an array that defines the dependencies - $scope and $resource are angular services that help with passing data to the view and consume a RESTful API respectively. The third element of the array is a function that defines the controller logic - in this case creating an object to access the API and a query to pull the data. The query in turn gets a callback function which passes the data to $scope which is the bridge between the controller and the corresponding view.
+
+The view is then modified to render what the controller ($scope) sends it. In this case:
+
+<li ng-repeat='video in videos'>{{video.title}}</li>
+
+ng-repeat is an angular specific attribute - it is a 'directtive' that adds behavior to HTML elements. The value of the attribute in this case is similar to a foreach loop (foreach video in videos). Enclosed in {{..}} are expressions where a variable is passed to be rendered.
+
+The final step is to add the controller to the route in <app>.js. To do that add a 'controller'attribute in the route configured in <app.js> and have it point at the name of the controller just created - HomeCtrl.
+
+controller: 'HomeCtrl'
+----------------------
+
+Adding a new component:
+Add a new API endpoint with Express, building forms with Angular and storing/inserting documents in Mongo using Monk (the node Mongo driver)
+
+1) Add a new API endpoint (same as before except here we are inserting into db using POST instead of fetching from db with GET):
+Edit routes->videos.js
+Add a router.post method that will insert a JSON object which has the same properties of the database record (keys).
+
+2a) Adding a form:
+Create a new html file under public/partials with a form that will let the user input a couple of fields that are required to create a record in the db.  
+
+Now we need to tell Angular to present this view when the user navigates to /add-video. For that we need to first define add-video as a new route in <app>.js. For that add a new 'when' clause to app.config (ie when /app-video is encountered) and tell it which template html file to display. We can also add a link to /add-video to the home page. Here instead of linking directly to the html page, we will link to /add-video.
+
+<a href="/#/add-video">Add a Video</a>
+The prefix with # is an angular feature for compatibility with older browsers that don't support SPAs.
+
+2b) To make the add-video page look a little better, use bootstrap. In the main layout page (views/layout.jade) add a link to bootstrap-min.css in the head section. Modify form elements in the html file to use custom bootstrap CSS classes that will make the form look classier.
+
+The final step is to implement the Controller to handle the click event of the 'Save' button on the form (which will insert a record into the db). As before, this is added in <app>.js as app.controller. As before this controller will take a few parameters - the name of the controller, a list of dependencies and a function that does the work. In addition to $scope and $resource, it will also take a $location argument (this is another angular service that tells the browser to go to a certain URL after the job is done - in this case back to the home page). Instead of the query function we used before, this time we will use the 'save' function.
+
+**********
+app.controller('AddVideoCtrl', ['$scope', '$resource', '$location',
+    function($scope, $resource, $location){
+        $scope.save = function(){
+            var Videos = $resource('/api/videos');
+            Videos.save($scope.video, function(){
+                $location.path('/');
+            });
+        };
+    }]);
+**********
+
+Now change the form html page to add what field in the table to update using ng-model attribute. eg.
+<input class="form-control" ng-model="video.title"></input>
+Next change the button declaration to point to the save() function using the ng-click attribute (also angular specific)
+
+<input type="button" class="btn btn-primary" value="Save" ng-click="save()"></input>
+
+essentially telling angular that when the user clicks this button the save method in $scope should be executed.
+
+Finally add 
+controller:'AddVideoCtrl'
+to the route (app.config in <app>.js)
+
+The general workflow:
+1) Add a endpoint: Edit routes.js, add an app.config to route and app.controller for what data to expose.
+2) Add front end HTML in public/partials - could be a form for input or 

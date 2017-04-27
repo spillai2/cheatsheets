@@ -211,3 +211,21 @@ Service that connects an on-premises software appliance with AWS storage to secu
 2) Volumes Gateway (iSCSI) - disk based storage, presents your application with disk volumes. Point in time snapshots. Most recently read data is stored in cache, rest in S3. Lots of data and dont want to keep it all onsite.
 
 3) Tape Gateway
+-------------------------
+
+Snowball
+To move large amounts of data into and out of AWS, you can use the Import/Export feature by sending in a disk to avoid copying over the network. To avoid the logistics issues with this, Amazon released Snowball. Import from or export into S3 from snowball.
+
+Snowball - physical device, quite big, bigger than a suitcase. Petabyte-scale data transport solutions that uses secure appliances to transfer large amounts of data into and out of AWS.
+
+Snowball Edge - similar to Snowball, but contains compute capacity, so almost like a portable AWS data center.
+
+Snowmobile - massive 45 foot long, peta/exa byte scale transfer
+
+Get a snowball, power it up, connect the ethernet cable to your local data storage device, copy the data and then ship it back to Amazon. The data will eventually end up in an S3 bucket in your account.
+-------------------------
+S3 Transfer Acceleration
+To speed up uploads to your S3, upload to a CloudFront Edge location, which will then transfer the file to S3. Will incur an additional fee.
+-------------------------
+
+Creating a static website on S3
