@@ -2,6 +2,41 @@ Node enables server-side capabilities to be written in JS. Written in C++ with a
 
 Ideal for IO-intensive operations, not so much for CPU intensive ones.
 
+Module - reusable block of code whose existence does not accidentally impact other code. Most programming languages have this feature, but JS doesn't officially support, though workarounds exist. Node makes is available for JS through 'commonjs' modules (set of standards)
+
+First class functions: Anything that you can do with other types/variables can be done with functions. JS feature, not present in other languages. Assign functions to variables, pass them around, put them in arrays etc. This is possible because functions in javascript are objects and you can do with it whatever you can do with other objects.
+
+Function expression: Expression is any block of code that returns a value. So you can create a variable and assign it a function on the fly and that is called function expression:
+
+var func = function(<args>) {
+    <do something>;
+}
+
+Functions can be passed as arguments to other functions (without the paranthesis to invoke the function).
+
+anotherFunc(func);
+
+A function can be defined anonymously as an argument to another function:
+
+anotherFunc( function() {
+    <do something>;
+});
+
+
+Building a module in node:
+require('<module name>') loads a module into a given js file.
+
+The calling js doesn't directly have access to objects defined in the module as it is encapsulated. But there is a way to make them available - in the module file:
+
+module.exports = <object>;
+will make the object available to the calling js.
+
+then, in the calling js:
+
+var variable = require(<module>);
+Now, what is exposed in the module is available as a variable in the calling code. Then use variable just like you normally would. 
+
+-----------------------
 The MEAN stack in the most popular way of developing web apps using Node
 M - MongoDB for backend database (since it stores its data in JSON format, there is a natural compatibility)
 E - Express.js is a server-side/back-end framework for implementing Node (like Django for Python of ASP.NET for C#)

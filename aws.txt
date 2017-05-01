@@ -160,7 +160,7 @@ Encryption
 Storage Tiers
 S3 - stored across multiple facilities
 S3-IA - Infrequently accessed data, lower fee than regular S3, but charged a retrieval fee
-Reduced Redundancy Storage - eg.thumbnail storage
+S3-RRS Reduced Redundancy Storage - eg.thumbnail storage
 Glacier - Very cheap, used only for archival only, takes 3-5 hrs to restore
 
 Creating an S3 bucket is pretty straightforward using the interface. Create bucket, upload file (for eg. a static HTML file).
@@ -196,9 +196,9 @@ Encryption:
 	SSL/TLS
 2) At Rest (on the server)
 	Server side
-		S3 managed keys
-		AWS Key management service
-		Customer provided keys
+		S3 managed keys - SSE-S3
+		AWS Key management service - SSE-KMS
+		Customer - provided keys SSE-C
 	Client Side
 		Data encrypted on the client side using whatever tech and uploaded to AWS.
 -------------------------
@@ -209,8 +209,11 @@ Service that connects an on-premises software appliance with AWS storage to secu
 1) File Gateway (NFS) - to store flat files. Files stored in S3 and accessed through an NFS mount point. Cheapest option.
 
 2) Volumes Gateway (iSCSI) - disk based storage, presents your application with disk volumes. Point in time snapshots. Most recently read data is stored in cache, rest in S3. Lots of data and dont want to keep it all onsite.
+    Stored Volumes: Entire dataset is stored on site and is asynchronously backed up to S3
+    Cached volumes: Entire dataset stored on S3 and the most frequently used is cached on site
 
-3) Tape Gateway
+3) Tape Gateway - Virtual Tape Library (VTL)
+    Used for backup
 -------------------------
 
 Snowball
@@ -229,3 +232,4 @@ To speed up uploads to your S3, upload to a CloudFront Edge location, which will
 -------------------------
 
 Creating a static website on S3
+    Serverless static page storage
