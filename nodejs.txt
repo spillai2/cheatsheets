@@ -1,42 +1,5 @@
-Node enables server-side capabilities to be written in JS. Written in C++ with an embedded V8 JS engine (one that converts JS code to machine code, also written in C++), so you can write server-side code in C++ and make it available to JS! For eg. JS can't open or read files/dbs on the server, but a C++ function doing the same can be made available through Node. This makes JS a full stack development platform along with HTML and CSS.
+Quick how-to to design a node website with the MEAN stack
 
-Ideal for IO-intensive operations, not so much for CPU intensive ones.
-
-Module - reusable block of code whose existence does not accidentally impact other code. Most programming languages have this feature, but JS doesn't officially support, though workarounds exist. Node makes is available for JS through 'commonjs' modules (set of standards)
-
-First class functions: Anything that you can do with other types/variables can be done with functions. JS feature, not present in other languages. Assign functions to variables, pass them around, put them in arrays etc. This is possible because functions in javascript are objects and you can do with it whatever you can do with other objects.
-
-Function expression: Expression is any block of code that returns a value. So you can create a variable and assign it a function on the fly and that is called function expression:
-
-var func = function(<args>) {
-    <do something>;
-}
-
-Functions can be passed as arguments to other functions (without the paranthesis to invoke the function).
-
-anotherFunc(func);
-
-A function can be defined anonymously as an argument to another function:
-
-anotherFunc( function() {
-    <do something>;
-});
-
-
-Building a module in node:
-require('<module name>') loads a module into a given js file.
-
-The calling js doesn't directly have access to objects defined in the module as it is encapsulated. But there is a way to make them available - in the module file:
-
-module.exports = <object>;
-will make the object available to the calling js.
-
-then, in the calling js:
-
-var variable = require(<module>);
-Now, what is exposed in the module is available as a variable in the calling code. Then use variable just like you normally would. 
-
------------------------
 The MEAN stack in the most popular way of developing web apps using Node
 M - MongoDB for backend database (since it stores its data in JSON format, there is a natural compatibility)
 E - Express.js is a server-side/back-end framework for implementing Node (like Django for Python of ASP.NET for C#)
@@ -223,4 +186,88 @@ to the route (app.config in <app>.js)
 
 The general workflow:
 1) Add a endpoint: Edit routes.js, add an app.config to route and app.controller for what data to expose.
-2) Add front end HTML in public/partials - could be a form for input or 
+2) Add front end HTML in public/partials - could be a form for input or a render page.
+
+###############################################################################################
+Deep-dive into node.js
+
+Node enables server-side capabilities to be written in JS. Written in C++ with an embedded V8 JS engine (one that converts JS code to machine code, also written in C++), so you can write server-side code in C++ and make it available to JS! For eg. JS can't open or read files/dbs on the server, but a C++ function doing the same can be made available through Node. This makes JS a full stack development platform along with HTML and CSS.
+
+Ideal for IO-intensive operations, not so much for CPU intensive ones.
+
+Module - reusable block of code whose existence does not accidentally impact other code. Most programming languages have this feature, but JS doesn't officially support, though workarounds exist. Node makes is available for JS through 'commonjs' modules (set of standards)
+
+First class functions: Anything that you can do with other types/variables can be done with functions. JS feature, not present in other languages. Assign functions to variables, pass them around, put them in arrays etc. This is possible because functions in javascript are objects and you can do with it whatever you can do with other objects.
+
+Function expression: Expression is any block of code that returns a value. So you can create a variable and assign it a function on the fly and that is called function expression:
+
+var func = function(<args>) {
+    <do something>;
+}
+
+Functions can be passed as arguments to other functions (without the paranthesis to invoke the function).
+
+anotherFunc(func);
+
+A function can be defined anonymously as an argument to another function:
+
+anotherFunc( function() {
+    <do something>;
+});
+
+
+Building a module in node:
+require('<module name>') loads a module into a given js file.
+
+The calling js doesn't directly have access to objects defined in the module as it is encapsulated. But there is a way to make them available - in the module file:
+
+module.exports = <object>;
+will make the object available to the calling js.
+
+then, in the calling js:
+
+var variable = require(<module>);
+Now, what is exposed in the module is available as a variable in the calling code. Then use variable just like you normally would. 
+
+Object literals:
+In JS sense, object is a collection of name-value pairs. Values could be another set of name-value pairs. Everything is an object. Primitives like numbers and strings, objects in the classical sense and functions are all objects. The values can also be functions. Pointing to memory locations. Object literal is a quick way to create a JS object, for eg:
+
+var address = {
+                Street: 'Main',
+                Number: 100,
+                Apartment:
+                {
+                    Floor: 3,
+                    Number: 301
+                }
+              }
+              
+Names don't need to be quoted, but values must be unless they are numbers or booleans.
+
+Individual values can be accessed using the dot notation - address.Number.
+
+Function constructor:
+Another way to create objects. Define a function and that can be instantiated as an object using the 'new' keyword. Similar to classes in other languages.
+
+Inheritance: when one object gets access to another objects properties and methods.
+JS implements prototypal inheritance. Every object has a prototype property that allows it to access other objects. It also gains access to objects defined in the other objects prototype and so on - called the prototype chain. All can be accessed using the same dot notation as above.
+
+function Person(firstname, lastname) {
+    this.firstname = firstname;
+    this.lastname = lastname;
+}
+
+Instantiate as:
+var San = new Person('Sanjeev', 'Pillai');
+
+To add prototypes:
+Person.prototype.greet = function() {
+    console.log("Hello " + this.firtsname)
+}
+
+Now any object created from Person will have access to this greet method.
+
+variable.__proto__ shows what prototype objects a variable has access to.
+
+When you pass a primitive (number/string/bool etc) to a function or assign to a new variable we are referring to passing by value in that the value of the primitive is copied to a new memory location. Called pass by value.
+When you pass an object to a function or assign a new object with the original object, the value is not copied - instead it 'refers' to the same memory location as the original object. Called pass by reference.  
