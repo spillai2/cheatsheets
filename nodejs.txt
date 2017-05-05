@@ -271,3 +271,25 @@ variable.__proto__ shows what prototype objects a variable has access to.
 
 When you pass a primitive (number/string/bool etc) to a function or assign to a new variable we are referring to passing by value in that the value of the primitive is copied to a new memory location. Called pass by value.
 When you pass an object to a function or assign a new object with the original object, the value is not copied - instead it 'refers' to the same memory location as the original object. Called pass by reference.  
+
+Immediately Invoked Function Expression (IIFE):
+Scope where else in your code do you have access to a particular variable or function.
+
+Invoke/make available a function as it is created, just like a variable. For this surround the function definition with ().
+
+( function() {
+	<do something>;
+  }() )
+
+This will execute the function rightaway. A parameter to the function can be passed within the invoke ()s at the end.
+
+(function (lastname) {
+...
+} ('Pillai'))
+
+Creation of a variable within an IIFE will not affect another variable with the same name declared before it.
+
+How modules and require works:
+require is a function that you pass a path to eg. require('path to module')
+module.exports is what the require function returns
+This works because your code is actually wrapped in a function that is given these things as parameters.

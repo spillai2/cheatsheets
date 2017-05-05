@@ -32,7 +32,7 @@ Direct Connect - dedicated connection to AWS (for security, pushing large data s
 
 3) Compute:
 EC2 - Elastic Compute Cloud, Virtual machines on the cloud 
-EC2 Container Service - scalable container management service that manages Docker containers.
+ECS - Elastic Container Service - scalable container management service that manages Docker containers.
 Elastic Beanstalk - If you know nothing about AWS and you want to run your app, you can upload your app into this, it takes care of everything.
 Lambda - serverless, upload code and it responds to events.
 Lightsail - out of the box service.
@@ -272,3 +272,13 @@ Creating an EC2 instance is done though the web console, fairly starightforward 
 
 When the instance is ready to be spun up, it will ask to create a key-pair (public/private). Public key is the lock and private is the key to unlock it. 
 
+-------------------------
+Security Group is a Virtual Firewall to secure your EC2 instance
+All access denied by default
+All outbounf traffic is allowed
+Changes take place immediately - for eg. removing http access will disable any websites hosted.
+Any number of EC2s can share a security group
+Any number of securoty groups in a given EC2
+Security groups are stateful - eg. if traffic is allowed in, it is automatically allowed out.
+You cannot block IPs using security groups, can only grant access to select IPs.
+Allow rules, but not deny rules. 
