@@ -479,6 +479,7 @@ function showContents {
 jQuery:
 jQuery is a javascript library that provides a lot of code for useful web features as easily usable functions. It is lightweight, with an active development community, follows a plugin architecture, is fast and easy to use.
 
+Module 1: Adding jQuery to web pages
 Basics:
 Load from CDN by saying in the HTML file:
 script src=<url to the CDN's jquery.js>
@@ -494,12 +495,17 @@ $(document).ready(function{}) - execute function when document is ready
 But jQuery provides a shortcut since document.ready is used everywhere - you can leave it out and say:
 $(function{}).
 
+Two main ways in which you act on the root jQuery object provided by $():
+1) $(content) - where you look for a particular type (like a tag for eg) and do something with it
+2) $.(method) - you execute a global method
+
 CSS based selectors:
 Most important feature is to find any element on an HTML page using CSS selectors. Just embed the element in the object fetched by $. For eg. to fetch every <h1> tag in a page, do:
 $('h1')
 To fetch a class called 'myClass', do:
 $('.myClass') - just as it is defined in CSS, similarly for ids:
 $('#myID')
+
 
 If multiple elements are returned as is often the case, whatever process/function that follows is applied to all the elements and this is pretty powerful.
 
@@ -528,6 +534,8 @@ parent - direct parent
 parents - all parents
 
 $('<selector>').attr('<some attribute>', '<new attribute def>'); // will change the an attribute of the selector found to something else. For eg. change the font color.
+$('#some_div_id).attr('style', 'color=red') 
+will fetch the id and change style='color:somecolor' to style='color:red'
 
 $('<selector>').children().attr('<some attribute>', '<new attribute def>'); // will do the same (change the attribute) for all direct children.
 
@@ -536,6 +544,28 @@ substitute children() with find('<selector>') and it will change for all childre
 Same with parent/parents. For eg. if you want to change the font color of the direct parent of a selector (say an id):
 $('#demo').parent().attr('style', 'color:red')
 parents() will change the color of all the parents of that selector, not just the direct parent.
+
+Moving up and down in the same level (siblings)
+prev(<optional selector>) will fetch the immediately previous element
+prevAll(<optional selector>) will fetch all previous elements at the same level
+prevUntil(<selector>) fetch all previous elements until the selector
+
+next, nextAll and nextUntil for moving down
+
+Selecting elements by position
+index(element or jq object)
+returns the position of that item
+get(index)
+returns the element at that index
+
+eg. if there is a div id container which contains a list of divs, one of which is called target
+var element = $('#target');
+var container = $('#container');
+var index = container.children().index(element);
+Conversely to get the DOM element at a given index
+var element = container.children().get(index);
+---------------------------------------------------------------------------
+
 
 $ in JQuery is the same as document.addEventListener('DOMContentloaded'), so 
 $(function() {...}) is the same as document.addEventListener('DOMContentloaded', function () {...})
