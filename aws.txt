@@ -282,3 +282,19 @@ Any number of securoty groups in a given EC2
 Security groups are stateful - eg. if traffic is allowed in, it is automatically allowed out.
 You cannot block IPs using security groups, can only grant access to select IPs.
 Allow rules, but not deny rules. 
+-------------------------
+Volumes and Snapshots
+Possible to create disk volumes in addition to the root volume on which the OS lies.
+Use UI ('Volumes' under EBS) to create a new volume and attach it to an existing EC2 instance. Then ssh in and format (mkfs ext4 /dev/<new vol>) and mount (mount /dev/<new vol> /<name of the volume created through UI> the volume for further use.
+
+Snapshots (point in time copies of volumes) can be made of the newly created volume. And a new volume can be created from the snapshot as whatever type (doesn't need to be the original type)
+-------------------------
+RAID, Volumes and Snapshots
+RAID - Redundant Array of Independent Disks. Set of disks acting as a single volume.
+Different types: RAID 0 (striped for faster access but no redundancy), RAID 1 (Mirrored for redundancy), RAID 5 RAID 10 (striped and mirrored combo of 1&2)
+
+use RAID when you are not getting the desired disk IO. Take EBS volumes and combine into single volume. (for eg. create a new windows server EC2 instance, create multiple volumes attached to it, then login via remote desktop -> go to disk management and merge the volumes into one RAID array)
+-------------------------
+Create an AMI
+After creating a snapshot, you can create an image of the snapshot. Once an image is created it can be used to boot an EC2 instance. Snapshots of volumes encrypted are automatically encrypted. Encrypted snapshots cannot be shared.
+Snapshots and AMIs created from them are excellent ways to replicate a server once created.

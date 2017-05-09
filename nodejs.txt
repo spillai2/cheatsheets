@@ -293,3 +293,55 @@ How modules and require works:
 require is a function that you pass a path to eg. require('path to module')
 module.exports is what the require function returns
 This works because your code is actually wrapped in a function that is given these things as parameters.
+
+JSON:
+Standard for structuring data inspired by JS Object literals. Can easily be converted to a JS object by the V8 engine as the format is the same.
+
+require: how it works when code is split across multiple modules
+Multiple module.js files can be created in a directory and then require can ask for the the folder name. Since the file is not a .js file, require will look for an index.js file inside the folder. The index.js will have multiple require statements for the multiple modules in it. Then the module.exports function uses a JSON format to export all the modules.
+
+module.exports {
+	module1: module1,
+	module2: module2
+}
+
+module patterns.
+Many ways to call a module and its functions.
+
+
+Pattern 1:
+Module will pass a function expression to module.exports and the requiring app can just execute the variable that it required the module into.
+var something = require('something');
+something();
+something.js that was required will have:
+module.exports = function() {
+...
+}
+
+Pattern 2:
+something.js will assign a name to the function like
+module.exports.name = function() {
+...
+}
+Calling app can do:
+var something = require('something').name;
+something();
+
+Pattern 3:
+something.js returns an object created with a function constructor defined in the same file.
+module.exports = new FuncConstr();
+Calling app can then execute any function defined in the constructor of something.js. Note that in this pattern, the calling app can actually change a variable defined in the constructor and due to a module caching feature, the modified variable will be passed to a new require of the same module.
+
+Pattern 4:
+The function constructor itself is passed on instead of an object made with the function constructor. The constructor is instantiated within the calling app.
+
+Pattern 5:
+something.js will assign to module.exports a json object in which the value will be the name of a function defined in it.
+function name() {
+....
+}
+module.exports = {
+	namekey: name
+}
+This is called revealing module pattern:
+Exposing only the properties and methods you want via a returned object. Very common, clean way to protect our module code.
