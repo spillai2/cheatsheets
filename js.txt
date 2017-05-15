@@ -552,7 +552,7 @@ prevUntil(<selector>) fetch all previous elements until the selector
 
 next, nextAll and nextUntil for moving down
 
-Selecting elements by position
+Selecting elements by positionzzas	
 index(element or jq object)
 returns the position of that item
 get(index)
@@ -564,6 +564,27 @@ var container = $('#container');
 var index = container.children().index(element);
 Conversely to get the DOM element at a given index
 var element = container.children().get(index);
+
+Manipulating DOM elements:
+html() - gets or replaces existing HTML in an element
+text() - gets or replaces existing text in an element
+
+html() will allow passing HTML syntax as parameters. for eg. $('#target').html('<b>Update</b>') will change the HTML within the target to show the text Update in bold. 
+text() will only allow you to change the text.
+
+Basic event handlers:
+Register event handlers in code, not in HTML.
+the 'this' object is very convenient for handling events.
+3 most common:
+click - $(item).click(function);
+hover - $(item).hover(function);
+mousout - $(item).mouseout(function);
+
+An event can be defined specifically for a target DOM element (like a specific div) or generally for a set of elements (for eg. all divs)
+$('#target').click(function () { <do something like update the text or write into an empty div> }; // specific
+$('div').hover(function () { <do something> }; // general
+
+the DOM element returned needs to be converted to a jQuery object and that is done by $(this).
 ---------------------------------------------------------------------------
 
 
