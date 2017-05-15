@@ -298,3 +298,27 @@ use RAID when you are not getting the desired disk IO. Take EBS volumes and comb
 Create an AMI
 After creating a snapshot, you can create an image of the snapshot. Once an image is created it can be used to boot an EC2 instance. Snapshots of volumes encrypted are automatically encrypted. Encrypted snapshots cannot be shared.
 Snapshots and AMIs created from them are excellent ways to replicate a server once created.
+
+Two different (root device) types of AMIs:
+EBS
+Instance Store
+
+Community AMIs are available for use for OS, Architecture and Root Device type. For eg. you can create a 64 bit Ubuntu server instance that uses Instance store for its root device. With an instance store volume, you cannot stop the instance - you can only reboot or terminate it (can do all that with EBS storage). With EBS you can also tell AWS to keep the root volume on termination, with Instance Store no such option - in both the root volmes are deleted by default.
+-------------------------
+
+Load balancers and health checks
+Elastic Load Balancer (ELB)
+Virtual appliance that spreads the load around.
+
+Two different types of load balancers:
+1) Application load balancer (new)
+2) Classic load balancer
+
+Can be set up from the dashboard like any other service. The meat of the settings is in 'Configure Health Check'
+Response Tiemout - timeout for accessing the 'ping path' (usually a file that conveys some info)
+Interval - between health checks
+Unhealthy threshold - number of consecutive health checks before an instance is declared unhealthy.
+
+Set it up, attach it to an EC2 instance and then when it is accessed through the console, it will show you the health of that instance. If for eg. the file it is pinging is missing, then it will show that the health check has failed.
+
+ELBs always have a DNS name and when accessed directly will show you the index page of the website.

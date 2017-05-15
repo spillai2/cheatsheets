@@ -585,6 +585,8 @@ $('#target').click(function () { <do something like update the text or write int
 $('div').hover(function () { <do something> }; // general
 
 the DOM element returned needs to be converted to a jQuery object and that is done by $(this).
+var variable = $(this);
+A quick way to see what you have is a DOM object or a jQuery object is to see if autocompletes like with VS Intellisense show jQuery functions.
 ---------------------------------------------------------------------------
 
 
