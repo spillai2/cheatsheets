@@ -587,6 +587,77 @@ $('div').hover(function () { <do something> }; // general
 the DOM element returned needs to be converted to a jQuery object and that is done by $(this).
 var variable = $(this);
 A quick way to see what you have is a DOM object or a jQuery object is to see if autocompletes like with VS Intellisense show jQuery functions.
+
+Event handling:
+jQuery provides various methods for event handling. Pass an 'event' parameter to the event handling function and you can access the event object.
+
+$('#target').click(function(event)) {
+	var xcord = event.pageX;
+	var ycord = event.pageY;
+}
+
+Input control events:
+.focus - control is ready to accept input from keyboard
+$(<selector>).focus(function)
+
+.change - input has changed as in entry in a drop-down list
+
+.blur - control has lost focus
+
+can use .focus to display some help text when the user clicks in an input box
+$(<selector>).focus(function() {
+	$(this).<something to display help text>;
+}
+
+other functions like blur can be 'chained' on to focus for default behavior, same object is passed on to the chained function
+$(<selector>).focus(function() {
+	$(this).<something to display help text>;
+}.blur(function() {
+	$(this).<something to hide help text>;
+
+The 'hover' function lets you enter two event handlers in one call. The first parameter hover accepts if for event 'mouseenter' and the second is for 'mouseleave'
+
+$(<selector>).hover(function() {
+	// mousenter event code
+
+}, function() {
+	// mouseleave event code
+});
+}
+
+Working with HTML elements
+To retrieve the value of an input control, use val()
+var value = $('<some input control>').val();
+
+text and html are the most basic functions when working with an element.
+$('#output').text('<b>value</b>');
+$('#output').html('<b>value</b>');
+
+text will output the value in plain text while HTML will output using the markup around it. In the above case the first will outout <b>value</b> to the screen while the second will output 'value' in bold.
+
+The attr function helps to work with and manipulate attributes.
+To retrieve
+attr(<name of attribute>)
+To change
+attr(<name>, <new value>)
+
+Working with classes
+addClass and removeClass will add or remove a class that is provided as a parameter.
+
+Classes define the style of an element. Can use attr to change the style of an element directly as above. Or can change the CSS itself using the css() function.
+$('#target').css('color', 'red');
+To set multiple properties, create a JS Object literal with property-value pairs and then pass that object to the css function.
+var style = {
+	color:'red',
+	background:'yellow'
+};
+
+$('#target').css(style);
+
+Multiple-event handlers
+If you want something to happen when a particular group of events happen (eg. clicking a group of buttons), you can use the 'on' and 'off' methods
+
+$('form').on('click', '<some search parameter to narrow down to a set', function() {...});
 ---------------------------------------------------------------------------
 
 
@@ -621,7 +692,7 @@ $("a").hover(function() {
 		});
 });
 
-Modify the css of an element using jquery. In this case, when a anchor is hovered over, its text and background color are changed based on which anchor is hovered over. A 'mouseout' even handling function can be added to restore the defaults.
+Modify the css of an element using jquery. In this case, when a anchor is hovered over, its text and background color are changed based on which anchor is hovered over. A 'mouseout' event handling function can be added to restore the defaults.
 
 Autocomplete:
 Very useful feature of jQuery. Eg. autocomplete a field where one is asked to enter one's state
