@@ -658,6 +658,12 @@ Multiple-event handlers
 If you want something to happen when a particular group of events happen (eg. clicking a group of buttons), you can use the 'on' and 'off' methods
 
 $('form').on('click', '<some search parameter to narrow down to a set', function() {...});
+
+Delegation:
+Event handlers are wired up when the code is executed (page loaded). So elements created after page load will not get the same event handler.
+To ensure that event handlers work on elements created after the event handler code is wired up, use 'delegate' method. Unlike click or on delegate will add the event to elements added later.
+
+$(item).delegate('selector', 'event', function() {})
 ---------------------------------------------------------------------------
 
 
