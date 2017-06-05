@@ -1,72 +1,3 @@
-HTTP basics:
-HTTP is the language/protocol that the client uses to communicate with the browser.
-Hyper Text Transfer Protocol - request/response stateless protocol
-
-URN - Uniform Resource Name (does not tell us how to get the resource)
-URI - Uniform Resource Identifier eg. official_web_site/index.html
-URL - Uniform Resource Locator - also tells you how to get the resource eg. http://mysite.com/official_web_site/index.html
-
-HTTP Request Methods:
-GET - the data is passed as part of the URI
-POST - data sent as part of the message body, not the URI (and it will be processed or stored at the server)
-
-REST - Representational state transfer - resource based
-Uniform interface
-Stateless
-Client-server
-Cacheable
-Layered system
-Code on demand
-
-Resource based - nouns/things instead of verbs/actions. Call an URI to dictate operation, with http doing the operation. Resources identified by the URIs. Multiple URIs can refer to the same resource.
-
-Representation - how resources get manipulated in a request.Resource provides the representation to the caller based on the request. Representations are usually JSON or XML. In other words results are returned in JSON or XML format.
-
-Eg.
-Resource - person (Sanjeev)
-Service/request - contact info (GET)
-Representation - JSON or XML format eg. { name: Sanjeev, address:xxxx, phone:xxx}
-
-Uniform interface:
-simplifies client-server interaction.
-HTTP verbs like GET, POST, PUT, DELETE
-Resource names in terms of URIs
-HTTP response - result we get back
-
-Stateless:
-Server contains no client state. All info needed is part of the message (the http verbs and the URI)
-There are services that are designed in a RESTful manner (like Oauth), which contain state.
-
-Client-server:
-Disconnected - the client may not have a direct connect to assets on the server like a database
-
-Cacheable:
-Server responses are cacheable (explicitly or implicitly).
-
-Layered system:
-Multiple layers, there could be software, hardware or middleware intermediaries - client doesn't know where the request is going or about the layers, just how to request (API) and the nature of what it gets back. Improves scalability.
-
-Code on demand:
-server extends client by sending over logic and having it execute on the client. eg. javascript or java applets
-
-The HTTP request has 5 parts:
-1) Verb (GET, POST, PUT, DELETE etc)
-2) URI - URI of the resource on which the operation is performed
-3) HTTP VERSION, mostly v1.1
-4) Request Header - key/value pairs that contain details like client type, formats client supports, cache settings etc.
-5) Request Body
-
-HTTP response has:
-1) HTTP version
-2) Response code
-3) Response header
-4) Response body
-
-Each resource should have its own URI (at least one). The service uses the URIs to to address its resources. The job of the URI is to identify a resource and tie it to the request. It is the verb that does the actual operation.
-
-Common HTTP responses: 200 - ok, 404 - not found, 403 - forbidden, 500 - Internal Server Error
-
-****************************************************************************
 Basic HTML, CSS
 
 <!doctype = html>
@@ -664,6 +595,21 @@ Event handlers are wired up when the code is executed (page loaded). So elements
 To ensure that event handlers work on elements created after the event handler code is wired up, use 'delegate' method. Unlike click or on delegate will add the event to elements added later.
 
 $(item).delegate('selector', 'event', function() {})
+
+Single event execution
+Usually event handlers execute each time the event is triggered, but it is possible to restrict to just a single execution (one click of a form submit button) using the 'one' method.
+
+Triggering events automatically
+If you want to execute an event handler without executing the event - for eg. if you have validate and submit buttons for your form, but want to execute validate code when a user clicks on submit - use the trigger() or triggerHandler() methods, the later will execute the first found event if multiple events exist.
+
+Note: when a click event is passed without any parameters, it will execute the event.
+
+Updating DOM elements without using html() method
+append() and appendTo() allows you to add some content at the end of a target, the former is applied to the target with the new content as the parameter, later is applied to the new content with the target as the parameter.
+
+Also prepend() and prependTo() 
+
+use after() and before() for inserting content outside elements.
 ---------------------------------------------------------------------------
 
 

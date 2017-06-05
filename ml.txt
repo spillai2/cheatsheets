@@ -52,3 +52,45 @@ Dummy variables
 When predictor variables are categorical (not numerical) we add extra columns for each of the values and then assign values of 1 or 0 based on if the given row has that value for the variable in question. These extra columns (values of the categorical variable) are called dummy variables. In the equation, we no longer use the categorical variable itself, but string on the extra dummy variables that we created for its values. 
 
 eg. profit prediction mentioned above could have a State variable which denotes the state the company is located in. So we create as many dummy variables as there are states in the data.
+
+You have to exclude one of the dummy variables from each category from your model, otherwise the effect of the dummy variable is canceled out. For eg. if the dummy variables represent 2 states NY and CA, then one of them have to be dropped (the one that gets zero as the value) as that needs to be the default. Including both means we are not getting the effect of either.
+
+Step-by-step building of an mult reg model
+We do not include *all* predictor variables in the model since some may not really have any effect at all on the predicted variable. How to eliminate? There are 5 different ways of building models by eliminating vars.
+1. All-in
+2. Backward Elimination
+3. Forward selection
+4. Bi-directional elimination
+5. Score comparison
+
+2,3 & 4 are usually referred to as Stepwise Regression.
+
+1. is done when you have prior knowledge that all variables are significant or you have to or you are prepping for #2.
+
+2. Backward Elimination
+	1. Select a significance level (like 0.05)
+	2. Fit the full model with all vars
+	3. Pick the variable with the highest p-value, if p > sig go to step 4 else finish the model
+	4. Eliminate that variable 
+	5. Fit the model without that variable
+
+Repeat steps 3-5 until the p-value of the variable chosen in less than sig level. At that stage you have finished the model.
+
+3. Forward selection
+	1. Select a sig level
+	2. Build simple linear models with each variable. Select one with lowest p-value.
+	3. Keep that variable and add an extra predictor.
+	4. Consider the predictor (of what is left) with the lowest p-value and go to step 3.
+Repeat 3-4 until you reach a predictor that has p-value > sig. Stop and select the model built in the previous step, that is the finished model.
+
+4. Bidirectional elimination (combination of 2 & 3 above)
+	1. Select a sig level to enter and a sig level to stay
+	2. Perform forward selection.
+	3. Perform backward selection checking if any of the added variables can be eliminated.
+	4. The model is done when no new variable can enter or leave.
+
+5. Score comparison
+	1. Select a goodness of fit criterion
+	2. Construct all possible regression models - if there are n vars, there are (2^n -1) models.
+	3. Select the one that best fits the criterion.
+	
