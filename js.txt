@@ -609,7 +609,10 @@ append() and appendTo() allows you to add some content at the end of a target, t
 
 Also prepend() and prependTo() 
 
-use after() and before() for inserting content outside elements.
+use after() and before() for inserting content outside elements. Also insertAfter() and insertBefore()
+
+To wrap DOM elements within tags use wrap() and wrapall().
+$('.target').wrap('<span></span>') will wrap each element of class target in a separate span whereas wrapall will wrap the entire class in one span tag. 
 ---------------------------------------------------------------------------
 
 
