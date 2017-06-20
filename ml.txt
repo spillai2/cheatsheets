@@ -93,4 +93,15 @@ Repeat 3-4 until you reach a predictor that has p-value > sig. Stop and select t
 	1. Select a goodness of fit criterion
 	2. Construct all possible regression models - if there are n vars, there are (2^n -1) models.
 	3. Select the one that best fits the criterion.
-	
+--------------------------
+Polynomial regression:
+Similar to multiple regression, but instead of multiple variables you have multiple powers of the same variable.
+b0 + b1x1 + b2(x1^2) + b3(x1^3)....+ bn(xn^n)
+When your x,y points are more in a curve than a line. Still called linear because the co-effecients (the unknowns we are interested in) are still linear. For eg. salary levels at a company for different positions (non-linear)
+
+Python
+use LinearRegression class to build linear regression model
+use PolynomialFeatures class to create polynomial x/independent variable
+Pass polynomial variable to linear regression objects fit method
+--------------------------
+

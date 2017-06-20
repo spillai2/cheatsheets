@@ -613,6 +613,43 @@ use after() and before() for inserting content outside elements. Also insertAfte
 
 To wrap DOM elements within tags use wrap() and wrapall().
 $('.target').wrap('<span></span>') will wrap each element of class target in a separate span whereas wrapall will wrap the entire class in one span tag. 
+
+Animations
+Basic ones - hide(), show(), toggle()
+names self-explanatory
+$('div-id').hide() will hide the div. One common use is to show() a hidden section.
+
+Fading
+fadeIn(), fadeOut(), fadeToggle()
+
+Removing and replacing items
+replaceAll(oldcontent)
+replaceWith(newcontent)
+
+Cloning
+use the clone() method to clone an element. The clone can then be used to append, add etc.
+var $clone = $('#divid').clone(); // generates a variable with the clone
+$clone.removeAttr(id); // removes the id of the cloned object
+$('#anotherdivid').append($clone); // appends to another div
+
+Asynchronous programming:
+Some operations can take an unknown amount of time. Asynchornous programming helps manage this situation. JS does this using 'promise's. JQ Promise() is an implementation of the promise pattern. Allows registering event handlers for various states (a promise to let you know if the event worked, failed or is in progress). 3 common ones:
+done
+failed
+progress
+for eg. for an output to be displayed only when a hide event has completed:
+$('.id').hide(1000).promise().done(function{<do something>});
+
+Threading:
+Concept that allows developers to execute code on a separate process. JS is not allowed to thread on browsers, instead it uses 'web workers'. It simulates threading. We dont have direct control over the thread, worker does.
+A web worker is made up of two components, the parent or calling script, and the worker or executing script. The worker runs in an environment similar to a separate thread, and does not have direct access to the calling environment or the UI. Web workers use a messaging system to pass information to and from the worker.
+The calling script will spin up a worker as follows:
+var worker - new Worker('someotherscript.js'); // the parameter is the script that does the work of the worker
+Then an event handler is added to the worker to respond (run a function) when the response is recieved from the worker script
+worker.addEventListener('message', function() {});
+
+In worker script:
+self.addeventListener('message', function() {});
 ---------------------------------------------------------------------------
 
 
