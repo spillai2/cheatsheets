@@ -1,3 +1,121 @@
+Quick setup of a web service
+1) Create a directory for the service and create a package.json (list of dependencies) file in it by running:
+npm init
+in the directory and answering a few questions.
+2) Create a file called server.js in the same directory.
+3) Create a directory within the main directory for the api itself, the name of this directory will be the start of the end points. Within the api directory create directories for controllers, models and routes.
+4) Create a .js file each inside the controllers, models and routes folders. Name it with the name of the service itself. eg. <service>Controller.js
+5) Set up the server by installing required modules with the --save option to include in package.json. A required module is the 'express' framework which will be used to develop apps and services. 'nodemon' is a useful to have as a dev-dependency to start the server.
+6) Write some boiler plate code in server.js:
+
+var express = require('express'),
+  app = express(),
+  port = process.env.PORT || 3000;
+app.listen(port);
+console.log('<default message>')
+
+and run:
+npm run start
+and you have your service running on port 3000. It doesn't do anything yet.
+
+7) Models: To add database access, add code to <server>Model.js. Involves using a database driver to connect to a db server and a schema to create if it doesn't exist or access if it does. Last line is:
+module.exports = <driver>.model(<Name of schema to create/access>, <var with schema defined>);
+
+8) Routes: Routes define the URL endpoints. Each route will use a specific function in the controller. Routes also define what type of request it is - get, put, post, delete. GET gets, POST creates, PUT updates and DELETE deletes and entry from the db.
+
+module.exports = function(app) {
+  var todoList = require('../controllers/<Controller file>');
+
+   #list of routes
+   app.route('<endpoint>')
+	.get(<controller function to call>)
+	.post(<controller function to call>);
+}
+
+9) Controllers: Logic for what to do when an endpoint is called lies in the controller. Contains a list of functions that are referred to by various endpoints in the route file. Functions typically query the database and in some cases process the output. The result is what you see when you call the endpoint.
+
+var dbdriver = require('<dbdriver>'),
+dbhandle = dbdriver.model('<schema defined in models file>');
+# list of functions
+exports.<function name> = function (req, res) {
+	<do something with db handle>
+}
+
+Of course, server.js is the master control script and so all the routes need to be registered there. Database connection also happens there.
+
+Use postman to test different endpoints. If db doesn't exist, then doing a POST will create it.
+
+Middleware can be added to server.js to give specific error messages if (for eg.) wrong routes are entered.
+app.use(function (req,res) {
+	res.status(404).send({url: req.originalUrl + ' not found'})
+});
+
+######################################################################
+Quick setup of a web app
+1) express <name of app>; # use the express framework to build app
+This creates a directory with the name of the app and in it files app.js (master control), package.json (dependency list) and a subdirectory structure that consists of bin, public, routes and views
+
+2) npm install; # installs dependencies in a node_modules directory
+
+3) npm start: # starts the app which can be accessed at localhost:3000/
+
+app.js is the master control script. It instantiates express with:
+var app = express();
+
+It tells the app where to find its views and what view engine to use:
+app.set('views', path.join(__dirname, 'views));
+app.set('view engine', 'jade');
+
+The last line is 
+module.exports = app;
+Core of node, all modules export some object
+
+Routes (end points) are defined in specific routes files, just as in services. Basic structure of route files (<something>.js) is:
+
+var express = express();
+var router = express.Router();
+
+router.get('path/name', function(req, res, next) {
+	res.render('name', {title: 'Some title for page'});
+});
+module.exports = router;
+
+The different routes are defined as get, post, put or delete and given a file to render. Usually rendering is done by an HTML templating engine called jade. In the above case it will be name.jade. Routes also contain controller logic.
+
+The jade files are stored in the views directory. There is usually a layout.jade file that defines the overall layout of the page - header, footer etc. The individual jade files start with 'extend layout' and then define their own html. Jade files are indentation sensitive and heirarchy is defined by indentation.
+
+4) db connection
+The db connection is defined in app.js as that is where middleware needs to go.
+
+var dbcon = require('<some db driver>');
+var db = dbcon('<url path to db>');
+
+Now make the db object accessible to the router (requests are send from app.js to the router)
+app.use(function(req,res,next){
+	req.db = db;
+	next();
+});
+
+The above needs to be defined before the routing code:
+app.use('/', routes);
+
+5) Getting data from db
+This is defined in the router js file.
+
+router.get('path/name', function (req, res){
+	var db = req.db;
+	<some db code here>;
+	res.render('name', {<render result object>}
+});
+
+6) Rendering data in the template jade file. 
+Same as before. May need to loop through is an array needs to be displayed. done with:
+each row, i in array
+	row.column1, row.column2
+
+7) You can add data to the database with a POST route
+######################################################################
+
 Quick how-to to design a node website with the MEAN stack
 
 The MEAN stack in the most popular way of developing web apps using Node
