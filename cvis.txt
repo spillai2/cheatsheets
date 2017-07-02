@@ -1,0 +1,15 @@
+Images as functions
+I(x,y) where I is a measure of the intensity of the image. Image processing is taking a function/image like this and returning another function/image.
+A function that represents and image goes from R^2 to R ie from (x,y) to an intensity value. x,y will have some finite bounds, same with intensity which will have a min and a max.
+In an 8-bit image:
+8 bits in a byte, if they are all on then we get 255 (white), if all off we get 0 (black).
+Color images are 3 functions stacked on top of each other - r(x,y), g(x,y) and b(x,y) - for the primary colors red, green and blue. Every pixel of the function/image is a vector of these 3 values. These values can be separated into 3 different 'channels' - all red intensity values can be grouped into a red channel and so on.
+
+In comp vision we operate with digital/discrete images. Discrete values in a 2D space. Matrix of values.
+The height of the image is the number or rows (y) and the width is the number of columns (x). The area is width*height and is the total number of pixels. Each pixel of a color image will have 3 values, each of which is represented by 1 byte - this gives an idea of the memory needed to store the image.
+
+Color images are read in as matrices. Each row/column location will have 3 values (1:3) to represent the colors RGB respectively. To fetch all the green values for eg:
+green = image(:,:,2)
+for all rows and columns, fetch the 2nd channel values.
+
+Quantizing an image (rounding out non-integer values) result in a loss of detail.
