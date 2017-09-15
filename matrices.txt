@@ -1,0 +1,41 @@
+Matrix algebra
+
+1) Creating matrices
+a) Python/Numpy ndarrays (n-dimensional arrays) can be used to create 2 dimensional arrays (matrices)
+   np.array([list1,list2]) # takes two lists and creates a 2 row matrix
+   np.random.randn(7,4) # creates a 7x4 matrix and fills with normal random numbers
+   np.arange(6).reshape(3,2) # converts a 1-dimensional ndarray into a matrix (has to be ndarray, won't work on lists)
+
+b) R
+   a = matrix(<vector>, nrow=x, ncol=y) # turns a vector into an (x,y) matrix
+	matrix(1:12, nrow=4) # only need to give one dimension
+   dim(<vector>) = c(<nrows>,<ncols>) # same thing, done a different way by giving 2 dimensions to a vector
+	a = 1:12
+	dim(a) = c(4,3)
+   cbind(v1,v2,v3) # takes 3 same size vectors and turns them into columns of a matrix
+   rbind(v1,v3,v3) # row bind
+--------------------------------
+2) Transposing
+Swapping rows and cols of a matrix
+
+a) Python/Numpy
+   <ndarray>.transpose() or <ndarray>.T
+b) R
+   t(<matrix>)
+--------------------------------
+3) Multiplying matrices
+An (x,n) matrix can be multiplied with an (n,y) matrix to give an (x,y) matrix. # of cols in the first matrix needs to be the same as the # of rows in the second matrix.
+
+a) Python/Numpy
+   <ndarray1>.dot(<ndarray2>)
+b) R
+   <matrix1> %*% <matrix2> # just * is only for scalar multiplication
+--------------------------------
+4) Inverse of a matrix
+Matrix equivalent of a scalar reciprocal. When you multiply a matrix with its inverse you get an identity matrix which is equivalent to scalar 1.
+
+a) Python
+   inv() function in numpy.linalg
+   inv(<ndarray>)
+b) R
+   
