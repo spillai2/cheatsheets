@@ -1,0 +1,42 @@
+Flask
+Lightweight python framework
+
+To create a simple web app
+
+Basic syntax
+-----------
+from flask import Flask
+app = Flask(__name__)
+
+@app.route("/") # base url mapped to /, runs the function defined right below it
+def <any func name>():
+    return "<some string>"
+    
+if __name__ == "__main__"
+    app.run()
+    # runs on localhost:5000
+    # app.run also takes parameters
+    # app.run(host='<hostname or IP>', port=<port #>)
+-------------
+executing the above code will make the app run on port 5000 and will show <some string>
+
+Any number of routes (URL endpoints) can be added as follows, starting with the base url / 
+-------------
+@app.route("/newroute")
+def <func name>():
+    <some logic>
+    return "<something>"
+-------------
+
+Displaying in templates
+Create an html template and enclose values to be displayed dynamically as {{<param>}}
+Set a template directory and define as follows:
+
+--------------
+from flask import Flask, render_template
+app = Flask(__name__, template_folder='<path to templates folder>')
+@app.route(<end point>)
+def <func name>():
+    <some logic>
+    return render_template('<template html file>', <param>=<value> # <param> should exist in html
+--------------
