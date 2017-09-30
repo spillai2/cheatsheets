@@ -1,0 +1,79 @@
+Sequences are data structures that can be iterated over eg. lists, tuples, dictionaries
+list = [1,2,3,4] # mutable
+list[0] # how to access
+tuple = (1,'a',2,'b') #immutable
+tuple[1]
+dict = {'key':'value', 'key2':'value2'}
+dict['key'] # access for all three through []
+------------------------------------
+Date/time modules
+
+import datetime as dt
+import time as tm
+tm.time() # number of seconds since Jan 1, 1970 (epoch)
+dtnow = dt.datetime.fromtimestamp(tm.time()) # converts time into year, month, day etc
+#dtnow.year, dtnow.month, dtnow.day, dtnow.hour, dtnow.minute, dtnow.second etc.
+dt.date.today() # shows today
+dt.timedelta(days = 100) # create a timedelta of 100 days
+dt.date.today() - dt.timedelta(days = 100) # the date 100 days befor today
+------------------------------------
+Basic OOP
+
+#Class definition
+class Person:
+    department = 'School of Information' #a class variable
+
+    def set_name(self, new_name): #a method
+        self.name = new_name
+    def set_location(self, new_location):
+        self.location = new_location
+        
+#Object instantiation and use:
+person = Person()
+person.set_name('Sanjeev Pillai')
+person.set_location('Bedford, MA')
+print('{} live in {} and works in the department {}'.format(person.name, person.location, person.department))
+------------------------------------
+Map, functional programming
+Funtional programming is where all parameters to a function are defined thus showing what can change and what can't. Often the parameters themselves can be functions.
+
+#Map() lets you execute a function on a set of iterable data
+store1 = [10.00, 11.00, 12.34, 2.34]
+store2 = [9.00, 11.10, 12.34, 2.01]
+map(min, store1, store2) # runs the min function comparing 2 lists and returns the min value at each position
+
+for item in (map(min, store1, store2)):
+    print(item)
+------------------------------------
+Lambda - python's way of creating anonymous functions
+Usually evaluates only a single expression, so not suited for complex logic, but can effectively do simple data cleaning.
+
+lambda a, b, c : a + b # takes 3 args and adds the first two. Parameters before the colon and expression after
+returns a function expression that can be stored in a variable and called as follows:
+myfunc = lambda a, b, c : a + b
+myfunc(1,2,3) # will return 1+2
+------------------------------------
+List comprehension
+Iterating through the elements of a sequence and doing some operation all in one statement without having to loop through
+[<some operation on x> for x in <some sequence>] # returns a list, so need to be enclosed in []
+[i^2 for i in range(10)] # returns the squares of numbers 1-10
+------------------------------------
+Numpy
+Create a numpy array, also called nd array for n-dimensional array
+
+npa = ndarray([1,2,3],[3,4,5],[6,7,8]) # creates a 3x3 matrix where each list is a row
+npa.shape() # returns dimensions 
+npa.reshape(x,y) # if npa is a one dimensional array, reshape turns it into a, x,y matrix
+npa.resize(x,y) # changes dimensions of an existing matrix
+np.ones((x,y)), np.zeros((x,y)), np.eye(4) # creates a matrix of ones, zeros, identity
+npa.linspace(0,4,9) # take 9 equidistant values between 0 and 4
+
+x*y # element-wise multiplication of 2 matrices of same dimensions
+x.doy(y) # matrix multiplication
+x.T # transpose
+min(), max(), mean(), std() # other common functions
+argmax(), argmin() # returns index of max and min vals respectively
+
+when copying arrays, use np.copy() to avoid affecting the original array
+enumerate(matrix) # iterates over a matrix row by row
+zip(mat1, mat2, mat3) # iterates over mutliple matrices of same dim
