@@ -1,0 +1,48 @@
+Scikit-image is the default basic package for working with images. It handles images as numpy arrays.
+More advanced ones include 
+scipy.ndimage for multidimensional images
+Mahotas - fast C++ based processing library
+OpenCV - powerful package specializing in CV
+ITK - to work on 3D images (mostly medical images)
+
+Basic load and display and image in greyscale
+
+**************************
+from skimage.io import imread
+from matplotlib import pyplot as plt
+import matplotlib.cm as cm
+
+%matplotlib inline
+file = '<url to an image file on the web>'
+image = imread(file, as_grey=True)
+plt.imshow(image, cmap=cm.gray)
+plt.show()
+**************************
+
+Filter images to smooth and reduce noise.
+1. Median filter - Based on idea that true signal comes from a median of the neighborhood pixels
+2. Total variation denoising - Based on the idea that noise is variance and tries to reduce it
+3. Gaussian - Uses Gaussian/Normal function to defines pixels.
+
+**************************
+from skimage import filters, restoration
+from skimage.morphology import disk
+
+mf = filters.rank.median(image, disk(1))
+tv = restoration.denoise_tv_chambolle(image, weight=0.1)
+gauss = filters.gaussian_filter(image, sigma=0.7)
+**************************
+
+To find out type and shape of image
+type(image) # usually a numpy ndarray
+image.shape # number of rows and cols in the array
+
+To crop an image:
+image2 = image1[5:70, 0:70] # crops by rows 5-70 and cols 0-70 of the original image. To analyze it helps if the images are the same size.
+
+Can also resize using
+resize(image, (x,y)) # x and y are the number of rows/cols
+
+flatten into a single dimension:
+image.flatten()
+
