@@ -31,7 +31,6 @@ def <func name>():
 Displaying in templates
 Create an html template and enclose values to be displayed dynamically as {{<param>}}
 Set a template directory and define as follows:
-
 --------------
 from flask import Flask, render_template
 app = Flask(__name__, template_folder='<path to templates folder>')
@@ -40,3 +39,19 @@ def <func name>():
     <some logic>
     return render_template('<template html file>', <param>=<value> # <param> should exist in html
 --------------
+
+Styling pages
+Define a base layout page (say layout.html) and include in body:
+--------------
+<body>
+ {% block body %}{% endblock %}
+</body>
+--------------
+Then in target html file:
+--------------
+{% extends "layout.html" %}
+{% block body %}
+<content you want displayed>
+{% end block body %}
+--------------
+This inserts the content of the target html file into the layout file

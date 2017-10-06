@@ -1,1 +1,0 @@
-/home/san/cloud_aws/docker/docker.txt
