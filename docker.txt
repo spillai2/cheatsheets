@@ -1,0 +1,131 @@
+Docker is an open-source project that automates the deployment of software apps inside containers by providing a level of abstraction and OS-level virtualization on Linux. In other words, Docker is a tool that enables developers and admins to deploy applications in a sandbox (container) to run on a Linux OS. An app written on any platform  can be deployed on Linux using Docker. Much lower overhead than VMs.
+
+Terminology:
+
+Images - blueprints of the app that form basis of containers
+Docker Daemon - background service running on the host that manages building, running and distributing Docker images.
+Docker Client - command line tool that allows the user to interact with the daemon.
+Docker hub - central repository of publicly available Docker images.
+
+$ docker pull <image>
+will download the image and make it available for use
+
+$ docker images
+will show all the Docker images available on your system
+
+$ docker run <image> <command>
+will run <command> on <image> for eg. an ls command on a linux image like busybox
+
+$ docker run -it <image> <command>
+invokes interactive tty, so you are within a command like 'sh' and then run as many commands as you want (like being in a linux shell) 
+
+$ docker ps
+shows the list of currently active (running) containers. ps -a will show the list of containers that were run, when they ran and when exited.
+
+$ docker rm <container id>
+will delete that container if it has already exited
+
+$ docker rm $(docker ps -a -q -f status=exited)
+will delete all containers. The command inside () feeds the list of container ids (-q returns only numeric ids and -f filters on a condition) 
+
+$ docker run -d 
+will detach the terminal, so that it is not tied up running docker jobs like running a web server
+
+$ docker run -d -P --name <name> <image>
+will run a web site called <name> using the <image> fetched, with the terminal detached.
+
+$ docker ports <name>
+will show what port the site is running on and can be accessed using the browser
+
+$ docker run -p 8888:80 <name> <image>
+runs the web server on port 8888
+
+$ docker stop <id>
+will stop running the container specified by id
+
+Docker images can be base images (OS like Ubuntu, Debian etc) or child images that are built on base images and add extra functionality. They can also be official images (supported by folks at Docker and are one word long - like 'busybox') or user images (uploaded by users and usually has the name user/image)
+
+Creating a docker image
+A Dockerfile is a simple text file that conatins a list of commands a docker client calls while creating an image. In the Dockerfile, list the commands needed. For eg.
+
+FROM  <base image>
+EXPOSE <port number>
+CMD [<comma separated list of commands>] for eg. CMD["python", "./app.py"]
+
+To create image run:
+$ docker build -t <user>/<app> . 
+creates an image <user>/<app> (dot at the end is important)
+The <app> directory with contain the code for the app as well as the Dockerfile
+
+Once an image is created, run it as:
+$ docker -p <external port>:<server port> <user>/<app>
+the xxxx are port numbers
+
+Docker on AWS
+Docker images can be deployed to the cloud in AWS. First step for that is to register the image at a registry that can be accessed from AWS. To publish:
+
+$ docker push <user>/<app>
+for a first time push the client will ask for login credentials for Docker hub (assuming it is configured as the registry). Once an image is online, anyone can run your app with a single command:
+
+$ docker run -p port:port <user>/<app>
+
+In AWS, use the Elastic Beanstalk (EBS) to host your app. Go through 'create new application', choose Docker as the predefined config and upload the file Dockerrun.aws.json. EBS will pull the image, load the app and show you a link to access the app.
+
+Most production apps are multi-container apps, with separate containers for different tiers (like database, UI, search, middleware etc). Docker can run apps that have multiple containers where each container is a separate docker image. Just a few steps:
+1) build the app container
+$ docker build -t <user>/<app>
+
+2) create the network, so that all containers in an app can run on the same network and securely access each other
+$ docker network create <name of network>
+
+3) start an already built and available container (eg. elasticsearch) that your app calls.
+$ docker run -d --net <name of network> -p port:port --name <local name for container> <available container>
+
+4) start the app container on the same network
+same command as above except for name of app
+
+Docker network is a relatively new and powerful feature. 3 default networks when docker is installed - none, host and bridge. bridge is what containers run by default.
+
+$ docker network ls
+
+If you 'inspect' a network you'll see the containers running inside it
+
+$ docker network inspect bridge (or any other network)
+
+You can creat your own network for multi-container apps
+
+$ docker network create <name of network>
+
+Docker Compose
+Tool for defining and running multi-container apps as 'run an app' instead of 'run a container'. Provides a config file called docker-compose.yml that can be used to run an app and the suite of (micro)services it depends on with one command. Each service is defined as separate entities under the general 'services:' section. Parameters such as command and ports enable configuration of the services. Once the config file is all set, a single command from within the directory that holds docker-compose.yml will load up the app:
+
+$ docker-compose up
+$ docker-compose up -d # detached mode
+$ docker-compose stop # to stop 
+
+docker-compose creates its own network to run apps, no need to create it ourselves
+
+To log into a container that is running:
+$ docker exec -it <container id> bash
+
+AWS Elastic Container Service:
+Docker-compose apps can be deployed on AWS ECS. First create and download a key pair from the AWS console. Store it in the same directory as the app. Configure ecs-cli (command line interface for ecs)
+
+$ ecs-cli configure --region <aws region> --cluster <name of app>
+
+Create a cloud formation template:
+
+$ ecs-cli up --keypair <downloaded key> --capability-iam --size 2 --instance-type t2.micro
+
+Next step is to configure the yml file (a bit differently from the default to suit AWS).
+
+Push the respository to docker hub for AWS to pick up:
+$ docker push <user>/<app>
+
+Last step is to get the app up and running:
+
+$ ecs-cli compose --file <name of aws yml file> up
+
+An Amazon ECS cluster is a regional grouping of one or more container instances on which you can run tasks.
+
+

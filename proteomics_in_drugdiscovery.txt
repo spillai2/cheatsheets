@@ -1,0 +1,13 @@
+Drugs act on mutliple targets (target proteins), not just the one it is designed to act on. Understanding these multi-target effects and awareness of biological networks lead to the concept of network pharmacology. This relies on many 'omics strategies to detect variables at the cellular/molecular level. The importance of PPIs and PTMs pushes proteomics to have a prominent role in drug discovery. Drugs generally act on proteins that do not act in isolation but are part of networks and pathways where they are connected with other proteins both physically and functionally. Dramatic progress in proteomic technologies, including innovative separation and analytical strategies such as LC-MS/MS (LC Tandem mass spectrometry) and quantitative MS measurements have also helped the advance of proteomics.
+
+Proteomic methodologies:
+2D Gel electrophoresis allows the separation of proteins by charge as first dimension and mass as second. After separation and staining statistical software can compare protein spots of different samples. The spots of interest (that appear differently in the samples) are cut out, digested in gel and the peptides identified by MS. The acquired mass data undergo a sequence database search with a score based on percentage of sequence coverage and number of peptides matched. Gel based methods have some limitations. Small (<10 kDa), large (>150 kDa) and low expressed proteins are hard to detect. Since spots usually have multiple proteins with different propeties (hydrophobic, high MW, extremely acidic and basic) that also presents a challenge. It is possible to load multiple samples (upto 3-4) in the same gel after labeling the proteins with different fluorescent dyes and measure the intensities to compare.
+
+MS based methods are more robust for quantitation in complex samples. Proteins in solution are enzymatically cleaved into peptides which are then separated by LC before MS/MS identification. When samples are extremely biologically complex, they have to separated by 2D chromatography before MS/MS (2D-LC-MS/MS). MudPIT (multi dimensional protein identification technology) is the most common of this approach.
+
+Roles for proteomics in the different steps to drug discovery:
+1) Identifying the full spectrum of protein targets of a given drug
+2) Elucidating MOA through which a drug exerts its pharmacological effect
+3) Identifying biomarkers that can be used to monitor the effect of the drug in-vivo
+
+
