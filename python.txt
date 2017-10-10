@@ -137,3 +137,30 @@ df = df[<list of cols to keep>] # edits dataframe to drop all other cols
 
 Missing values:
 df.fillna(method = 'ffill')
+-----------------------------
+Merging data frames:
+To add a column to a data frame with a scalar value:
+df[newcol] = <somevalue> # adds somevalue to all rows, if values are different then they have to be in a list
+
+Two merge 2 different data frames which share an index. For eg. a df of staff and students can be merged if the 'name' is a shared index.
+
+pd.merge(first_df, second_df, how='outer', left_index=True, right_index=True) # union merge/outer join
+the columns that are not common are put adjacent to each other with NaN where values don't exist.
+
+pd.merge(first_df, second_df, how='inner', left_index=True, right_index=True) # intersection merge/inner join
+pd.merge(first_df, second_df, how='left', left_index=True, right_index=True) # left join takes all from the first that also exists in the second
+pd.merge(first_df, second_df, how='right', left_index=True, right_index=True) # right join opposite of left
+print(pd.merge(df1, df2, left_index=True, right_on=<shared index>))
+-----------------------------
+Pandas idioms
+Index chaining is bad - back to back square brackets as in df.loc[row][column]
+Method chaining is recommended - for eg.
+(df.where(column == value)
+    .dropna()
+    .setindex(....)
+    .rename(...))
+if you begin a statement with (, in python, you can span a statement over mutliple lines.
+
+Pandas has an apply() function that works much the same way as R apply.
+apply() lets you execute a function along a certain axis (row or col)
+df.apply(<func>, axis=1) # func could be a lambda
