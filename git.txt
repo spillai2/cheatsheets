@@ -1,0 +1,10 @@
+Create local repository:
+1) In directory with the files to commit run 'git init'
+2) 'git add <filename(s)>' will add the files and stage them for commit
+3) 'git commit -m <"some message">' will commit the files
+
+Remote repository
+1) log into github.com (or any other) and create a new repository using the GUI
+2) then come back to local repository directory and run 'git remote add origin git@github.com:spillai2/reponame'. This will link your local to remote
+3) 'git push' will push your commits to remote
+4) 'git pull' will pull in changes from remote to local
