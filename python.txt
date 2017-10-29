@@ -113,11 +113,20 @@ df.drop(row) # won't drop the row from the original df, only it is a df.copy()
 copy_del(col) # will drop 
 del copy_df[col] # will delete the column
 
-df = pd.read_csv(<csv file>, index_col=0, skiprows=1) # read a csv file, skip the first row and use the first col as index
+df.columns - gives list of columns
+list(df.columns.values) # gives the column names as a list
+list(df) # short version of above
 
-columns can be rename
-df.columns - gives list of columns 
+df.shape # gives number or rows and columns in a data frame
+
+df = pd.read_csv('file.csv', index_col=0, skiprows=1) # read a csv file, skip the first row and use the first col as index
+
+df = pd.read_table('file.dat', sep='<record separator>', header='<None or row#>', names='<list of names for cols>')
+
+columns can be renamed
+ 
 df.rename(col, inplace=True)
+df.unstack('col') # splits a dataframe according the values of the col specified
 
 Querying a DataFrame:
 By creating boolean arrays
@@ -190,3 +199,23 @@ astype('category', categories=<list of values>, ordered=True) # ordered = True m
 Once converted to categorical, a df can be queried based on the category. For eg. >= 'C' if the categories are A,B,C,D and ordered.
 
 pd.cut - divides a column into a specified number of bins
+-----------------------------
+pd.pivot_table() allows you to pivot your table and summarize/view data the way you want
+
+df.pivot_table(values = <col which we want to summarize>, index = <col to be rows in the result>, columns = <cols of pivot table>, aggfunc = [<one or more list of func]) 
+
+If a list of functions are passed, say min and max, the pivot table will show two column sets for the 2 funcs.
+
+Time functions
+pd.Timestamp() # converts an input like 10/12/2017 to a standard yyyy/mm/dd format
+pd.Period() # converts input into a period eg. 01/2017 will be converted to a month period and 01/01/2017 to day
+
+DateTimeIndex, PerodIndex - refers to indexes that are DateTime(Timestamp) or Period
+
+pd.to_datetime() # converts input into Timestamp
+
+Timestamps can be added to or subtracted from each other and it gives a Timedelta type. Similarly adding or subtracting Timestamp and Timedelta gives Timestamp. Timedelta is a certain interval of time eg. 12D or 13H
+
+pd.date_range() # creates a date range just like a sequence with intervals etc.
+
+
