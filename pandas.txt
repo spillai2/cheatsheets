@@ -1,0 +1,28 @@
+#pandas methods to read files:
+read_csv('filename') # optional sep parameter if separator is not comma
+read_json('filename')
+read_excel('filename', sheetname=0) # to read the first sheet in case there are multiple sheets
+
+#An url can also be passed as argument to the above functions
+
+#To index with a specific column
+df.set_index('colname') 
+# above does not change the dataframe, just spits out a modified df. To actually change the df:
+df = df.set_index('colname') #or
+df.set_index('colname', inplace=TRUE)
+
+#Access data based on labels (row/column names)
+# To slice a chunk (some number of rows for a certain set of columns)
+df.loc[fromrowid:torowid, fromcolumn:tocolumn]
+# if you leave out the range, you can also access single cells from the df
+df.loc['rowid', 'colname']
+# to get all rows for a select set of columns, use a single colon for rows
+df.loc[:, 'fromcolumn':'tocolumn']
+
+#Access data based on indexes/positions
+# same logic as above, but use function iloc and index numbers
+df.iloc[1:4, 3:5] # fetches rows 1,2 and 3 of column numbers 3&4
+
+#For access with a mix of labels and positions, use ix
+df.ix[1:4, 'fromcolumn':'tocolumn'] 
+
