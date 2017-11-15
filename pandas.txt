@@ -24,5 +24,12 @@ df.loc[:, 'fromcolumn':'tocolumn']
 df.iloc[1:4, 3:5] # fetches rows 1,2 and 3 of column numbers 3&4
 
 #For access with a mix of labels and positions, use ix
-df.ix[1:4, 'fromcolumn':'tocolumn'] 
+df.ix[1:4, 'fromcolumn':'tocolumn']
+
+#To delete a row or column from data frame
+df.drop('colname', 1) # 1 means column 
+df.drop('rowname', 0) # 0 means row
+#To delete by index instead of names/labels
+df.drop(df.index[from:to, 0] # change to 1 for columns
+
 

@@ -58,6 +58,22 @@ Iterating through the elements of a sequence and doing some operation all in one
 [<some operation on x> for x in <some sequence>] # returns a list, so need to be enclosed in []
 [i^2 for i in range(10)] # returns the squares of numbers 1-10
 ------------------------------------
+# fire up a jupyter notebbok
+cd <desired directory>
+jupyter notebook
+
+# have jupyter linked to different versions of python
+install Jupyter again using pip3 install jupyter
+install Python3 kernel using jupyter kernelspec install-self
+
+# have jupyter open in a browser you want
+jupyter notebook --generate-config
+vi ~/.jupyter/jupyter_notebook_config.py
+#and change
+c.NotebookApp.browser = ''
+#to for example:
+c.NotebookApp.browser = '/usr/bin/google-chrome'
+------------------------------------
 Numpy
 Create a numpy array, also called nd array for n-dimensional array
 
