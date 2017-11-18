@@ -32,4 +32,13 @@ df.drop('rowname', 0) # 0 means row
 #To delete by index instead of names/labels
 df.drop(df.index[from:to, 0] # change to 1 for columns
 
+#To add a column to a data frame
+df['newcolumn'] = "value" # value will be propagated through all the rows of the data frame 
+#To add a new row, transpose the df, add a column and then transpose back
+
+#To apply a function to all rows of a column without looping
+df['column'].apply(functionname)
+#function can also be a lambda
+df['newcolumn'] = df['oldcolumn'].apply(lambda x: <do something with x>)
+
 
