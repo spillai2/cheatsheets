@@ -1,0 +1,35 @@
+nparr = np.arange(27) # creates a one dimensional array with numbers from 0 - 26
+nparr.reshape(3,9) # converts it into a 2 dimensional array (matrix) with 3 rows and 9 cols
+
+#convert list to numpy array
+np.asarray(list)
+
+#read an image in as a numpy array
+import cv2
+img = cv2.imread('image.jpg')
+# img is now an ap array with each number being the value of a pixel.
+# color scale is 0-black 255-white and everything between them are diff shades of gray. 
+# 3 dimensional array if reading in RGB with each dimension representing one of R,G and B. The actual color at a particular pixel is a composite of the 3 values.
+#write an image
+cv2.imwrite('newfile', <np array>)
+
+#to slice/subset an np array
+# first arg is for rows, second for columns - leave either of them empty and you get all rows or columns
+array[fromr:tor, fromc:toc]
+# to get individual values
+array[rownum, colnum]
+#to iterate through an np array
+for i in nparray:
+    print(i)
+#to iterate column-wise, transpose array
+for i in nparray.T:
+#to get a flat list of elements
+for i in nparray.flat:
+
+#to stack multiple arrays
+np.hstack((arr1,arr2)) # note that hstack (horizontal) takes a single argument which is a tuple of the arrays to stack
+#to stack vertical (one on top of the other)
+np.vstack
+#to split array
+np.hsplit(nparray, x) # where is the number of arrays to split into
+np.vsplit(nparray, x)
