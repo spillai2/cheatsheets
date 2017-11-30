@@ -75,26 +75,7 @@ vi ~/.jupyter/jupyter_notebook_config.py
 c.NotebookApp.browser = ''
 #to for example:
 c.NotebookApp.browser = '/usr/bin/google-chrome'
-------------------------------------
-Numpy
-Create a numpy array, also called nd array for n-dimensional array
 
-npa = ndarray([1,2,3],[3,4,5],[6,7,8]) # creates a 3x3 matrix where each list is a row
-npa.shape() # returns dimensions 
-npa.reshape(x,y) # if npa is a one dimensional array, reshape turns it into a, x,y matrix
-npa.resize(x,y) # changes dimensions of an existing matrix
-np.ones((x,y)), np.zeros((x,y)), np.eye(4) # creates a matrix of ones, zeros, identity
-npa.linspace(0,4,9) # take 9 equidistant values between 0 and 4
-
-x*y # element-wise multiplication of 2 matrices of same dimensions
-x.doy(y) # matrix multiplication
-x.T # transpose
-min(), max(), mean(), std() # other common functions
-argmax(), argmin() # returns index of max and min vals respectively
-
-when copying arrays, use np.copy() to avoid affecting the original array
-enumerate(matrix) # iterates over a matrix row by row
-zip(mat1, mat2, mat3) # iterates over mutliple matrices of same dim
 ------------------------------------
 Pandas 
 import pandas as pd

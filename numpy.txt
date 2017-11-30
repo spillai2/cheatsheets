@@ -1,5 +1,25 @@
-nparr = np.arange(27) # creates a one dimensional array with numbers from 0 - 26
-nparr.reshape(3,9) # converts it into a 2 dimensional array (matrix) with 3 rows and 9 cols
+Numpy
+Create a numpy array, also called ndarray for n-dimensional array
+
+npa = np.array([[1,2,3],[3,4,5],[6,7,8]]) # creates a 3x3 matrix where each list is a row
+npa.shape() # returns dimensions 
+npa.reshape(x,y) # if npa is a one dimensional array, reshape turns it into a, x,y matrix
+npa.resize(x,y) # changes dimensions of an existing matrix
+np.ones((x,y)), np.zeros((x,y)), np.eye(4) # creates a matrix of ones, zeros, identity
+np.linspace(0,4,9) # take 9 equidistant values between 0 and 4
+
+x*y # element-wise multiplication of 2 matrices of same dimensions
+x.dot(y) # matrix multiplication
+x.T # transpose
+min(), max(), mean(), std() # other common functions
+argmax(), argmin() # returns index of max and min vals respectively
+
+when copying arrays, use np.copy() to avoid affecting the original array
+enumerate(matrix) # iterates over a matrix row by row
+zip(mat1, mat2, mat3) # iterates over mutliple matrices of same dim
+
+npa = np.arange(27) # creates a one dimensional array with numbers from 0 - 26
+npa.reshape(3,9) # converts it into a 2 dimensional array (matrix) with 3 rows and 9 cols
 
 #convert list to numpy array
 np.asarray(list)
@@ -7,7 +27,7 @@ np.asarray(list)
 #read an image in as a numpy array
 import cv2
 img = cv2.imread('image.jpg')
-# img is now an ap array with each number being the value of a pixel.
+# img is now an np array with each number being the value of a pixel.
 # color scale is 0-black 255-white and everything between them are diff shades of gray. 
 # 3 dimensional array if reading in RGB with each dimension representing one of R,G and B. The actual color at a particular pixel is a composite of the 3 values.
 #write an image
@@ -15,7 +35,7 @@ cv2.imwrite('newfile', <np array>)
 
 #to slice/subset an np array
 # first arg is for rows, second for columns - leave either of them empty and you get all rows or columns
-array[fromr:tor, fromc:toc]
+array[from_row:to_row, from_col:to_col]
 # to get individual values
 array[rownum, colnum]
 #to iterate through an np array
