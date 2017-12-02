@@ -77,6 +77,22 @@ c.NotebookApp.browser = ''
 c.NotebookApp.browser = '/usr/bin/google-chrome'
 
 ------------------------------------
+Virtualenv:
+Create a virtual env with system packages
+$ virtualenv --system-site-packages targetDirectory
+Create a plain virtual env without system packages
+$ virtualenv targetDirectory
+
+Activate
+$ source targetDirectory/bin/activate
+Then pip install modules needed. This creates a self-contained installation that can be used to create an app
+To deactivate
+(targetDirectory)$ deactivate
+
+You can also modules by
+$ targetDirectory/bin/pip install <packagename>
+------------------------------------
+
 Pandas 
 import pandas as pd
 
