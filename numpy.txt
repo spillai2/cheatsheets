@@ -24,18 +24,25 @@ npa.reshape(3,9) # converts it into a 2 dimensional array (matrix) with 3 rows a
 #convert list to numpy array
 np.asarray(list)
 
-#read an image in as a numpy array
-import cv2
-img = cv2.imread('image.jpg')
-# img is now an np array with each number being the value of a pixel.
-# color scale is 0-black 255-white and everything between them are diff shades of gray. 
-# 3 dimensional array if reading in RGB with each dimension representing one of R,G and B. The actual color at a particular pixel is a composite of the 3 values.
-#write an image
-cv2.imwrite('newfile', <np array>)
-
 #to slice/subset an np array
-# first arg is for rows, second for columns - leave either of them empty and you get all rows or columns
+# if a one dimensional array, get value at a certain index by
+array[x]
+# get a sequence of values
+array[x:y]
+# for multidimenational arrays, first arg is for rows, second for columns - leave either of them empty and you get all rows or columns. This is called array slicing
 array[from_row:to_row, from_col:to_col]
+array[row,col] # gets you a single value
+# if you want to get a row from a 2-dimensional array
+array[0,:] # means first row (all columns)
+array[:,1] # second column (all rows)
+# for higher dimensional arrays, indexing like above will return smaller arrays. For eg. is x is a 2x2x3 array (2 rows, 2 columns and 3 elements in each element of the 2x2 array)
+x[0] # will be a 2x3 array
+
+# slices are views on original array, so if you change values in a slice, the values in the original array will change
+slice = array[5:8]
+slice[0] = x # now array[5] is also x
+# to create a slice that is not a view you have to copy the array
+slice = array[5:8].copy()
 # to get individual values
 array[rownum, colnum]
 #to iterate through an np array
@@ -46,6 +53,18 @@ for i in nparray.T:
 #to get a flat list of elements
 for i in nparray.flat:
 
+# Boolean indexing is when a boolean array is used to slice an array. This can be used if 2 arrays are related to each other - boolean indexing can then be used to pull out values from the second array that correspond to the first array. Construct a boolean array from the first array.
+names = np.array(['Bob','Joe','Will','Bob','Will','Joe','Joe'])
+names == 'Bob' # will give
+array([ True, False, False,  True, False, False, False], dtype=bool)
+# this boolean array can be used to slice another array, say 'data'
+data[names == 'Bob'] # will give values of data where the index array is True
+data[-(names == 'Bob')] # will give values where index array is False
+# Selecting data using boolean indexing always creates a copy of the data
+# boolean indexing can be used to set values as well
+data[data<0] = 0 # will set all the negative values in 'data' to 0
+data[names != Bob] = 7 # sets whatever values that are true in the index array to 7
+
 #to stack multiple arrays
 np.hstack((arr1,arr2)) # note that hstack (horizontal) takes a single argument which is a tuple of the arrays to stack
 #to stack vertical (one on top of the other)
@@ -53,3 +72,14 @@ np.vstack
 #to split array
 np.hsplit(nparray, x) # where is the number of arrays to split into
 np.vsplit(nparray, x)
+
+#read an image in as a numpy array
+import cv2
+img = cv2.imread('image.jpg')
+# img is now an np array with each number being the value of a pixel.
+# color scale is 0-black 255-white and everything between them are diff shades of gray. 
+# 3 dimensional array if reading in RGB with each dimension representing one of R,G and B. The actual color at a particular pixel is a composite of the 3 values.
+#write an image
+cv2.imwrite('newfile', <np array>)
+
+

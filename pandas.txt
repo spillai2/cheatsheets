@@ -42,3 +42,4 @@ df['column'].apply(functionname)
 df['newcolumn'] = df['oldcolumn'].apply(lambda x: <do something with x>)
 
 
+
