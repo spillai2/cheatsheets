@@ -8,3 +8,45 @@ Remote repository
 2) then come back to local repository directory and run 'git remote add origin git@github.com:spillai2/reponame'. This will link your local to remote
 3) 'git push' will push your commits to remote
 4) 'git pull' will pull in changes from remote to local
+
+From Datacamp git course:
+How can I tell what I have changed?
+
+Git has a staging area in which it stores files with changes you want to save that haven't been saved yet. Putting files in the staging area is like putting things in a box, while committing those changes is like putting that box in the mail: you can add more things to the box or take things out as often as you want, but once you put it in the mail, you can't make further changes.
+
+git status shows you which files are in this staging area, and which files have changes that haven't yet been put there. In order to compare the file as it currently is to what you last saved, you can use git diff filename. git diff without any filenames will show you all the changes in your repository, while git diff directory will show you the changes to the files in some directory.
+
+What is in a diff?
+
+A diff is a formatted display of the differences between two sets of files. Git displays diffs like this:
+
+diff --git a/report.txt b/report.txt
+index e713b17..4c0742a 100644
+--- a/report.txt
++++ b/report.txt
+@@ -1,4 +1,4 @@
+-# Seasonal Dental Surgeries 2017-18
++# Seasonal Dental Surgeries (2017) 2017-18
+
+ TODO: write executive summary.
+This shows:
+
+The command used to produce the output (in this case, diff --git). In it, a and b are placeholders meaning "the first version" and "the second version".
+An index line showing keys into Git's internal database of changes. We will explore these in the next chapter.
+--- a/report.txt and +++ b/report.txt, which indicate that lines being removed are prefixed with -, while lines being added are prefixed with +.
+A line starting with @@ that tells where the changes are being made. Here, the line shows that lines 1-4 are being removed and replaced with new lines.
+A line-by-line listing of the changes with - showing deletions and + showing additions. (We have also configured Git to show deletions in red and additions in green.) Lines that haven't changed are sometimes shown before and after the ones that have in order to give context; when they appear, they don't have either + or - in front of them.
+
+Desktop programming tools like RStudio can turn diffs like this into a more readable side-by-side display of changes; you can also use standalone tools like DiffMerge or WinMerge.
+
+What's the first step in saving changes?
+
+You commit changes to a Git repository in two steps:
+
+Add one or more files to the staging area.
+Commit everything in the staging area.
+To add a file to the staging area, use git add filename
+
+How can I tell what's going to be committed?
+
+To compare a file's current state to the changes in the staging area, you can use git diff -r HEAD path/to/file. The -r flag means "compare to a particular revision", HEAD is a shortcut meaning "the most recent commit", and the path to the file is the relative to where you are (for example, the path from the root directory of the repository). We will explore other uses of -r and HEAD in the next chapter.
