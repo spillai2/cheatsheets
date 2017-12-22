@@ -65,6 +65,36 @@ data[-(names == 'Bob')] # will give values where index array is False
 data[data<0] = 0 # will set all the negative values in 'data' to 0
 data[names != Bob] = 7 # sets whatever values that are true in the index array to 7
 
+# Fancy indexing is indexing using integer arrays. For eg. if a is an (8,4) array a[[4,3,2]] will return the respective rows (4th, 3rd and 2nd)
+a[[-3,-5,-7]] # will select rows from the end.
+# note the double brackets, otherwise it will return the corresponding element
+a[5,4] # returns the element in the 5th row, 4th column
+a[[5,4]] # returns rows 5 & 4
+# Passing multiple index arrays selects the corresponding elements
+a[[1,2,3][0,2,3]} # will return a 1D array with elements [1,0], [2,2] and [3,3]
+# To return a multidimension array with the second integer array being columns for each row in the first
+a[[1,2,3]][:[0,2,3]] # returns for each row, elements in columns 0,2 & 3
+# even cleaner way using np.ix_
+a[np.ix_([1,2,3][0,2,3])]
+# Fancy indexing always copies into a new array, unlike slicing which creates views into the existing array
+
+# Transpose an np array
+a.transpose
+a.T
+# Multiplying two matrices (assuming conditions for matrix multiplication are satisfied)
+np.dot(a,b)
+# Mutlidimensional array
+a=np.arange(16).reshape((2,2,4)) # means the array will have 2 rows and each row will be a 2x4 array
+a.swapaxes(1,2) # will swap axes 1 and 2
+
+# Universal functions or ufuncs perform element-wise operations on an array without looping
+eg. sqrt, exp - unary ufuncs since they require only one array
+# binary ufuncs takes 2 arrays and return a single array
+np.maximum(a,b) # will return element-wise maximum comparing a and b
+# some binary ufuncs return multiple arrays
+np.modf(a) # returns the integral and fractional parts of array a
+
+
 #to stack multiple arrays
 np.hstack((arr1,arr2)) # note that hstack (horizontal) takes a single argument which is a tuple of the arrays to stack
 #to stack vertical (one on top of the other)
