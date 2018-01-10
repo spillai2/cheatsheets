@@ -55,3 +55,24 @@ Then in target html file:
 {% end block body %}
 --------------
 This inserts the content of the target html file into the layout file
+
+#########################################
+RESTful APIs
+Basic syntax
+-----------
+from flask import Flask
+from flask_restplus import Resource, Api
+
+app = Flask(__name__)
+api = Api(app)
+
+@api.route('/hello') # route
+class Hello(Resource): # class that defines the route
+	def get(self):
+		return {'hello': 'world'} # get function returns JSON
+
+if __name__ == '__main__':
+	app.run()
+
+
+
