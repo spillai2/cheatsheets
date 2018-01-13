@@ -1,3 +1,21 @@
+2 basic pandas data structures: Series and DataFrames
+Series: one dimensional array. Like lists, except they have an associated array of data labels instead of just index locations.
+a = pd.Series([1,2,3,4]) # converts a list to a series
+b = pd.Series([1,2,3,4], index=['a','b','c','d']) # creates the same series, but now with custom index labels
+a.values # prints the values of the Series
+b.index # prints the indexes
+b[['c','a','d']] # returns correponding values
+Numpy operations like filtering with boolean array, scalar multiplication, math functions etc. apply to Series as well.
+Dicts can be converted to Series as:
+Series(<dict variable>) # where dict var is {'key1': 'val1', 'key2':'val2' etc}
+Series with the same indexes can be aligned (values summed)
+
+a.isnull() will show as True any keys that have no value
+###################################
+DataFrame: Tabular, spreadsheet like data structure containing an ordered collection of columns each of which can be a different value type (numeric, string, bool etc)
+
+A Series' index can be altered in place by assignment to object.index eg. a.index = ['w', 'x', 'y', 'z'] 
+
 #pandas methods to read files:
 read_csv('filename') # optional sep parameter if separator is not comma
 read_json('filename')
