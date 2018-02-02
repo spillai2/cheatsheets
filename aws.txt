@@ -15,7 +15,7 @@ Desktop and App Streaming
 
 1) AWS Global Infratsructure
 The physical infrastructure on which AWS runs - classified into regions and availability zones.
-Globally 14 regions and 38 availability zones - 2016
+Globally 16 regions and 42 availability zones - 2017
 More planned to be added in 2017
 A region is a geographical area that consists of 2 or more availability zones.
 An availability zone is simply a Data Center. Availability zones in a region will be close to each other, but not dependent on each other. Kind of like a backup, hence at least 2 AZs in a region.
