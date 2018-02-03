@@ -1,13 +1,163 @@
+# fire up a jupyter notebbok
+cd <desired directory>
+jupyter notebook
+
+# have jupyter linked to different versions of python
+install Jupyter again using pip3 install jupyter
+install Python3 kernel using jupyter kernelspec install-self
+
+# have jupyter open in a browser you want
+jupyter notebook --generate-config
+vi ~/.jupyter/jupyter_notebook_config.py
+#and change
+c.NotebookApp.browser = ''
+#to for example:
+c.NotebookApp.browser = '/usr/bin/google-chrome'
+
+Shift-Enter: Executes cell and moves into next, creating a new one if there isn't one
+Alt-Enter: Executes cell and creates a new one below it, inserting one if there is already one
+Ctl-Enter: Just executes cell
+
+For Markdown, choose 'Markdown' from drop-down options
+------------------------------------
+Virtual Environments:
+virtualenv:
+Create a virtual env with system packages
+$ virtualenv --system-site-packages targetDirectory
+Create a plain virtual env without system packages
+$ virtualenv targetDirectory
+# specify a desired version of python
+$ virtualenv targetDirectory python=python3.5
+
+Activate
+$ source targetDirectory/bin/activate
+Then pip install modules needed. This creates a self-contained installation that can be used to create an app
+To deactivate
+(targetDirectory)$ deactivate
+
+You can also install modules in your venv by:
+$ targetDirectory/bin/pip install <packagename>
+
+conda:
+$ conda create --name <name of env> <list of libraries needed separated by space>
+eg. $ conda create --name mybioinfo biopython pandas numpy
+$ conda info --envs # shows all your conda enviroments
+------------------------------------
+# Print formatting
+name = 'San'
+age = 38
+print('{} is {} years old'.format(name,age))
+print('{x} is {y} years old'.format(x=name,y=age)) # dont have to worry about order
+------------------------------------
 Sequences are data structures that can be iterated over eg. lists, tuples, dictionaries
 list = [1,2,3,4] # mutable
 list[0] # how to access
 tuple = (1,'a',2,'b') #immutable
 tuple[1]
-dict = {'key':'value', 'key2':'value2'}
+dict = {'key1':'value1', 'key2':'value2'}
 dict['key'] # access for all three through []
+# dict values can be lists etc.
+# dicts do not have any order, just based on keys
 
 len(list) # gives length of list
+
+# Strings are immutable lists, like tuples, individual elements can be accessed the same way
+# When slicing, access is upto, but not including the to index defined
+name = 'Sanjeev'
+name[0:] # will fetch the entire string
+name[1:4] # 'anj', 'e' the 4th index is not included
+name[2:] # 'njeev'
+name[:5] # 'Sanje' the second 'e', which is the 5th index is not included
+
+# append
+list.append[5] # makes list [1,2,3,4,5]
+# list can contain nested lists
+
+# 'set' creates a list of unique elements from a list
+set{1,1,1,2,2,2,3,3} # creates 1,2,3
+
+x = list(range(0,100)) # creates a list of numbers from 0-99, same as range(100)
 ------------------------------------
+List comprehension
+Iterating through the elements of a sequence and doing some operation all in one statement without having to loop through
+[<some operation on x> for x in <some sequence>] # returns a list, so need to be enclosed in []
+[i^2 for i in range(10)] # returns the squares of numbers 1-10
+
+# in other words, one line for loop
+# eg. if you want a list of the squares of the first 5 numbers
+[x**2 for x in range(1,6)]
+------------------------------------
+
+# functions - created with def
+def square(number):
+	return number**2
+
+# Documentation strings - especially for functions, to describe what the code does. Enclosed in triple enclosing quotes
+"""
+This function calculates the mean squared value of a set of numbers
+"""
+
+------------------------------------
+#Map() lets you execute a function on a set of iterable data
+x=[1,2,3,4,5]
+map(square,x) # will apply the function square to every element of x and return a map object that can be printed out with a for loop
+for sq in map(square,x):
+	print(sq)
+
+list(map(square,x)) # returns a list 
+[sq for sq in map(square,x)] # same as above
+
+# map can also run functions that compare multiple lists
+store1 = [10.00, 11.00, 12.34, 2.34]
+store2 = [9.00, 11.10, 12.34, 2.01]
+map(min, store1, store2) # runs the min function comparing 2 lists and returns the min value at each position
+
+for item in (map(min, store1, store2)):
+    print(item)
+
+Functional programming is where all parameters to a function are defined thus showing what can change and what can't. Often the parameters themselves can be functions.
+------------------------------------
+#Lambda - python's way of creating anonymous functions
+#Usually evaluates only a single expression, so not suited for complex logic, but can effectively do simple data cleaning.
+
+lambda a, b, c : (a + b) * c # takes 3 args and multiplies the sum of the first two with the third. 
+# a lambda function expression can be stored in a variable and called as follows:
+myfunc = lambda a, b, c : (a + b)*c
+myfunc(1,2,3) # will return 9
+
+# lambda can be combined with map to avoid having to define functions to use with map
+x=[1,2,3,4,5]
+map(lambda num: num**2, x) # same as map(square,x), except you don't have to define and store square
+------------------------------------
+# filter is similar to map, but instead of applying a function to all elements of a list, it selects certain elements of a list that meet a criteria
+filter(lambda num: num%2 == 0, x) # returns just the even numbers from list x, using map instead of filter here would yield a list of boolean values based on if a given list element is even or not
+------------------------------------
+# key functions
+s = 'My name is SP#her name is MP'
+s.lower() # lower cases the string s. s.upper() does the opposite
+s.split() # splits s on white space by default
+s.split('#') # custom split, splits on #
+
+dict.keys() # returns keys of dictionary
+dict.values()
+
+list.pop() # pop and returns the last item in the list, shortening the list by one
+list.append('element') # appends an element to the list
+
+x in list # checks if x is in the list, returns a boolean
+list.count('word') # counts the number of times a word occurs in the list
+string.startswith('letter') # checks if string starts with letter  
+------------------------------------
+#Tuple unpacking - basically accessing single elements of tuples
+list = [(1,2),(3,4),(5,6)]
+for (a,b) in list:
+	print(a)
+	print(b)
+------------------------------------
+iterating through multiple lists
+for i,j in zip(list1, list2)
+------------------------------------
+
 Date/time modules
 
 import datetime as dt
@@ -36,113 +186,13 @@ person.set_name('Sanjeev Pillai')
 person.set_location('Bedford, MA')
 print('{} live in {} and works in the department {}'.format(person.name, person.location, person.department))
 ------------------------------------
-Map, functional programming
-Funtional programming is where all parameters to a function are defined thus showing what can change and what can't. Often the parameters themselves can be functions.
 
-#Map() lets you execute a function on a set of iterable data
-store1 = [10.00, 11.00, 12.34, 2.34]
-store2 = [9.00, 11.10, 12.34, 2.01]
-map(min, store1, store2) # runs the min function comparing 2 lists and returns the min value at each position
-
-for item in (map(min, store1, store2)):
-    print(item)
-------------------------------------
-Lambda - python's way of creating anonymous functions
-Usually evaluates only a single expression, so not suited for complex logic, but can effectively do simple data cleaning.
-
-lambda a, b, c : a + b # takes 3 args and adds the first two. Parameters before the colon and expression after
-returns a function expression that can be stored in a variable and called as follows:
-myfunc = lambda a, b, c : a + b
-myfunc(1,2,3) # will return 1+2
-------------------------------------
-List comprehension
-Iterating through the elements of a sequence and doing some operation all in one statement without having to loop through
-[<some operation on x> for x in <some sequence>] # returns a list, so need to be enclosed in []
-[i^2 for i in range(10)] # returns the squares of numbers 1-10
-------------------------------------
-iterating through multiple lists
-for i,j in zip(list1, list2)
-# fire up a jupyter notebbok
-cd <desired directory>
-jupyter notebook
-
-# have jupyter linked to different versions of python
-install Jupyter again using pip3 install jupyter
-install Python3 kernel using jupyter kernelspec install-self
-
-# have jupyter open in a browser you want
-jupyter notebook --generate-config
-vi ~/.jupyter/jupyter_notebook_config.py
-#and change
-c.NotebookApp.browser = ''
-#to for example:
-c.NotebookApp.browser = '/usr/bin/google-chrome'
-
-------------------------------------
-Virtualenv:
-Create a virtual env with system packages
-$ virtualenv --system-site-packages targetDirectory
-Create a plain virtual env without system packages
-$ virtualenv targetDirectory
-
-Activate
-$ source targetDirectory/bin/activate
-Then pip install modules needed. This creates a self-contained installation that can be used to create an app
-To deactivate
-(targetDirectory)$ deactivate
-
-You can also modules by
-$ targetDirectory/bin/pip install <packagename>
-------------------------------------
 
 %%timeit n=100 # will time an operation for 100 loops, can be used to check the time of execution of loop vs no-loop
 
 
 -----------------------------
-groupby
-when you have a data frame and want to group by a certain column, you can either loop through the data frame or use groupby (much faster)
 
-while groupby(col) is standard, groupby can also take a function arugument. The function could be something that categorizes based on some complex criteria (not just col name)
-
-The output from groupby can be passed on to the agg (aggregate) function to aggregate based on the result of the grouping
-
-df.groupby('col1').agg({'col2': np.average}) # groups by the first column and then calculates the avg value for col2.
-
-groupby can work at dataframe and series level. At dataframe level it can take multiple columns as arguments and it will run the aggregate separately for each column. It is also possible to aggregate based on different functions for the diff cols - for eg. avg for one column and sum for another.
-
-groupby is very powerful, useful and popular
------------------------------
-Scales - 4 main categories
-Ratio (mathematical operations like + and * are valid)
-Interval (equally spaced units)
-Ordinal (shows some type of order)
-Nominal (no order)
-
-df[col].astype('category') will transform that col into the category scale if the indexes refer to categories
-astype('category', categories=<list of values>, ordered=True) # ordered = True makes the categories ordinal
-
-Once converted to categorical, a df can be queried based on the category. For eg. >= 'C' if the categories are A,B,C,D and ordered.
-
-pd.cut - divides a column into a specified number of bins
------------------------------
-pd.pivot_table() allows you to pivot your table and summarize/view data the way you want
-
-df.pivot_table(values = <col which we want to summarize>, index = <col to be rows in the result>, columns = <cols of pivot table>, aggfunc = [<one or more list of func]) 
-
-If a list of functions are passed, say min and max, the pivot table will show two column sets for the 2 funcs.
-
-Time functions
-pd.Timestamp() # converts an input like 10/12/2017 to a standard yyyy/mm/dd format
-pd.Period() # converts input into a period eg. 01/2017 will be converted to a month period and 01/01/2017 to day
-
-DateTimeIndex, PerodIndex - refers to indexes that are DateTime(Timestamp) or Period
-
-pd.to_datetime() # converts input into Timestamp
-
-Timestamps can be added to or subtracted from each other and it gives a Timedelta type. Similarly adding or subtracting Timestamp and Timedelta gives Timestamp. Timedelta is a certain interval of time eg. 12D or 13H
-
-pd.date_range() # creates a date range just like a sequence with intervals etc.
------------------------------
 Plotting with matplotlib
 import matplotlib.pyplot as plt
 plt.plot(x,y) # x and y are lists to display in x and y axis

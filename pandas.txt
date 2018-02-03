@@ -167,3 +167,48 @@ if you begin a statement with (, in python, you can span a statement over mutlip
 Pandas has an apply() function that works much the same way as R apply.
 apply() lets you execute a function along a certain axis (row or col)
 df.apply(<func>, axis=1) # func could be a lambda
+-----------------------------
+groupby
+when you have a data frame and want to group by a certain column, you can either loop through the data frame or use groupby (much faster)
+
+while groupby(col) is standard, groupby can also take a function arugument. The function could be something that categorizes based on some complex criteria (not just col name)
+
+The output from groupby can be passed on to the agg (aggregate) function to aggregate based on the result of the grouping
+
+df.groupby('col1').agg({'col2': np.average}) # groups by the first column and then calculates the avg value for col2.
+
+groupby can work at dataframe and series level. At dataframe level it can take multiple columns as arguments and it will run the aggregate separately for each column. It is also possible to aggregate based on different functions for the diff cols - for eg. avg for one column and sum for another.
+
+groupby is very powerful, useful and popular
+-----------------------------
+Scales - 4 main categories
+Ratio (mathematical operations like + and * are valid)
+Interval (equally spaced units)
+Ordinal (shows some type of order)
+Nominal (no order)
+
+df[col].astype('category') will transform that col into the category scale if the indexes refer to categories
+astype('category', categories=<list of values>, ordered=True) # ordered = True makes the categories ordinal
+
+Once converted to categorical, a df can be queried based on the category. For eg. >= 'C' if the categories are A,B,C,D and ordered.
+
+pd.cut - divides a column into a specified number of bins
+-----------------------------
+pd.pivot_table() allows you to pivot your table and summarize/view data the way you want
+
+df.pivot_table(values = <col which we want to summarize>, index = <col to be rows in the result>, columns = <cols of pivot table>, aggfunc = [<one or more list of func]) 
+
+If a list of functions are passed, say min and max, the pivot table will show two column sets for the 2 funcs.
+
+Time functions
+pd.Timestamp() # converts an input like 10/12/2017 to a standard yyyy/mm/dd format
+pd.Period() # converts input into a period eg. 01/2017 will be converted to a month period and 01/01/2017 to day
+
+DateTimeIndex, PerodIndex - refers to indexes that are DateTime(Timestamp) or Period
+
+pd.to_datetime() # converts input into Timestamp
+
+Timestamps can be added to or subtracted from each other and it gives a Timedelta type. Similarly adding or subtracting Timestamp and Timedelta gives Timestamp. Timedelta is a certain interval of time eg. 12D or 13H
+
+pd.date_range() # creates a date range just like a sequence with intervals etc.
+-----------------------------
