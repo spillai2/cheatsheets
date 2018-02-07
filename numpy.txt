@@ -1,4 +1,6 @@
-Numpy
+Numpy - linear algebra library for numeric computation.
+Numpy arrays come in both one dimensional vectors and 2-dimensional matrices
+
 Create a numpy array, also called ndarray for n-dimensional array
 
 npa = np.array([[1,2,3],[3,4,5],[6,7,8]]) # creates a 3x3 matrix where each list is a row
@@ -19,10 +21,30 @@ enumerate(matrix) # iterates over a matrix row by row
 zip(mat1, mat2, mat3) # iterates over mutliple matrices of same dim
 
 npa = np.arange(27) # creates a one dimensional array with numbers from 0 - 26
+np.arange(start,stop,step)
 npa.reshape(3,9) # converts it into a 2 dimensional array (matrix) with 3 rows and 9 cols
 
 #convert list to numpy array
 np.asarray(list)
+
+# functions to generate np arrays
+np.zeros(10) # generates a vector of 10 zeros
+np.zeros((5,5)) # generates a 5x5 matrix of zeros
+np.eye(4) # creates a 4x4 identity matrix
+np.full(10,5) # creates an array of length 10, all values being 5
+
+np.random.rand(5) # generates 5 random numbers from a uniform distribution of numbers between 0 & 1.
+np.random.randn(5) # # generates 5 random numbers from a normal distribution centered around 0.
+np.random.randint(1,100,10) # generates 10 random integres between 1 and 100, 1 included by 100 not
+
+# functions to operate on arrays
+# Note: arrays in python refer to ndarrays, regular python arrays are called lists
+ndarray.max() # gives max value of given ndarray
+ndarray.argmax() # gives the position of the max value
+
+# attributes of arrays, no () after since they are properties, not functions
+ndarray.shape
+ndarray.dtype
 
 #to slice/subset an np array
 # if a one dimensional array, get value at a certain index by
@@ -31,9 +53,9 @@ array[x]
 array[x:y]
 # for multidimenational arrays, first arg is for rows, second for columns - leave either of them empty and you get all rows or columns. This is called array slicing
 array[from_row:to_row, from_col:to_col]
-array[row,col] # gets you a single value
+array[row,col] # gets you a single value, same as array[row][col]
 # if you want to get a row from a 2-dimensional array
-array[0,:] # means first row (all columns)
+array[0,:] # means first row (all columns), same as array[0][:]
 array[:,1] # second column (all rows)
 # for higher dimensional arrays, indexing like above will return smaller arrays. For eg. is x is a 2x2x3 array (2 rows, 2 columns and 3 elements in each element of the 2x2 array)
 x[0] # will be a 2x3 array
