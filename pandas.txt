@@ -60,6 +60,10 @@ df2 = df.append(<list>) # will create y adding a new list to df, but won't chang
 #Access data based on labels (row/column names)
 df.loc[rowname/id, colname] # will pull out the value in that cell, same as R data.frame
 df.loc[:,[col1, col2]] # pulls out all rows for the 2 cols mentioned
+#Access data based on indexes/positions
+df.iloc[1:4, 3:5] # fetches rows 1,2 and 3 of column numbers 3&4
+#For access with a mix of labels and positions, use ix
+df.ix[1:4, 'fromcolumn':'tocolumn']
 
 # To slice a chunk (some number of rows for a certain set of columns)
 df.loc[fromrowid:torowid, fromcolumn:tocolumn]
@@ -67,19 +71,30 @@ df.loc[fromrowid:torowid, fromcolumn:tocolumn]
 df.loc[:, 'fromcolumn':'tocolumn']
 
 # copy/delete columns
-df.drop(row) # won't drop the row from the original df
-df.drop(row, inplace=True) # will drop from original
+df.drop(rowname) # won't drop the row from the original df
+df.drop(rowname, inplace=True) # will drop from original
 df.drop(df[index], inplace=True) # better general syntax
 df.drop(df.index[:2], inplace=True) # drops first 2 rows
 df.drop(df['column'], axis=1 inplace=True) # drops a column by name
+df.drop('rowname', 0, inplace=True) # 0 means row
+#To delete by index instead of names/labels
+df.drop(df.index[from:to, 0] # change to 1 for columns
 
 del df[col] # deletes columnn
 
 df.columns - gives list of columns
 list(df.columns) # gives the column names as a list
 list(df) # short version of above
+# rename columns 2 ways
+df.columns=[<list of new column names>]
+df.rename(columns={'oldName1': 'newName1', 'oldName2': 'newName2'}, inplace=True)
 
 df.shape # gives number or rows and columns in a data frame
+df.T will transpose the data frame, same as df.transpose()
+#To add a column to a data frame
+df['newcolumn'] = "value" # value will be propagated through all the rows of the data frame
+if the values are different, they need to be a list
+To add a new row, transpose the df, add a column and then transpose back
 ---------------------------
 conditional selection
 df[df>0] # will retrieve values from those cells where value > 0, rest returned as null
@@ -98,49 +113,22 @@ df.set_index([list of cols]) # index with multiple columns
 df = df.reset_index(inplace=True) # will reset index to numerical range and turn previous index into a regular column
 df.unstack('column') # splits a dataframe according the values of the column specified
 ---------------------------
-
-df.T will transpose the data frame
-
-#pandas methods to read files:
-pd.read_csv('filename') # optional sep parameter if separator is not comma
-pd.read_json('filename')
-pd.read_excel('filename', sheetname=0) # to read the first sheet in case there are multiple sheets
-#An url can also be passed as argument to the above functions
-
-df = pd.read_csv('file.csv', index_col=0, skiprows=1) # read a csv file, skip the first row and use the first col as index
-df = pd.read_table('file.dat', sep='<record separator>', header='<None or row#>', names='<list of names for cols>')
-
-# rename columns 2 ways
-df.columns=[<list of new column names>]
-df.rename(columns={'oldName1': 'newName1', 'oldName2': 'newName2'}, inplace=True)
-
-
-
-#Access data based on indexes/positions
-df.iloc[1:4, 3:5] # fetches rows 1,2 and 3 of column numbers 3&4
-
-#For access with a mix of labels and positions, use ix
-df.ix[1:4, 'fromcolumn':'tocolumn']
-
-#To delete a row or column from data frame
-df.drop('colname', 1, inplace=True) # 1 means column 
-df.drop('rowname', 0, inplace=True) # 0 means row
-#To delete by index instead of names/labels
-df.drop(df.index[from:to, 0] # change to 1 for columns
-
-#To add a column to a data frame
-df['newcolumn'] = "value" # value will be propagated through all the rows of the data frame
-# if the values are different, they need to be a list
-
-#To add a new row, transpose the df, add a column and then transpose back
-
-#To apply a function to all rows of a column without looping
-df['column'].apply(functionname)
-#function can also be a lambda
-df['newcolumn'] = df['oldcolumn'].apply(lambda x: <do something with x>)
-For eg.
-df['column'].apply(lambda x: x+2) # will add 2 to the value of 'column' in all the rows
-
+Mutilevel index - multiple levels of indexing
+Passing a tuple of indexes to the index definition when creating a df, the order of elements in the tuple determine the level of indexing ie. first element is the outermost index, second is next etc.
+To retrieve elements from df indexed this way
+df.loc['outer index'.loc['inner index] # chain indexes with loc
+df.xs('inner index', level='name of inner index') # allows to cross outer index and get inner index from multiple outer indices.
+---------------------------
+Missing values
+By default pandas fills in missing values with null (np.NaN)
+dropna() allows for dropping of missing values ie drop rows or columns that have missing values
+fillna() allows for filling missing values with a desired value
+df.dropna() will drop rows that have missing values
+df.dropna(axis=1)
+df.dropna(thresh=2) # drop rows that have atleast 2 nulls
+df.fillna(value='fillval') # fills in all NaNs with 'fillval'
+df.fillna(value=df['col'].mean()) # fills NaNs with mean of 'col'
+---------------------------
 Querying a DataFrame:
 By creating boolean arrays
 df[col] > 0 # will create a boolean array where every entry that satisfies the condition will be true and the rest false. This array can be super-imposed on the dataframe to query with the 'where' clause:
@@ -151,24 +139,82 @@ df[df[col]>0] # same as above
 df[col].unique() # unique values from a col
 df = df[df[col] == <some value>] # recreates the data frame with only those entries that satisfy the condition
 df = df[<list of cols to keep>] # edits dataframe to drop all other cols
+---------------------------
+Groupby
+Similar to SQL group_by, allows you to group by a certain column - ie aggregate rows based on a certain column by running an aggregate function on other columns. An aggregate function is one that takes multiple values and returns a single value (like sum, avg etc). In the end you get a single row for each 'grouped by' column value.
+SQL : select count(col_a) from table group_by col_b
+df.groupby('col1').mean() # will group the df by col1 and set the other columns to their mean value, where applicable. It will ignore columns that it cannot apply mean to, like strings.
+groubpy() will automatically convert the grouping by column to an index
+df.groupby().describe() # will show the values of a whole set of functions run on df (sum, max, min etc
+df.groupby('col1').agg({'col2': np.average}) # groups by the first column and then calculates the avg value for col2.
 
-Missing values:
-df.fillna(method = 'ffill')
+groupby can work at dataframe and series level. At dataframe level it can take multiple columns as arguments and it will run the aggregate separately for each column. It is also possible to aggregate based on different functions for the diff cols - for eg. avg for one column and sum for another.
 
------------------------------
-Merging data frames:
+groupby is very powerful, useful and popular
+---------------------------
+Merging, joining and concatenating data frames
+pd.concat([df1,df2,df3]) # will concatenate the 3 data frames along rows, meaning the result will be a data frame where the number of rows will be the sum of the number of rows of the 3 individual data frames
+pd.concat([<list of dfs>], axis=1) # will concatenate along columns
 
-Two merge 2 different data frames which share an index. For eg. a df of staff and students can be merged if the 'name' is a shared index.
-pd.merge is the function that does all the merging
-
+pd.merge() will merge two or more data frames based on shared(key) columns
+pd.merge(df1,df2) # absent any other arguments, pandas figures out the key column to join by and does and inner join
+pd.merge(df1,df2, how='inner', on='key_col') # more descriptive way
+pd.merge(df1,df2, how='outer', on=[<list of keys>]) # outer join based on more than one key column, the columns that are not common are put adjacent to each other with NaN where values don't exist
 pd.merge(first_df, second_df, how='outer', left_index=True, right_index=True) # union merge/outer join
-the columns that are not common are put adjacent to each other with NaN where values don't exist.
-
 pd.merge(first_df, second_df, how='inner', left_index=True, right_index=True) # intersection merge/inner join
 pd.merge(first_df, second_df, how='left', left_index=True, right_index=True) # left join takes all from the first that also exists in the second
 pd.merge(first_df, second_df, how='right', left_index=True, right_index=True) # right join opposite of left
 print(pd.merge(df1, df2, left_index=True, right_on=<shared index>))
------------------------------
+
+join() merges data frames based on indexes (merge does that based on columns)
+df1.join(df2)
+df1.join(df2, how='outer')
+---------------------------
+Operations
+df['col'].unique() # fetches unique values of a column
+df['col'].nunique() # fetches number of unique values of a column
+df['col'].value_counts() # unique values of a column and the number of times they occur (similar to R table function)
+
+Pandas has an apply() function that works much the same way as R apply. Can apply a certain function across all elements
+df['col'].apply(lambda x: x*2) # will multiply all values in col with 2.
+df['col'].apply(func) # general form will apply func to all elements of col
+apply() also lets you execute a function along a certain axis (row or col)
+df.apply(<func>, axis=1) # apply func on columns
+df['newcolumn'] = df['oldcolumn'].apply(lambda x: <do something with x>)
+df['column'].apply(lambda x: x+2) # will add 2 to the value of 'column' in all the rows
+
+sort_values() lets you sort by value
+df.sort_values('col1') # sorts the df by the value of col1
+
+pd.pivot_table() allows you to pivot your table and summarize/view data the way you want
+pd.pivot_table(values='col4', index=['col1,'col2'], columns=['col3]) # summarizes the values of col4 with col3 as columns and multi-indexed by col1 and col2
+# a general form
+df.pivot_table(values = <col which we want to summarize>, index = <col to be rows in the result>, columns = <cols of pivot table>)
+df.pivot_table(values = <col which we want to summarize>, index = <col to be rows in the result>, columns = <cols of pivot table>, aggfunc = [<one or more list of func]) 
+If a list of functions are passed, say min and max, the pivot table will show two column sets for the 2 funcs.
+---------------------------
+Data input/output
+Pandas can read CSVs, Excel, HTML and SQL databases
+pd.read_csv('input.csv', index=False) # optional sep parameter if separator is not comma. index=False removes the index
+pd.read_csv('file.csv', index_col=0, skiprows=1) # read a csv file, skip the first row and use the first col as index
+df.to_csv('output.csv') # writes the data frame to outputfile
+
+df = pd.read_table('file.dat', sep='<record separator>', header='<None or row#>', names='<list of names for cols>')
+
+pd.read_excel('file.xlsx', sheetname='Sheet1')
+df.to_excel('outfile.xlsx', sheet_name='newsheet') # note parameter is 'sheet_name' for to_excel and 'sheetname' for read_excel
+
+df = pd.read_html('HTML URL')
+read_html will read each HTML <table> into a separate data frame, so df is actually a list in this case and can be cycled through to get individual dfs. In many cases there will be only one table
+
+pd.read_json('filename') # read JSON
+
+Pandas can also read data from SQL databases after opening a connection to the database using sqlalchemy
+from sqlalchemy import create_engine
+engine = create_engine('sqlite:///:memory:') # generic ('<dbtype>:///<db name>')
+df.to_sql('my_table', engine) # create a new table called my_table in the database
+pd.read_sql('my_table', con=engine) # read a db table into a data frame, with connection being the engine
+---------------------------
 Pandas idioms
 Index chaining is bad - back to back square brackets as in df.loc[row][column]
 Method chaining is recommended - for eg.
@@ -177,23 +223,6 @@ Method chaining is recommended - for eg.
     .setindex(....)
     .rename(...))
 if you begin a statement with (, in python, you can span a statement over mutliple lines.
-
-Pandas has an apply() function that works much the same way as R apply.
-apply() lets you execute a function along a certain axis (row or col)
-df.apply(<func>, axis=1) # func could be a lambda
------------------------------
-groupby
-when you have a data frame and want to group by a certain column, you can either loop through the data frame or use groupby (much faster)
-
-while groupby(col) is standard, groupby can also take a function arugument. The function could be something that categorizes based on some complex criteria (not just col name)
-
-The output from groupby can be passed on to the agg (aggregate) function to aggregate based on the result of the grouping
-
-df.groupby('col1').agg({'col2': np.average}) # groups by the first column and then calculates the avg value for col2.
-
-groupby can work at dataframe and series level. At dataframe level it can take multiple columns as arguments and it will run the aggregate separately for each column. It is also possible to aggregate based on different functions for the diff cols - for eg. avg for one column and sum for another.
-
-groupby is very powerful, useful and popular
 -----------------------------
 Scales - 4 main categories
 Ratio (mathematical operations like + and * are valid)
@@ -208,12 +237,6 @@ Once converted to categorical, a df can be queried based on the category. For eg
 
 pd.cut - divides a column into a specified number of bins
 -----------------------------
-pd.pivot_table() allows you to pivot your table and summarize/view data the way you want
-
-df.pivot_table(values = <col which we want to summarize>, index = <col to be rows in the result>, columns = <cols of pivot table>, aggfunc = [<one or more list of func]) 
-
-If a list of functions are passed, say min and max, the pivot table will show two column sets for the 2 funcs.
-
 Time functions
 pd.Timestamp() # converts an input like 10/12/2017 to a standard yyyy/mm/dd format
 pd.Period() # converts input into a period eg. 01/2017 will be converted to a month period and 01/01/2017 to day
