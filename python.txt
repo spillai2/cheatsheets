@@ -193,23 +193,3 @@ print('{} live in {} and works in the department {}'.format(person.name, person.
 
 
 -----------------------------
-
-Plotting with matplotlib
-import matplotlib.pyplot as plt
-plt.plot(x,y) # x and y are lists to display in x and y axis
-plt.hist(x, bins=<#bins>) # x is a list of values
-
-To actually display the plot after all customizations:
-plt.show()
-
-labeling axes:
-plt.xlabel('blah')
-plt.ylabel('blah')
-plt.title('blah')
-plt.yticks([1,2,3,4],['a','b','c','d']) # defines y ticks and labels to shows (second list should match length of first)
-
-plt.xscale('log') # converts x-axis to log scale
-
-plt.scatter(x,y, s=<list with same length as x/y>, c = <list with colors>, alpha=0.8) # makes the scatter size based, s meaning size, c is for color and alpha for opacity value
-
-plt.txt(<x coord>, <y coord>, 'text to display') # displays text in the plot

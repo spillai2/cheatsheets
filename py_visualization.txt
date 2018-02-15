@@ -1,0 +1,48 @@
+Plotting with Matplotlib
+Designed to have the same feel of Matlab's graphical plotting 
+import matplotlib.pyplot as plt
+
+# Functional way of calling matplotlib functions
+plt.plot(x,y) # x and y are lists to display in x and y axis
+plt.hist(x, bins=<#bins>) # x is a list of values
+
+To actually display the plot after all customizations:
+plt.show()
+
+To avoid having to do plt.show() each time do:
+%matplotlib inline
+
+# labeling axes:
+plt.xlabel('blah')
+plt.ylabel('blah')
+plt.title('blah')
+plt.yticks([1,2,3,4],['a','b','c','d']) # defines y ticks and labels to shows (second list should match length of first)
+
+plt.xscale('log') # converts x-axis to log scale
+
+plt.scatter(x,y, s=<list with same length as x/y>, c = <list with colors>, alpha=0.8) # makes the scatter size based, s meaning size, c is for color and alpha for opacity value
+
+plt.txt(<x coord>, <y coord>, 'text to display') # displays text in the plot
+--------------------
+# Multiple plots
+To have more than one plot on a given canvas
+plt.subplot(<num rows>,<num cols>,<plot #>) # the last argument is to specify where the given plot will go, eg.
+plt.subplot(1,2,1) # create a plot with 1 row, 2 cols and put the following plot at column 1
+plt.plot(x,y) # plot as usual
+plt.subplot(1,2,2) # create a plot with 1 row, 2 cols and put the following plot at column 2
+plt.plot(x,y)
+--------------------
+# Object oriented API
+Create figure objects and call methods off of it
+fig = plt.figure() # creates a figure object
+axes = fig.add_axes([<list of 4 values for left, bottom, width and height of plot>) # all values in the list must be between 0 & 1
+axes.plot(x,y)
+axes.set_xlabel('blah')
+axes.set_ylabel('blah')
+axes.set_title('blah')
+
+# Putting 2 sets of figure on one canvas
+Can be done by defining 2 axes with different dimensions
+axes1 = fig.add_axes([0.1,0.1,0.8,0.8])
+axes2 = fig.add_axes([0.2,0.3,0.3,0.4])
+Here axes1 that starts 10% from the left, 10% from the bottom and at 80% width and height will contain axes2 which is 20% from the left, 30% from the bottom, 30% width and 40% height
