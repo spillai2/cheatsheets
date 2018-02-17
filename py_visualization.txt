@@ -1,4 +1,4 @@
-Plotting with Matplotlib
+MATPLOTLIB
 Designed to have the same feel of Matlab's graphical plotting 
 import matplotlib.pyplot as plt
 
@@ -46,3 +46,51 @@ Can be done by defining 2 axes with different dimensions
 axes1 = fig.add_axes([0.1,0.1,0.8,0.8])
 axes2 = fig.add_axes([0.2,0.3,0.3,0.4])
 Here axes1 that starts 10% from the left, 10% from the bottom and at 80% width and height will contain axes2 which is 20% from the left, 30% from the bottom, 30% width and 40% height
+
+# Subplots
+fig, axes = plt.subplot(nrows=1,ncols=2) # adds axes automatically based on # rows/cols needed, 'axes' here are matplotlib axes objects
+Individual axes can then be plotted on and labeled like:
+axes[0].plot(x,y)
+To avoid overlap of subplots do at the end of the plot statements:
+plt.tight_plot()
+--------------------
+# Control Fig size and DPI
+fig = plt.figure(figsize=(3,2), dpi=100) # creates a figure 3" wide and 2" tall with a DPI of 100
+Same can be done with subplots as well
+fig, axes = plt.subplots(nrows=2,ncols=1,figsize=(3,2), dpi=100)
+
+# To save a figure
+fig.savefig(''myfig.png', dpi=100) # dpi is optional
+Figs can be saved in various formats like png, jpeg etc.
+
+# Adding legends
+When you have multiple plots on the same canvas it helps to label which one is what
+axes.plot(x,x**2, label='X Squared')
+axes.plot(x, x**3, label='X Cubed')
+axes.legend() # this will now add the above labels for each of the two plots
+axes.legend(loc=0) # puts the legend at the best spot, 0 is code for best, there are several others that will let you position your legend.
+--------------------
+# Colors, line width
+#To assign a specific color to your plot
+axes.plot(x,y,color='blue') # color accepts common colors as string arguments. It also accepts RGB Hex values for more finer color control
+#To control line width user argument linewidth (lw for short)
+axes.plot(x,y,linewidth=2) # default is one, in this case it double the default
+#Transparency can be controlled by parameter alpha
+axes.plot(x,y,alpha=0.5) # default is 1, in this case it gives a bit more transparency
+#Line style, like solid line or dotted line can be specified with parameter linestyle (ls for short)
+axes.plot(x,y,ls='--) # will draw a dotted line, default is '-' which draws a solid line
+#Markers lets you see where the exact data points are in your plot
+axes.plot(x,y,marker='o',markersize=2) # puts an 'o' on the plot where your data points are, markersize is self-explanatory
+#All parameters can be passed in a single call
+axes.plot(x,y, color='blue',lw=2, alpha=0.5, ls='--', marker=0, markersize=2)
+
+# Setting x and y limits
+axes.set_xlim([low,high]) # will show/stretch the x axis between low and high values
+axes.set_ylim([low,high])
+--------------------
+# Plot types (generally done better with Seaborn, but can also be done with Matplotlib)
+Default plotting type is line graph, but many others are possible
+plt.scatter(x,y)
+plt.hist(data) # where data is usually a data frame or list
+plt.boxplot(data)
+#########################################
