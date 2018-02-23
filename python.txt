@@ -193,3 +193,24 @@ print('{} live in {} and works in the department {}'.format(person.name, person.
 
 
 -----------------------------
+Reg ex
+
+
+-----------------------------
+File operations
+# use 'open' to create a file handle
+f = open('file.txt', 'r') # default mode is read, so can leave out 'r' 
+# then loop through the lines
+for line in f:
+  <do something>
+# strip out EOL (end of line) markers and gather contents in a list
+lines = [line.rstrip() for line in f]
+# to write into a file
+f = open('file.txt', 'w') # creates a new file overwriting one if it already existed
+# to copy a file into a new file
+with open('newfile.txt', 'w') as handle:
+  handle.writelines(line for line in open('oldfile.txt') if len(line) >1
+# close file handle
+f.close()
+# file methods include read(), readlines(), write(string), writelines(strings)
+-----------------------------

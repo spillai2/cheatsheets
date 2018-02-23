@@ -132,3 +132,35 @@ sns.stripplot(x='cat col', y='num col', data=df) # optional argument 'jitter=Tru
 sns.swarmplot(x='cat col', y='num col', data=df)
 # violinplot and swarmplot can be combined into a single plot with the swarm points shown inside the violin borders
 A general way to call all the above plots for categorical data is to call 'factorplot' and specify 'kind' eg. 'kind=bar' or 'kind=swarm'
+--------------------
+Matrix plotting
+df.corr() # gives the correlation matrix between the various variables of a df
+# main matrix plot function is heatmap
+sns.heatmap(<matrix with corr>) # shows the correlation as a heatmap
+sns.heatmap(<matrix with corr>, annot=True, cmap='coolwarm') # optional annot argument will show the correlation inside the cells, cmap is color map
+# to convert a data set to a matrix, use pandas pivot_table()
+df.pivot_table(index='col1', columns='col2', values='col3') # will create a matrix the rows of which are col1, columns are col2 and observations are col3. This can then be fed to heatmap()
+# optional arguments linecolor and linewidth lets you set color and width of the lines separating the cells
+# another type of matrix plot is clustermap - it uses hierarchical clustering to classify the variables, so heatmap will not be in the order of the rows/columns as in the data frame
+--------------------
+Grid plots
+sns.PairGrid(df) # will create empty grids based on the number of numerical columns in the df
+g = sns.PairGrid(df) # assign to variable
+g.map_diag(sns.<something>)
+g.map_upper(sns.<something>)
+g.map_lower(sns.<something>)
+# The above statements show how you can have finer grain control of what plots to display in the diagonal and upper/lower halves.
+# FacetGrid allows you to grid just the cols you want
+g = sns.FacetGrid(df, row='col1', col='col2') # gives an empty grid of 4
+g.map(sns.distplot, 'col3') # gives a grid of 4, where the rows are distinct values of col1, cols are distinct values of col2 and the x axis is the values of col3
+g.map(plt.scatter, 'col3', 'col4') # scatter needs 2 args so provide 2 columns
+--------------------
+Regression plots
+sns.lmplot(x='col1', y='col2', data=df) # will plot the 2 variables and draw the regression line through them
+# matplotlib parameters can be passed to a seaborn lmplot since seaborn calls matplotlib under the hood
+sns.lmplot(x='col1', y='col2', data=df, hue='sex', markers=['o','v']) # here markers is a matplotlib parameter
+sns.lmplot(x='col1', y='col2', data=df, col='sex') # creates 2 side-by-side plots split by sex (insted of together as in hue)
+sns.lmplot(x='col1', y='col2', data=df, col='sex', aspect=0.6, size=0.8) # aspect changes the width/height ratio of the individual plots and size changes the size of the points
+--------------------
+Style and color
+sns.set_style('darkgrid') # sets background to dark and shows grids. just dark will get rid of grids
