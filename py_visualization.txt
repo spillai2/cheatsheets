@@ -105,7 +105,8 @@ sns.distplot(tips['one column'])
 # optional args
 sns.distplot(tips['one column'], kde=False, bins=30)
 # to explore relationship between 2 variables
-sns.jointplot(x='col1',y='col2',data=df) # plots the relationship as a scatterplot with histograms of individual vars appearing as sidebars along the x and y axis
+sns.joint
+plot(x='col1',y='col2',data=df) # plots the relationship as a scatterplot with histograms of individual vars appearing as sidebars along the x and y axis
 #optional arg 'kind' lets you determine what type of plot to show for relationship
 sns.jointplot(x='col1',y='col2',data=df, kind='hex') # shows hexagons which also display freq of occurennce by darkness of color
 # plot all possible numerical var pairs in a dataframe
@@ -122,11 +123,11 @@ Categorical plotting
 sns.barplot(x='cat col', y='num col', data=df) # bar plot showing average for each category. Default is mean/avg, but can be changed with the 'estimator' paremeter eg. estimator=std
 # to count the cat variable
 sns.countplot(x='cat col', data=df)
-# to see the distribution of different values of a categorical variable against a numerical variable
+#Boxplot to see the distribution of different values of a categorical variable against a numerical variable
 sns.boxplot(x='cat col', y='num col', data=df) # optional argument 'hue' will let you subdivide even further
-# to see kde of different values of a categorical variable against a numerical variable
+#Violinplot to see kde of different values of a categorical variable against a numerical variable
 sns.violinplot(x='cat col', y='num col', data=df) # optionally 'hue' and 'split=True' would split the plot among 2 categories in hue on either side
-# to see a scatter plot of a num variable for different values of a cat variable
+#Scatterplot to see a scatter plot of a num variable for different values of a cat variable
 sns.stripplot(x='cat col', y='num col', data=df) # optional argument 'jitter=True' will add separation between the points using randomization
 # combine a stripplot with a violinplot
 sns.swarmplot(x='cat col', y='num col', data=df)
@@ -164,3 +165,20 @@ sns.lmplot(x='col1', y='col2', data=df, col='sex', aspect=0.6, size=0.8) # aspec
 --------------------
 Style and color
 sns.set_style('darkgrid') # sets background to dark and shows grids. just dark will get rid of grids
+#########################################
+Pandas built-in data visualization
+#Allows you to call visualization functions on a pandas data frame
+df['col'].hist() # create a histogram of the distribution of values in col
+# generic way to call
+df['col'].plot(kind='hist')
+or
+df['col'].plot.hist()
+df.plot.scatter(x='col1',y='col2')
+df.plot.scatter(x='col1',y='col2', figsize=(12,2), s=4, c='red') # stretches out figure, changes size and color of dots
+df.plot.scatter(x='col1',y='col2', figsize=(12,2), s=4, c='red', linewidth=1.2, edgecolor='black') # last 2 args defines borders of the bars
+plt.style.use('ggplot') # setting this parameter makes the plots look better with ggplot kind of style
+df.plot.box() # will create boxplots for all cols in data frame
+df[['c1','c2']].plot.box() # will create boxplots for just those two columns
+#########################################
+Plotly and Cufflinks - for interactive visualization
+Plotly is an interactice visualization library and Cufflinks connects Plotly to Pandas 
