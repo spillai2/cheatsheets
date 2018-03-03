@@ -181,4 +181,20 @@ df.plot.box() # will create boxplots for all cols in data frame
 df[['c1','c2']].plot.box() # will create boxplots for just those two columns
 #########################################
 Plotly and Cufflinks - for interactive visualization
-Plotly is an interactice visualization library and Cufflinks connects Plotly to Pandas 
+# Plotly is an interactice visualization library and Cufflinks connects Plotly to Pandas
+from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
+import cufflinks as cf
+# For Notebooks
+init_notebook_mode(connected=True)
+# For offline use
+cf.go_offline() # Plotly as a company hosts your plotly apps, to work locally need to use go_offline()
+
+df.iplot() # plots the values of the df interactively, shows values when mousing over, zoom in-out and a whole set of tools. default is line plots of all columns of the df
+df.iplot(kind='scatter', x='c1', y='c2', mode='markers') # without markers plotly will try to connect all the points and give a messy looking figure.
+# Most of the times the data frame will not be in the format in which we can easily call iplot on columns. In those cases, we can call aggregate functions on the df and pass the result to iplot
+df.sum().iplot(kind='bar')
+df.iplot(kind='box') # creates boxplots of all columns
+# 3D plotting
+df.iplot(kind='surface') # creates 3D plots of dataframes with 3 cols
+df.iplot(kind='bubble', x='c1', y='c2', size='c3') # plot x1 on x, c2 on y and make the size of the bubbles correspond to values of c3
+df.scatter_matrix() # similar to sns.pairplot (plots columns against each other)

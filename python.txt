@@ -88,17 +88,23 @@ Iterating through the elements of a sequence and doing some operation all in one
 # eg. if you want a list of the squares of the first 5 numbers
 [x**2 for x in range(1,6)]
 ------------------------------------
-
+Functions
 # functions - created with def
 def square(number):
 	return number**2
 
-# Documentation strings (docstring) - especially for functions, to describe what the code does. Enclosed in triple enclosing quotes
-"""
-This function calculates the mean squared value of a set of numbers
-"""
+Positional and keyword arguments
+def function(x, y, z=2.0):
+# x and y are positional arguments, z is a keyword argument. Positional arguments have to be declared in order first followed by keyword arguments that need not be in any order (just that they need to be declared after positional ones)
 
-------------------------------------
+Scope - variables in functions can have local or global scope. The scope of a variable is called its namespace. After a function is done executing variables in the local namespace are destroyed (exception being closures). For a variable to be global, it needs to be declared with the global keyword.
+
+Functions can be declared within other functions - inner and outer functions. Inner destroyed once outer is done executing. Inner cannot bind variables but can access local vars in outer's scope.
+
+Functions in python can return multiple values. In such cases, the return value can be captured in a single tuple or multiple scalars. Can also be captured in a dict if the function returns as a dict.
+
+Functions are objects - this means they can be passed around as variables, making them much more useful and flexible. For eg. if you want to do a set of string cleaning operations on a set of strings, you can create funcions for each operation (or use built-in functions), put those functions into a list and then call them successively on a set of strings. This is a more 'functional' pattern than having the strings go through each function separately. Being objects also enables functions to be used as arguments to other functions - for eg. the built in 'map' function can apply another function to a collection (lists, dicts) of some kind.
+
 #Map() lets you execute a function on a set of iterable data
 x=[1,2,3,4,5]
 map(square,x) # will apply the function square to every element of x and return a map object that can be printed out with a for loop
@@ -116,10 +122,16 @@ map(min, store1, store2) # runs the min function comparing 2 lists and returns t
 for item in (map(min, store1, store2)):
     print(item)
 
-Functional programming is where all parameters to a function are defined thus showing what can change and what can't. Often the parameters themselves can be functions.
-------------------------------------
+'Functional programming' is where all parameters to a function are defined thus showing what can change and what can't. Often the parameters themselves can be functions.
+
+#Filter 
+filter is similar to map, but instead of applying a function to all elements of a list, it selects certain elements of a list that meet a criteria
+filter(lambda num: num%2 == 0, x) # returns just the even numbers from list x, using map instead of filter here would yield a list of boolean values based on if a given list element is even or not
+
 #Lambda - python's way of creating anonymous functions
 #Usually evaluates only a single expression, so not suited for complex logic, but can effectively do simple data cleaning.
+General form:
+lambda <arg or list of args> : <do something with the args result of which is returned>
 
 lambda a, b, c : (a + b) * c # takes 3 args and multiplies the sum of the first two with the third. 
 # a lambda function expression can be stored in a variable and called as follows:
@@ -129,9 +141,22 @@ myfunc(1,2,3) # will return 9
 # lambda can be combined with map to avoid having to define functions to use with map
 x=[1,2,3,4,5]
 map(lambda num: num**2, x) # same as map(square,x), except you don't have to define and store square
-------------------------------------
-# filter is similar to map, but instead of applying a function to all elements of a list, it selects certain elements of a list that meet a criteria
-filter(lambda num: num%2 == 0, x) # returns just the even numbers from list x, using map instead of filter here would yield a list of boolean values based on if a given list element is even or not
+
+Its often less typing and clearer to pass a lambda function as opposed to writing a full-out function or even passing a variable containing the lambda function.
+
+#Closures
+A closure is a dynamically generated function returned by another function. A key property is that closures continue to have access to the variables in the local namespace where it was created even after the function is done executing. 
+
+def parent_func(x):
+  def closure_func():
+    print('This is the local variable: %d' % x)
+  return closure_func
+
+closure = parent_func(5)
+closure()
+# whenever you execute closure you will always get 5 - because it has access to the 5 that was passed to the parent function the first time.
+Variables within closures can be static like above or dynamic (lists, dict etc) which can then be used to keep track of arguments from previous executions of the closure. 
+You cannot, however, bind variables in the enclosing function's scope within a closure function		
 ------------------------------------
 # key functions
 s = 'My name is SP#her name is MP'
@@ -147,7 +172,10 @@ list.append('element') # appends an element to the list
 
 x in list # checks if x is in the list, returns a boolean
 list.count('word') # counts the number of times a word occurs in the list
-string.startswith('letter') # checks if string starts with letter  
+string.startswith('letter') # checks if string starts with letter
+
+list.sort() # default sorting is alphabetical
+list.sort(key = lambda x: <do something with x>) # 'key' argument allows you to pass different sorting criteria 
 ------------------------------------
 #Tuple unpacking - basically accessing single elements of tuples
 list = [(1,2),(3,4),(5,6)]
@@ -157,6 +185,11 @@ for (a,b) in list:
 ------------------------------------
 iterating through multiple lists
 for i,j in zip(list1, list2)
+------------------------------------
+# Documentation strings (docstring) - especially for functions, to describe what the code does. Enclosed in triple enclosing quotes
+"""
+This function calculates the mean squared value of a set of numbers
+"""
 ------------------------------------
 
 Date/time modules
