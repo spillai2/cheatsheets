@@ -1,0 +1,102 @@
+Largest human chromosome 250 million
+
+Positive strand - 5' to 3'
+
+Proteins - 100s or maybe 1000s of amino acids long
+
+DNA->(transcribe)->RNA->(translate)->protein
+
+61 of 64 codons encode amino acids, the other 3 are stop codons (though its been shown that the stop codons can once in a while code for 2 newly found amino acids in other organisms)
+
+Human Genome Project - proposed by DOE in 1987, started in 1989 (DOE and NIH)
+Human Genome - 3 billion bp long, around $10 per base when it started but also projected to come down to $1 at the end (hence $3 billion is the official estimate)
+Most of the DNA doesn't code for proteins (98-99%), so some were opposed to it.
+Idea was to clone around 150kb chunks into BACs, sequence and stitch them together.
+Tile (map) the BACs in a library, assemble the genome that way and then sequence individual clones.
+1995: H.influenzae sequenced at TIGR - game changer - whole genome shotgun sequencing: fragment the genome, sequence the fragments and then assemble into genome. No cloning involved.
+1998: Applied Biosystems comes out with new sequencer - capillary - allowed automation of sequencing in a way not possible before. Celera Genomics formed.
+2000 June: Clinton and Blair jointly announced completion of human genome.
+Sequenced a mosaic of about 12 volunteers (northern european)
+How many genes? what do they do?
+2001: 30,000 - 40,000 genes, later a more precise estimate of 26,588 genes emerged with an additional 12,000 'likely' genes.
+Today, we think there are around 22-23,000 protein encoding genes.
+Initially we thought only protein encoding segments were called genes. But now we know that some genes get transcribed into 'functional' RNAs which never get translated to proteins.
+RNA-seq has shown us that there are 10s of thousands of RNA encoding genes.
+Cost today $1 per 3 million bases! 4000 times cheaper than when the HGP started.
+1 read is about 700 bp
+
+DNA inside each cell when streched out is about 2 m long!
+Wrapped around histones (beads on a string) - supercoiled into chromosome
+Repeats - sequence repeats. Tandem and interspersed. 
+Tandem - Could be hundreds of bp. eg centromeres are usually around 180 bp repeats 100s of thousands of times in a row.
+mRNA - 5'UTR, coding, 3'UTR and a poly A tail (added after transcription - as hook to grab out of the cell)
+Exons (coding regions) and introns - introns chopped out before translation (splicing)
+Alternative splicing - combining exons in different combinations. 90% of human genes have alternative splicing.
+Proteins - primary, secondary and tertiary structure. secondary - Beta sheets, alpha helices. Tertiary - 3 dimensional
+Transcription factors: proteins that bind DNA and control expression of genes (over or under express)
+Epigenetics - beyond genetics that control genes eg. methylation, histone modification.
+
+Genotype - genetic blueprint -> Phenotype - observed trait
+Mutations: SNPs, insertions, deletions, copy number variants, inversions
+
+3rd generation - single molecule sequencing (future)
+2nd (next) gen sequencing 
+    - attach DNA that is a few hundred to a thousand nt long on a slide, 
+    - use PCR to create many (few million) identical copies of each of the templates to form clusters 
+    - 'read off' the clusters by generating complements to the single stranded clusters snapping a picture after each base is added (each sequencing cycle).
+Read error is the main reason why we sequence short fragments as the errors increase many fold as longer fragments are sequenced.
+
+Applications of NGS:
+1) exome (collection of all exons) sequencing. To look for mutations in proteins we only need to look at exons and they comprise only 1.5% of the genome, need to sequence only 50-60 million nt. Exons captured by kits that have beads with exon sequences. 
+2) RNA-Seq: Capture all the mRNAs by their polyA tails. Turn them into cDNA with reverse transcriptase. Attach the DNA and then sequence.
+3) ChIP-Seq: cross link proteins (of interest) to purified DNA, capture the bound DNA and sequence them
+4) Bisulfite/Methyl-Seq: Find out where DNA is methylated (always at C). Split DNA into 2 samples - treat one with with bisulfite that will convert unmethylated Cs into Us. Sequence and compare
+
+Comp Sci - theory, systems and applications
+what can be solved and how, studying computers themselves and the software to keep it working, everything else that we use computers for respectively.
+
+Algorithms: what a computer can do in step-by-step instructions. Algorithms dont need computers, its just a way of describing how to do something in full detail.
+eg. find a max, sort a set of numbers etc.
+
+Data structures: how to store data. Most efficient way to store data, also ease of finding them. Most common - lists, linked lists, trees. Pointers point to location of data storage. byte=8bits 8 digit binary number, can store values from 0 to 127 that can store everything on your keyboard.
+DNA - since there are only 4 letters, DNA can be stored as 2 bits A:00, C:01, G:10 and T:11
+Introns almost always start with the letters GT and end with AG. Knowing that we can create intronic start and end sites of a fixed length (say nt) by representing them as probabilistic diagrams of the 10 nt length from 1000s of sequences, instead of storing the sequences from all the sites.
+
+Computational/algorithmic efficiency: ways to implement a task fast in fewer steps, using less memory.
+
+Software engineering: critical when analyzing large data sets
+RNA editing: some nucleotides in your RNA can be edited by the cell before translation - only affects a few nts. Existing software was used to compare RNA and DNA sequences from the same person and provided reliable results for where RNA was edited. Even one in a million misalignments can give 100s of errors in large data sets. So important to understand the algorithm used.
+
+Computational biology software: raw data to information.
+Analysis pipeline: takes data and passes it through series of software/algorithms and provides some insight at the end.
+RNA-Seq pipeline: takes RNA from a cell and sequences them to find out which genes are turned on. Comparative studies between different types of cells. A pipeline called Tuxedo tools - comprising of Bowtie, TopHat and cufflinks doing fast alignment, spliced alignment, transcript assembly respectively - can be used to analyze RNA.
+Almost all genes in human genome can be spliced in more than one way (isoforms) and each of them can be expressed differently.
+Next Gen Tuxedo tool - Bowtie2, HISAT, StringTie - have superceded the above three.
+
+Genomic data science: Biology + Comp Sci + Statistics. Lack of statistical expertise can lead to misleading/wrong results and recommendations that can have severa consequences.
+Central Dogma of statistical inference: Population -> random sample -> measure and guess the population. The guess could be variable and that needs to be quantified. If the population changes after the sample is taken, the inference could be wrong (google flu maps)
+Data sharing plan: important to reproduce. Data consists of raw data, tidy data and the steps to go from raw to tidy. Raw data is one on which there has been no processing, computing, summarizing or deleting. Tidy data set is one variable per column, one observation per row, one table per kind of variable and linking indicators for columns. Code book describes the tidy data.
+Visualizing is key for big data. Showing raw data in some form helps to derive conclusions. Data can also be transformed if mostly clustered around a small area or if the numbers are very small eg. log transformation. This is done when comparing two samples/replicates. MA plot in genomics adds the two replicated on one axis and subtracts on the other axis. Ridiculogram - a plot that looks good, but conveys little meaning.
+Sample size is a way understanding the variability in the population. The way to do this is with 'power' - the probability that you will be able to detect the variability, if there exists variability. Power usually takes the effect size, sd and n as arguments, but we can also get n for a given power (say 80%) to detect the effect size.
+3 types of variability in genomics: 1) phenotypic 2)measurement error 3)natural variation
+
+######## NGS steps
+In general, the steps are:
+
+1) Align your fastq of reads to a reference genome - bwa, bowtie
+2) Determine the variants between your sample and the reference genome - GATK, samtools
+3) determine which variants are the best candidates for contributing to your clinical phenotype - hardest
+########
+
+Multiple testing: When looking at hugely multiple hypothesis, something could turn out to be significant just by chance. To correct:
+1) Family wise error rate (FWER) - very strict, hardly allows any errors
+2) False Discovery rate (FDR) - expected [# false positives/# discoveries]
+Suppose 550 out of 10,000 genes appear significant at the 0.05 level.
+FDR of 0.05 means you would expect 0.05*550=27.5 false positives
+FWER of 0.05 means the probability of at least one false positive is 0.05, which means almost all of them will be true positives
+Best way to not create statistically significant results is to not look at the data and specify a plan before analyzing it and stick to it.
+
+Confounding and batch effects: A confounder is a variable that is related to two unrelated variables and may make it look like they are related. For eg. Age is a counfounder that is connected to both shoe size and literacy. Very common problem in genomics - most common example is batch effect (batches of samples differ in date taken etc). One way to deal with confounders is randomization. For eg. if you are treating male and female mice with a drug and placebo, make sure that some of the male and some of the female are treated (and given placebo) to avoid sex bias.
+
+Study design: should be balances (fairly equal # of treated and untreated), replicated (technical and biological replicates) and has controls.
+

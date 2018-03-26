@@ -1,0 +1,21 @@
+20 Amino acids
+Amino terminal, alkyl group (R) and carboxy terminal - R group key in differentiating amino acids
+Non-polar hydrophobic (8/20 - Tryptophan, Phenylalanine, Methionine etc)
+Polar acidic (2/20 Aspartic and Glutamic acid)
+Polar basic (3/20 Lysine, Arginine, Histidine)
+Polar uncharged (7/20 Glycine, Glutamine etc)
+
+In peptides, amino acids are linked to each other by bonds between the amino group of one and the carboxyl of the next (between the N and C, losing an H2O in the process). Peptides are depicted as going from the amino terminus to the carboxyl terminus. Multiple peptides form a protein.
+
+Peptide fragmentation
+The bonds that connect amino acids are broken by collision and you get b ions (amino terminal) and y ions (carboxy terminal)
+For eg. if it is a peptide with 8 amino acids, if a collision breaks the bond between the first amino acid and the second you get b1 and y7 ions. The number indicates the number of R groups left in the ion.
+
+Mass spectra
+The spectra plots mass/charge ratio (called m/z) on x axis against intensity (peptide count) on the y-axis. Basically means how many peptides were found for a certain m/z value/range. First round of MS called MS1 will give the spectra for the entire protein. The second round MS2 does finer grain separation of selected regions (precursor ions). MS2 gives the sequence of individual peptides, with each called peak being the total weight of aas till that peak starting from one of the terminals.
+
+The acquired spectra then undergo a sequence DB search as well as a spectral library search (compare to a library of well documented spectra). Alternatively, mass spec software can do de-novo sequencing which means it will give the sequence of the peptides without DB search. Eventually you get a list of peptide matches with associated scores and you pick the best one (highest score).
+
+Sequence DB search:
+Define a scoring function
+Identify Peptide Spectrum Match (PSM) between acquired spectra and a theoretical spectra based on sequence DB.

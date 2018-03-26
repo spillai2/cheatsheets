@@ -1,0 +1,32 @@
+library(shiny)
+# basic components, same as any web app
+ui = fluidPage() # creates UI/frontend, define and layout input, lay out output
+server = function(input, output) # server/backend does the work of computing output from a given input
+shinyApp(ui=ui, server=server) # app ties the UI and server together
+
+fluidPage() defines all the requirements of the UI. The default is usually a smaller sidebar - sidebarPanel() - for displaying input and a wider main area - mainPanel() - for showing the output. App scales to the width of the browser, so developer doesn't to worry about it. Under the hood, shiny implements Bootstrap. Both sidebarPanel() and mainPanel() are within a main sidebarLayout()
+
+sidebarPanel() can have multiple selectInput() functions for selecting the inputs for the different axes
+selectInput(inputId = 'y' # internal use as ya-axis
+	    label = 'Y axis' # what user sees
+	    choices = c(<vector of different variables for y axis>) # y axis choices
+	    selected = '<selected variable>')
+
+mainPanel() contains specifications on how to display output
+plotOutput(outputId = 'scatterplot') # single scatter plot with variables chosen in side bar and processed by server
+
+The server function defines the relationship between the input and output. It is a function that takes two arguments 'input', which are the choices from UI (inputId) and 'output' also from UI (outputID) which defines how what the output should be.
+server = function (input, output) {
+	output$scatterplot = renderplot({ ggplot(data=df, aes_string(x=input$x, y=input$y) + geom_point() )}
+}
+
+Rules of server function:
+1. Save output objects as output$xxx
+2. Take input values as input$xxx
+3. Build objects with render* functions eg. renderplot for plot output
+
+Many different outputs available besides plot - data table, table, image etc - and there is a corresponding render function for each. 
+
+The app is reactive because shiny automatically updates output when input changes.
+
+The shinyApp functions ties the UI together with the server and creates the app.
