@@ -1,0 +1,17 @@
+cut
+# cut one column from a file
+cut -d'<separator>' -f<column#> file
+# fetch first field of a csv
+cut -d',' -f1 file.csv
+# fetch first 3 fields
+cut -d',' -f1,2,3 file.csv
+# fetches first 6 fields 
+cut -d',' -f1-6 file.csv 
+# fetch unique entries from first column
+cut -d',' -f1 file.csv | uniq 
+# show number of unique entries in first column
+cut -d',' -f1 file.csv | uniq | wc -l
+
+sort
+sort numerically by separator '-' first by second column, then by third 
+sort -t - -n -k2 -k3 
