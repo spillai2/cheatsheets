@@ -1,0 +1,75 @@
+Learning properties from samples of available data and then try to predict properties of unknown data. Samples could have single (univariate) or multiple features/properties (multivariate).
+
+Supervised learning: Training data comes with the properties we want to predict. A couple of main types -
+1) Classification: Training data belongs to two or more classes and are labeled so. Using that info try to predict what classes sample data belongs to. eg. hand written digit recognition.
+2) Regression: Predict a feature/features as a function of other features. Eg.length of a fish as a function of its age and weight.
+
+Unsupervised learning: Training data does not come with attributes. Instead find patterns/groups within it based solely on the data.
+1) Clustering
+ (discovering groups)
+2) Density estimation (distribution of data with the input space)
+3) Dimensionality reduction (for the purpose of visualization)
+
+The core idea is to train a model using training data, test against some test data for which we know the actual output and then use the model on new data
+-------------------------------------------------------
+
+Base library from ML in python - SciKit learn (sklearn)
+
+# General syntax
+from sklearn.family import Model
+# for eg.
+from sklearn.linear_model import LinearRegression
+
+Steps
+1. Instantiate the model/estimator
+model = LinearRegression(normalize=True)
+It is possible to pass all the required parameters in one call
+
+2. Split given data into training and test
+from sklearn.model_selection import train_test_split
+# Suppose you have data that has X (features) and y (labels) it can be split as follows:
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3) # this means use 30% of data to create test, rest train
+# the above is for supervised learning. For unsupervised, you only have data, no x/y values (no labels)
+
+3. Fit your data to the model (means calculate parameters that best describe your data)
+model.fit(X_train,y_train)
+
+4. Test using testing data (means predict labels - y values - for the test data) 
+predictions = model.predict(X_test) 
+
+5. Evaluate predictions
+model.score() and model.predict_proba() will show you how close the predictions are to real values
+
+Unsupervised models also come with model.transform() which will transform new data into new basis.
+-------------------------------------------------------
+Linear regression:
+Regression in general means regress (move towards) the average. In linear regression we draw a line that fits the data best, in other words a line that minimizes the squared distances between the actual values and the line
+
+When you have a dataset, for eg. as a csv read into a pandas df
+The first step is to split the predictor and predicted variables into two dfs
+X = df[<list of predictor variables>]
+y = df[<variable to be predicted>] # usually one, like Price of a house
+
+Second step is to create the training and test data using train_test_data from sklearn.model_selection
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, <optional random state = any number>)
+
+Third step is to train a model with the training data
+from sklearn.linear_model import LinearRegression
+# create an object for the model
+lm = LinearRegression()
+# fit the object to training data
+lm.fit(X_train, y_train) # the lm object now has the coefficients and the y-intercepts of the predictor variables
+
+Fourth step is to use the model and predict the test set and then compare to actual test values
+lm.predict(X_test)
+plt.scatter(predictions, y_test) # visual comparison if the points are more or less along a straight line
+
+3 main regression evaluation metrics
+Absolute mean error - mean of the differences between predicted and actual values (called residuals)
+Mean squared error - mean of the squares of the residuals
+Root mean squared error - root of the above
+
+from sklearn import metrics
+metrics.mean_absolute_error(y_test, predictions)
+metrics.mean_squared_error(y_test, predictions)
+np.sqrt(metrics.mean_squared_error(y_test, predictions)) # there is no separate function, just have to use np.sqrt

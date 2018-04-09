@@ -3,8 +3,8 @@ import pandas as pd
 2 basic pandas data structures: Series and DataFrames
 Series: one dimensional array, somewhere between a list and a dictionary. Like lists (and ndarrays), except they have an associated array of data labels instead of just index locations. Single indexed column of data. Items are stored in an order and there are labels with which they can be retrieved.
 
-list a = [1,2,3]
-x=pd.series(list, index=['First','Second','Third']) # stores a list of 3 numbers and labels them, so they can be retrieved either by x[index] or x.label.
+a = [1,2,3] # declare a list
+x=pd.series(a, index=['First','Second','Third']) # stores a list of 3 numbers and labels them, so they can be retrieved either by x[index] or x.label.
 
 underneath, pandas stores data in a numpy typed array. Numbers are stored by default as float64, strings as object.
 Dictionaries can also be converted to pandas Series, no need to label.
@@ -39,8 +39,8 @@ data = {'state': ['OH','OH', 'OH', 'NV', 'NV'],
 	'year':[2000,2001,2002,2001,2002], 
 	'pop': [1.5,1.7,3.6,2.4,2.9]}
 
-df = DataFrame(data)
-df = DataFrame(data, columns=[<list of data columns in order you want>])
+df = pd.DataFrame(data)
+df = pd.DataFrame(data, columns=[<list of data columns in order you want>])
 df.index =[<list of row names you want>] # will name the rows
 # all in one shot
 df  = pd.DataFrame(data, columns=[<list of col names>], index=[<list of row names>])
@@ -58,17 +58,17 @@ df = pd.DataFrame([series1, series2, series3])
 df2 = df.append(<list>) # will create y adding a new list to df, but won't change df
 
 #Access data based on labels (row/column names)
-df.loc[rowname/id, colname] # will pull out the value in that cell, same as R data.frame
+df.loc[rowname, colname] # will pull out the value in that cell, same as R data.frame
 df.loc[:,[col1, col2]] # pulls out all rows for the 2 cols mentioned
 #Access data based on indexes/positions
 df.iloc[1:4, 3:5] # fetches rows 1,2 and 3 of column numbers 3&4
 #For access with a mix of labels and positions, use ix
-df.ix[1:4, 'fromcolumn':'tocolumn']
+df.ix[1:4, 'fromcolumnname':'tocolumnname']
 
 # To slice a chunk (some number of rows for a certain set of columns)
-df.loc[fromrowid:torowid, fromcolumn:tocolumn]
+df.loc[fromrowname:torowname, fromcolumnname:tocolumnname]
 # to get all rows for a select set of columns, use a single colon for rows
-df.loc[:, 'fromcolumn':'tocolumn']
+df.loc[:, 'fromcolumnname':'tocolumnname']
 
 # copy/delete columns
 df.drop(rowname) # won't drop the row from the original df
@@ -85,11 +85,14 @@ del df[col] # deletes columnn
 df.columns - gives list of columns
 list(df.columns) # gives the column names as a list
 list(df) # short version of above
+list(df.index) # gives names of row labels
+
 # rename columns 2 ways
 df.columns=[<list of new column names>]
 df.rename(columns={'oldName1': 'newName1', 'oldName2': 'newName2'}, inplace=True)
 
 df.shape # gives number or rows and columns in a data frame
+df.info() # describes the structure of the data frame in details, like R str()
 df.T will transpose the data frame, same as df.transpose()
 #To add a column to a data frame
 df['newcolumn'] = "value" # value will be propagated through all the rows of the data frame
@@ -116,7 +119,7 @@ df.unstack('column') # splits a dataframe according the values of the column spe
 Mutilevel index - multiple levels of indexing
 Passing a tuple of indexes to the index definition when creating a df, the order of elements in the tuple determine the level of indexing ie. first element is the outermost index, second is next etc.
 To retrieve elements from df indexed this way
-df.loc['outer index'.loc['inner index] # chain indexes with loc
+df.loc['outer index'].loc['inner index] # chain indexes with loc
 df.xs('inner index', level='name of inner index') # allows to cross outer index and get inner index from multiple outer indices.
 ---------------------------
 Missing values
@@ -136,6 +139,9 @@ df[col] > 0 # will create a boolean array where every entry that satisfies the c
 df.where(df[col] > 0) # same as in R
 df[df[col]>0] # same as above
 
+Counting number of entries that match a certain column value:
+df[df['col']=='value']['col'].count() # the second value counts for a single column, otherwise it gives the same count for all columns 
+
 df[col].unique() # unique values from a col
 df = df[df[col] == <some value>] # recreates the data frame with only those entries that satisfy the condition
 df = df[<list of cols to keep>] # edits dataframe to drop all other cols
@@ -145,7 +151,7 @@ Similar to SQL group_by, allows you to group by a certain column - ie aggregate 
 SQL : select count(col_a) from table group_by col_b
 df.groupby('col1').mean() # will group the df by col1 and set the other columns to their mean value, where applicable. It will ignore columns that it cannot apply mean to, like strings.
 groubpy() will automatically convert the grouping by column to an index
-df.groupby().describe() # will show the values of a whole set of functions run on df (sum, max, min etc
+df.groupby().describe() # will show the values of a whole set of functions run on df (sum, max, min etc)
 df.groupby('col1').agg({'col2': np.average}) # groups by the first column and then calculates the avg value for col2.
 
 groupby can work at dataframe and series level. At dataframe level it can take multiple columns as arguments and it will run the aggregate separately for each column. It is also possible to aggregate based on different functions for the diff cols - for eg. avg for one column and sum for another.
@@ -157,7 +163,7 @@ pd.concat([df1,df2,df3]) # will concatenate the 3 data frames along rows, meanin
 pd.concat([<list of dfs>], axis=1) # will concatenate along columns
 
 pd.merge() will merge two or more data frames based on shared(key) columns
-pd.merge(df1,df2) # absent any other arguments, pandas figures out the key column to join by and does and inner join
+pd.merge(df1,df2) # absent any other arguments, pandas figures out the key column to join by and does an inner join
 pd.merge(df1,df2, how='inner', on='key_col') # more descriptive way
 pd.merge(df1,df2, how='outer', on=[<list of keys>]) # outer join based on more than one key column, the columns that are not common are put adjacent to each other with NaN where values don't exist
 pd.merge(first_df, second_df, how='outer', left_index=True, right_index=True) # union merge/outer join
@@ -187,7 +193,7 @@ sort_values() lets you sort by value
 df.sort_values('col1') # sorts the df by the value of col1
 
 pd.pivot_table() allows you to pivot your table and summarize/view data the way you want
-pd.pivot_table(values='col4', index=['col1,'col2'], columns=['col3]) # summarizes the values of col4 with col3 as columns and multi-indexed by col1 and col2
+pd.pivot_table(values='col4', index=['col1','col2'], columns=['col3']) # summarizes the values of col4 with col3 as columns and multi-indexed by col1 and col2
 # a general form
 df.pivot_table(values = <col which we want to summarize>, index = <col to be rows in the result>, columns = <cols of pivot table>)
 df.pivot_table(values = <col which we want to summarize>, index = <col to be rows in the result>, columns = <cols of pivot table>, aggfunc = [<one or more list of func]) 

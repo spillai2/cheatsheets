@@ -17,7 +17,7 @@ plotOutput(outputId = 'scatterplot') # single scatter plot with variables chosen
 
 The server function defines the relationship between the input and output. It is a function that takes two arguments 'input', which are the choices from UI (inputId) and 'output' also from UI (outputID) which defines how what the output should be.
 server = function (input, output) {
-	output$scatterplot = renderplot({ ggplot(data=df, aes_string(x=input$x, y=input$y) + geom_point() )}
+	output$scatterplot = renderPlot({ ggplot(data=df, aes_string(x=input$x, y=input$y) + geom_point() })
 }
 
 Rules of server function:
@@ -30,3 +30,22 @@ Many different outputs available besides plot - data table, table, image etc - a
 The app is reactive because shiny automatically updates output when input changes.
 
 The shinyApp functions ties the UI together with the server and creates the app.
+
+Various types of UI input features - selectInput is just one of them. Others include sliderInput, numericalInput, fileInput (browse button), checkboxInput etc. ?<any>Input will give documentation on any of them.
+
+Shiny also provides a wide range of output functions, each of which is enabled through a 'render' function. eg. renderPlot, renderTable, renderDataTable, renderImage etc. Each render function has a corresponding 'Output' function in the UI. for eg. renderPlot corresponds with plotOutput, renderTable with tableOutput etc. The render functions can take multiple arguments, the first being the expression for the desired output which should always be in curly braces.
+
+More interactivity can be added in the outputtted plot itself by providing 'brush' capability. This means drawing a rectangle in the plot and doing something with just those values from the data frame - eg. displaying them in a data table. 
+
+To add brushing capability to the plotting function:
+plotOutput(outputId = 'scatterplot', brush = 'plot_brush')
+This will now be accessible to server functions via input$plot_brush. In server:
+output$<table defined> = DT::renderDataTable({brushedPoints, df, input$plot_brush %>% select(<some columns) })
+Here %>% is dplyr syntax for selecting columns from a data frame, brushedPoints() is a helper function that helps pick rows from a data frame selected by a brush.
+
+To hover and display data points
+plotOutput(outputId = 'scatterplot', hover = 'plot_hover')
+and in server function
+output$<table defined> = DT::renderDataTable({nearPoints, df, input$plot_hover %>% select(<some columns) })
+
+<button type="button" onclick='document.getElementById("demo").innerHTML = "Hello JavaScript!"'>Click Me!</button>

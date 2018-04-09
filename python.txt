@@ -78,12 +78,14 @@ list.append[5] # makes list [1,2,3,4,5]
 set{1,1,1,2,2,2,3,3} # creates 1,2,3
 
 x = list(range(0,100)) # creates a list of numbers from 0-99, same as range(100)
+
+# print a list
+print(*list, sep='\n') # print a list separated by new lines. The '*' will pass the elements of the list as individual elements
 ------------------------------------
 List comprehension
 Iterating through the elements of a sequence and doing some operation all in one statement without having to loop through
 [<some operation on x> for x in <some sequence>] # returns a list, so need to be enclosed in []
 [i^2 for i in range(10)] # returns the squares of numbers 1-10
-
 # in other words, one line for loop
 # eg. if you want a list of the squares of the first 5 numbers
 [x**2 for x in range(1,6)]
@@ -202,33 +204,32 @@ dtnow = dt.datetime.fromtimestamp(tm.time()) # converts time into year, month, d
 dt.date.today() # shows today
 dt.timedelta(days = 100) # create a timedelta of 100 days
 dt.date.today() - dt.timedelta(days = 100) # the date 100 days befor today
-------------------------------------
-Basic OOP
-
-#Class definition
-class Person:
-    department = 'School of Information' #a class variable
-
-    def set_name(self, new_name): #a method
-        self.name = new_name
-    def set_location(self, new_location):
-        self.location = new_location
-        
-#Object instantiation and use:
-person = Person()
-person.set_name('Sanjeev Pillai')
-person.set_location('Bedford, MA')
-print('{} live in {} and works in the department {}'.format(person.name, person.location, person.department))
-------------------------------------
-
 
 %%timeit n=100 # will time an operation for 100 loops, can be used to check the time of execution of loop vs no-loop
-
-
 -----------------------------
-Reg ex
+Regular expressions
+# Done using the re library
+import re
+search() - returns the first of the matches
+re.search(<pattern>, <input string>) # pattern here is any general regular expression pattern. For eg.
+re.search('^From:', line) # will match if the line starts with 'From:' (as is the case with email headers)
+re.search('From:.+@', line) # .+ means 1 or more characters 
+re.search('From:.*@', line) # .* means zero or more characters
 
+To extract the matches, have the portion to be extracted enclosed in parantheses. For eg. say a string 'extime_100modulename' and you want to extract 'modulename'
+re.search('.*_\d+(.*)', string) # will fetch the match into a match object
+match.group(1) # will give 'modulename'
 
+findall() - returns all matches
+re.findall('\S+@\S+', line) # will return a list of all email addresses in line
+re.findall('[a-zA-Z0-9]\S+@\S+[a-zA-Z]', line) # more specific version of above making sure the non-whitespace characters are alphanumeric
+findall will return all matches as a list
+
+split
+re.split('@', string) # splits the string into two at @
+
+sub
+re.sub('subsitute this', 'with this, 'in this string') # finds one string and substitutes with another, in a given string/line
 -----------------------------
 File operations
 # use 'open' to create a file handle
@@ -247,3 +248,77 @@ with open('newfile.txt', 'w') as handle:
 f.close()
 # file methods include read(), readlines(), write(string), writelines(strings)
 -----------------------------
+Basic OOP
+#Class definition
+class Person (object): # 'object' passed as the parameter means there is no inheritance, it is its own class
+    department = 'School of Information' #a class variable
+
+    def __init__(self, name, location): # constructor that initializes a Person object
+	self.name = name
+	self.location = location
+    def set_name(self, new_name): #a method
+        self.name = new_name
+    def set_location(self, new_location):
+        self.location = new_location
+        
+#Object instantiation and use:
+person = Person('Sanjeev', 'Bedford')
+person.set_name('Sanjeev Pillai')
+person.set_location('Bedford, MA')
+print('{} live in {} and works in the department {}'.format(person.name, person.location, person.department))
+
+'self' refers to the object itself. For eg. person.setname('name') is the same as Person.setname(person, 'name'). Here the instance person is passed to the class's setname method. Means the method acts on the object (self) that is passed to it.
+
+Instance methods need a 'self' because they require an existing instance of a class to be used. 
+
+Class attributes are general to all objects created from a class. For eg.
+
+class Car(object):
+	num_wheels = 4
+
+	def __init__(...)
+
+Here all car objects created will have num_wheels set to 4 and can be accessed through self, ie. self.num_wheels
+
+Static methods do not need a 'self', they are declared at class level. A 'decorator' @staticmethod is used to make it clear that it should not receive a self as first parameter
+
+@staticmethod
+def make_car_sound():
+	print('Vrooom!')
+
+All cars can make the same sound.
+
+Class methods are variants of static methods. Instead of no parameter or self/object parameter, this method receives a 'cls' parameter, meaning the class itself. Decoarated with @classmethod.
+
+Inheritance
+Child classes inheriting from a parent class will help define a lot of the abstractions in the parent class itself with the child classes containing only what is different from the parent (or in addition to the parent). For eg. a Car parent class can have child classes like 'compact', 'midsize' and 'fullsize' cars.
+
+Often a concept (not a real world object) is a parent class. For eg. 'Vehicle' is a concept class for real world object like cars, trucks etc.
+
+When a child class inherits from a parent class, its definition will have the parent class as the parameter (instead of 'object' which means no inheritance).
+
+class Car(Vehicle):
+
+Abstract classes: The parent concept class should not be instantiated since it is not a real world object. It should instead be an 'Abstract Base Class' (ABC) - classes that can only be inherited from. This can be achieved by setting that class's metaclass to ABCMeta and making one of its methods virtual (meaning it is an abstractmethod that doesn't do anything in the ABC, but the child classes can override it with a method that does something. Abstraction is key to inheritance.
+
+class Vehicle(object):
+	__metaclass__= ABCMeta
+	
+	sale_price=0
+	num_wheels=0
+	<a set of methods including __init__>
+
+	@abstractmethod
+	def vehicle_type():
+		pass
+
+And then
+
+class Motorcycle(Vehicle):
+	sale_price=4000
+	num_wheels=2
+
+	def vehicle_type():
+		return 'motorcycle'
+------------------------------------
+
