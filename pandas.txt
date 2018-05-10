@@ -75,7 +75,7 @@ df.drop(rowname) # won't drop the row from the original df
 df.drop(rowname, inplace=True) # will drop from original
 df.drop(df[index], inplace=True) # better general syntax
 df.drop(df.index[:2], inplace=True) # drops first 2 rows
-df.drop(df['column'], axis=1 inplace=True) # drops a column by name
+df.drop('columnname', axis=1 inplace=True) # drops a column by name
 df.drop('rowname', 0, inplace=True) # 0 means row
 #To delete by index instead of names/labels
 df.drop(df.index[from:to, 0] # change to 1 for columns
@@ -196,7 +196,7 @@ pd.pivot_table() allows you to pivot your table and summarize/view data the way 
 pd.pivot_table(values='col4', index=['col1','col2'], columns=['col3']) # summarizes the values of col4 with col3 as columns and multi-indexed by col1 and col2
 # a general form
 df.pivot_table(values = <col which we want to summarize>, index = <col to be rows in the result>, columns = <cols of pivot table>)
-df.pivot_table(values = <col which we want to summarize>, index = <col to be rows in the result>, columns = <cols of pivot table>, aggfunc = [<one or more list of func]) 
+df.pivot_table(values = <col which we want to summarize>, index = <col to be rows in the result>, columns = <cols of pivot table>, aggfunc = [<one or more list of func>]) 
 If a list of functions are passed, say min and max, the pivot table will show two column sets for the 2 funcs.
 ---------------------------
 Data input/output
@@ -255,3 +255,7 @@ Timestamps can be added to or subtracted from each other and it gives a Timedelt
 
 pd.date_range() # creates a date range just like a sequence with intervals etc.
 -----------------------------
+Tricks
+create and populate a new column based on values in another column stored as a dict
+dict = {'exist_col_val1':'new_col_val1', 'exist_col_val2':'new_col_val2', 'exist_col_val3':'new_col_val3'}
+df['new_column'] = df['exist_column'].map(dict) # creates a new column filling in with values from dictionary

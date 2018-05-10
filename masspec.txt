@@ -31,3 +31,6 @@ Alternatively, mass spec software can do de-novo sequencing which means it will 
 Sequence DB search:
 Define a scoring function
 Identify Peptide Spectrum Match (PSM) between acquired spectra and a theoretical spectra based on sequence DB.
+
+Quantitation (bottoms-up or Peptide centric)
+Proteins labeled with light/heavy isotopes in control/treatment samples. Then samples mixed and total proteins extracted (at that stage differentially tagged) -> digested into peptides -> separation by MS/MS. In a given spectra, the differntially labeled peptides will show up separately and the intensities (peptide count) will show quantities of control and treatment.

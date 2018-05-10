@@ -61,7 +61,7 @@ lm = LinearRegression()
 lm.fit(X_train, y_train) # the lm object now has the coefficients and the y-intercepts of the predictor variables
 
 Fourth step is to use the model and predict the test set and then compare to actual test values
-lm.predict(X_test)
+predictions=lm.predict(X_test)
 plt.scatter(predictions, y_test) # visual comparison if the points are more or less along a straight line
 
 3 main regression evaluation metrics
@@ -73,3 +73,8 @@ from sklearn import metrics
 metrics.mean_absolute_error(y_test, predictions)
 metrics.mean_squared_error(y_test, predictions)
 np.sqrt(metrics.mean_squared_error(y_test, predictions)) # there is no separate function, just have to use np.sqrt
+
+Residuals - difference between actual observed values and predicted ones - give a good idea of how good the model is. Plotting the residuals is the way to find out
+sns.distplot(y_test - predictions, bins=<some value>)
+-------------------------------------------------------
+Variance/bias tradeoff - optimally the model should predict with low variance and low bias, but in practice it is a tradeoff. Depends on the training data. If we try too hard to fit the training data the model will overfit trying to accommodate the outliers and false values in the training set, resulting in errors when trying to predict test data.

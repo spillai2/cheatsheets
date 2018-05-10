@@ -105,8 +105,8 @@ sns.distplot(tips['one column'])
 # optional args
 sns.distplot(tips['one column'], kde=False, bins=30)
 # to explore relationship between 2 variables
-sns.joint
-plot(x='col1',y='col2',data=df) # plots the relationship as a scatterplot with histograms of individual vars appearing as sidebars along the x and y axis
+sns.jointplot(x='col1',y='col2',data=df) # plots the relationship as a scatterplot with histograms of individual vars appearing as sidebars along the x and y axis
+sns.jointplot(x='col1',y='col2',data=df, marginal_kws={'hist_kws': {'edgecolor': "black"}}) # edgecolor demarcates the bars in the histogram
 #optional arg 'kind' lets you determine what type of plot to show for relationship
 sns.jointplot(x='col1',y='col2',data=df, kind='hex') # shows hexagons which also display freq of occurennce by darkness of color
 # plot all possible numerical var pairs in a dataframe
@@ -165,6 +165,7 @@ sns.lmplot(x='col1', y='col2', data=df, col='sex', aspect=0.6, size=0.8) # aspec
 --------------------
 Style and color
 sns.set_style('darkgrid') # sets background to dark and shows grids. just dark will get rid of grids
+plt.rcParams["patch.force_edgecolor"] = True # to turn on edge color on bars, off by default
 #########################################
 Pandas built-in data visualization
 #Allows you to call visualization functions on a pandas data frame
