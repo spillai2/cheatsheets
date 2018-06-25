@@ -7,7 +7,7 @@ Polar uncharged (7/20 Glycine, Glutamine etc)
 
 In peptides, amino acids are linked to each other by bonds between the amino group of one and the carboxyl of the next (between the N and C, losing an H2O in the process). Peptides are depicted as going from the amino terminus to the carboxyl terminus. Multiple peptides form a protein.
 
-Proteins are digested into peptides that are approx 8-20 aa long by using an enzype trypsin that cleaves at Lysine and Arginine. In thr first step of Tandem mass spectrometry (MS/MS), the peptides are separated by mass. These peptide are then fragmented further in the second step by collision induced dissociation (CID)
+Proteins are digested into peptides that are approx 8-20 aa long by using an enzype trypsin that cleaves at Lysine and Arginine. In the first step of Tandem mass spectrometry (MS/MS), the peptides are separated by mass. These peptide are then fragmented further in the second step by collision induced dissociation (CID)
 
 Peptide fragmentation
 The bonds that connect amino acids are broken by collision and you get b ions (amino terminal) and y ions (carboxy terminal)

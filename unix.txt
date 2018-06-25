@@ -13,5 +13,23 @@ cut -d',' -f1 file.csv | uniq
 cut -d',' -f1 file.csv | uniq | wc -l
 
 sort
-sort numerically by separator '-' first by second column, then by third 
+# sort numerically by separator '-' first by second column, then by third 
 sort -t - -n -k2 -k3 
+
+# count columns in a csv,tsv
+awk -F'<separator>' '{print NF; exit}' <file> 
+
+# find all .txt files in a directory, recursively
+find <path to directory> -name *.txt 
+# find in the top level directory, not subdirectories
+find <path to directory> -maxdepth 1 -name *.txt
+# find more than one type of file ( -o is for OR)
+find <path to directory> -maxdepth 1 -name *.txt -o -name *.pdf
+# find all files other than those of a certain type (the negation can be applied to exclude more than one type)
+find <path to directory> ! -name *.txt
+# find all files, but not directories (use maxdepth to restrict)
+find <path to directory> -type f 
+# find directories only (use maxdepth to restrict)
+find <path to directory> -type d
+# find files with a certain word or set of characters
+find <path to directory> -name *.txt -exec grep -l 'linear' {} \;

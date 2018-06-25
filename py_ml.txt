@@ -78,3 +78,146 @@ Residuals - difference between actual observed values and predicted ones - give 
 sns.distplot(y_test - predictions, bins=<some value>)
 -------------------------------------------------------
 Variance/bias tradeoff - optimally the model should predict with low variance and low bias, but in practice it is a tradeoff. Depends on the training data. If we try too hard to fit the training data the model will overfit trying to accommodate the outliers and false values in the training set, resulting in errors when trying to predict test data.
+-------------------------------------------------------
+Logistic regression:
+Similar to linear regression except that instead of predicting the value of a variable, it calculates the log odds of the variable belonging to a binary category (disease vs non-disease, book smart vs street smart, spam vs ham email). It is a method of classification (though named 'regression') - classifying into catgories.
+
+After training the model, it can be valuated using a 'confusion' matrix - a 2,2 matrix that stores actual and predicted yes/no values. Used to label True Positives, True negatives, False positives and False negatives. These are the whole numbers predicted. Accuracy is TP+TN/Total number, Error rate is FP+FN/Total number. The matrix is structures as:
+[ TP, FP
+  FN, TN ]
+
+False positives are what causes Type I errors - predicted to be true, but actually false.
+False negatives cause Type II errors - predicted to be false, actually true.
+
+First step is to fill in missing data - means on columns can be used to fill in, this process is called imputation. Then convert categorical columns to numerical by using dummy coding. Pandas provides get_dummies() for this. Then the data frame is ready for model building.
+
+For eg. use downloadable Titanic dataset from Kaggle that contains information about the passengers and if they survived or not. Split into train and test sets with X being the various variables like age, sex, what class they were traveling in, ticket price paid etc and y being survived or not (1 or 0).
+
+from sklearn.linear_model import LogisticRegression
+model = LogisticRegression()
+model.fit(X_train, y_train)
+model.fit(X_train,y_train)
+predictions = model.predict(X_test) # predictions
+
+from sklearn.metrics import confusion_matrix
+confusion_matrix(y_test,predictions)
+-------------------------------------------------------
+K-Nearest Neighbors (KNN)
+Classification algorithm. Given a set of data points that belong to two or more different categories, predict what category a new unknown point would belong to. For this you choose a distance metric called 'k' and then classify all the points within that distance metric. After that you predict what category the unknown point belongs to depending on what category is most represented in its 'k' nearest neighbors. For eg. k=10 means you choose the 10 nearest points to the unknown point and see what category is most represented, then assign the unknown point to it.
+
+Easy to train and predict, but not effecive when the number of features start to grow.
+
+Because the KNN classifier predicts the class of a given test observation by identifying the observations that are nearest to it, the scale of the variables matters. Any variables that are on a large scale will have a much larger effect on the distance between the observations, and hence on the KNN classifier, than variables that are on a small scale. Hence the variables need to be standardized.
+/// scaling variables
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+scaler.fit(df.drop('TARGET CLASS',axis=1))
+scaled_features = scaler.transform(df.drop('TARGET CLASS',axis=1))
+df_feat = pd.DataFrame(scaled_features,columns=df.columns[:-1])
+///
+Then split your dataset into training and testing and build the KNN model. Start with k=1 ie predict based on the class of 1 nearest neighbor
+///
+from sklearn.neighbors import KNeighborsClassifier
+knn = KNeighborsClassifier()
+knn.fit(X_train,y_train)
+pred = knn.predict(X_test)
+///
+Then evaluate the predictions using classification report and/or confusion matrix
+Now we need to choose an optimal k value since we can't just guess. For this we cycle through a range of k values, do predictions and append the error values (mean of difference between y_test and predicted values) to a list and then plot the list. From the plot we can see around what k value the error rate is the lowest. Pick that k value, redo predictions and evaluate. You'll see the new predictions are better than the previous ones. 
+-------------------------------------------------------
+Decision trees:
+A variety of features determine the end result - Yes/No. Each feature is a node in the tree. Each node splits into the different values for that feature. Then there are edges where the outcomes of one feature connects to the next feature node. For eg. if weather conditions are the features, Temp can be one node and the values (hot, mild, cold) can then split into another feature, say humidity and so on.
+The root node is the one feature that performs the first split. Leaves are the terminal nodes that predict the end result (yes/no). How to best split features to give the best prediction is key and is determined mathematically by entropy and information gain.
+Random forests: Use multiple decision trees where the splits are done based on a random set of 'm' features out of a total of 'p' features. That means - a random feature is chosen for each split in each tree. Each tree will have a total of 'm' features, not all of 'p'. Usually 'm' is the square root of 'p'.
+Why random? When using bagged trees ie using a bootstrap (sampling with replacement), if there is one feature that is a strong predictor, most trees will use that feature and will hence be highly correlated. Random ensures that doesn't happen.
+
+from sklearn.tree import DecisionTreeClassifier
+model building etc. same as before
+
+/// to visualize tree
+from IPython.display import Image  
+from sklearn.externals.six import StringIO  
+from sklearn.tree import export_graphviz
+import pydot
+dot_data = StringIO()  
+export_graphviz(dtree, out_file=dot_data,feature_names=features,filled=True,rounded=True)
+graph = pydot.graph_from_dot_data(dot_data.getvalue())  
+Image(graph[0].create_png())
+///
+
+Random forests
+from sklearn.ensemble import RandomForestClassifier
+-------------------------------------------------------
+Support Vector machines:
+SVM builds a model that assigns new data into one of the two classifications, given a set of training data that belongs to one of the two categories. Non-probabilistic binary linear classifier. The categories themselves are divided by a clear gap as wide as possible (meaning the data points in space are clearly divided). New examples are mapped into one of the 2 categories based on which side of the gap they fall on. The gap is called the hyperplane. To overcome the problem that there are many ways to draw a line that separates the two categories, we choose a hyperplane that maximizes the margin between the classes. So it won't be a single line itself, it will have two border lines on each side that maximizes the area of the hyperplane. The points that the margins touch on each side are called the support vectors.
+
+This idea can also be expanded into non-linearly separable data using 'kernel' functions, viewing data in a higher (than 2) dimension. This involves adding new features and increasing the dimensionality. This enables us to separate the data non-linearly which will classify the data much better.
+
+from sklearn.svm import SVC
+model = SVC() 
+# alternatively, can specify the kernel to be used SVC(kernel-'linear') - linear is also default. The kernel 'rbf' is used to classify non-linearly
+
+Other parameters for SVM (ones you pass when you create your model/classifier)
+1) C - controls tradeoff between a smooth decision boundary and classifying training points correctly, higher C means more training points classified correctly.
+2) Gamma - how far the influence of a single training point reaches, low values mean far reach, high values mean close reach (no effect on linear kernels, only in rbf). In other words a high gamma would only look at the points close to the decision boundary/divding line in deciding where to draw the line. Low values means farther points are also taken into consideration.
+
+Use parameters to stop overfitting (taking data too literally and creating a model too complex). Manually cycling through different values for parameters can be tedious. But 'GridSearch' can be used to automatically cycle through a set of parameters in a grid and pick the best combination.
+
+# First create a dictionary of paramemeters:
+
+param_grid = {'C': [0.1,1, 10, 100, 1000], 
+	      'gamma': [1,0.1,0.01,0.001,0.0001], 
+	      'kernel': ['rbf']} 
+
+# Then import the grid search module and feed it the model and the parameter hash
+
+from sklearn.model_selection import GridSearchCV
+grid = GridSearchCV(SVC(),param_grid,refit=True,verbose=3)
+
+# fit
+
+grid.fit(X_train,y_train)
+
+# To find best parameters chosen
+grid.best_params_
+
+grid_predictions = grid.predict(X_test)
+
+# calculate accuracy score
+from sklearn.metrics import accuracy_score
+print(accuracy_score(grid_predictions, y_test))
+-------------------------------------------------------
+K means clustering:
+Unsupervised learning algorithm which will attempt to cluster similar groups together in the data. The data will have no labels, hence unsupervised.
+
+Steps:
+1) Choose a number of clusters K
+2) Randomly assign each data point to one of the K clusters
+3) Repeat the following until clusters stop changing:
+	a) for each cluster calculate the cluster centroid by taking the mean of the points in the cluster
+	b) move each data point to the cluster for which the centroid is the closest.
+
+To choose a K value (number of clusters), use the elbow method. It calculates the Sum of Squares of all the points from their respective cluster centroid. When you plot K against SSE, at some value(s) of K, you will see the SSE leveling off after falling for the lower K values. Beyond that point the SSE doesn't decrease much. On the graph this gives an elbow shape, hence the name.
+
+To test, generate some data with known number of clusters using scikit-learn
+
+from sklearn.datasets import make_blobs
+# generate 200 samples, with 2 features, belonging to 4 clusters and the std of points around a centroid is 1.8
+data = make_blobs(n_samples=200, n_features=2, centers=4, cluster_std=1.8,random_state=101)
+# creates a tuple, the first element of which is a numpy array of the features and the second is the cluster it belongs to
+
+#To visualize generated data
+plt.scatter(data[0][:,0], data[0][:,1], c=data[1])
+# data[0][:,0] is the xvalue which corresponds to the first column/feature on the numpy array, y is the other column and c is the cluster it belongs to. Adding a cmap will help distinguish better.
+
+The same generated data can be used for predictions/classifications (without looking at the cluster labels attached to it.
+
+from sklearn.cluster import KMeans
+clf = KMeans(n_clusters=4) # since we already know the number of clusters, otherwise choose
+kmeans.fit(data[0]) # given all the features, fit into 4 clusters
+# find the centers of the clusters
+kmeans.cluster_centers_
+# find the labels
+kmeans.labels_
+
+Test the predicted clusters by doing a scatter plot and setting c=kmeans.labels_

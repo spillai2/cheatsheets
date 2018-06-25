@@ -182,7 +182,7 @@ df.plot.box() # will create boxplots for all cols in data frame
 df[['c1','c2']].plot.box() # will create boxplots for just those two columns
 #########################################
 Plotly and Cufflinks - for interactive visualization
-# Plotly is an interactice visualization library and Cufflinks connects Plotly to Pandas
+# Plotly is an interactive visualization library and Cufflinks connects Plotly to Pandas
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 import cufflinks as cf
 # For Notebooks

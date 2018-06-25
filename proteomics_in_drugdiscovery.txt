@@ -10,4 +10,122 @@ Roles for proteomics in the different steps to drug discovery:
 2) Elucidating MOA through which a drug exerts its pharmacological effect
 3) Identifying biomarkers that can be used to monitor the effect of the drug in-vivo
 
+Protein basics:
+DNA transcribed to RNA by RNA Polymerase. Starts at the START codon and finishes at STOP codon to generate a 'transcript'. 5' end of transcript is capped with a single G attached so that 3' end of it is exposed. 3' end has a polyA tail with hundreds of adenosines. Exonucleases target the 5' end, so a 3' cap at the 5' end protects the transcript from degradation. Coding regions of genes (which are transcribed into mRNA transcripts) contain both exons (that code for peptides) and introns (intervening sequences). Introns need to be removed prior to translation. The process of splicing excises the exons and joins them together - this also generates diversity since the exons are spliced and joined differently. Thus a single gene can code for multiple proteins.
+Intended variation
+- One gene can code for multiple proteins, makes coding more efficient, allows for modular evolution
+Abnormal variation
+- Some alternative splicing is unintended, can result in disease for example: DNMT splicing variant is associated with cancer
 
+A mature/final transcript is translated into a protein by ribosomes. 
+Three phases:
+Initiation
+Elongation
+Termination
+Initiation of translation begins with the 40S ribosomal subunit, the e1F2, e1F3, and e1F4 factors binding with the first tRNA (for Methionine, typically). This complex binds the mRNA at the 5’ cap and scans for the START (AUG) codon. Once the START is found the 60s ribosomal subunut attaches, releasing the cofactors.
+Elongation - The ribosome contains two sites which can accept tRNAs: 
+P (peptidyl) site
+A (acceptor) site
+After initiation, the initiator tRNA resides in the P site, leaving the A site open for the next tRNA. Each tRNA has an anticodon site which can recognize exactly one codon on the mRNA. When the appropriate tRNA enters the A site, a peptide bond is formed between the first amino acid attached to the initiator tRNA in the P site and the amino acid connected to the tRNA in the A
+site. The peptide bond is formed between the carboxyl (C) group of the first amino acid and the amino (N) group of the incoming amino acid, and releases a water molecule. This process then ratchets forwards the mRNA, moving the tRNA from the A site to the P site, opening  up the A site for the next appropriate tRNA.
+The elongation process continues until the ribosome encounters a STOP codon, which is recognized by a universal release co-factor, terminating the extension of the peptide chain.
+
+Protein Identification
+Order to identify and characterize proteins we use a variety laboratory techniques. 
+These techniques are always based on properties that are shared, but different, between proteins:
+Size
+Charge
+Sequence
+Shape
+The resulting data types are then used in a variety of bioinformatics pipelines
+
+Protein Separation
+One of the simplest forms of characterization begins with the separation of proteins from a mixture
+E.g. cell lysate:  all proteins in a cell can be precipitated
+Next we have to separate them from each other so that we can begin to identify and characterize them
+In gel separation, proteins are placed in one end of a semi-permeable matrix, typically a gel, and made to run from one end to another by applying an electrical charge
+Depending on the porosity of the gel, smaller proteins will travel faster – thus farther – down the gel, separating the proteins by size
+Size as well as charge can have an impact. Charge comes from the amino acid R groups!
+As do many other properties used to separate and characterize proteins
+
+PAGE stands for Polyacrylamide Gel Electrophoresis
+Can be used to separate proteins OR DNA.
+Can separate native (non-denatured) or denatured proteins
+Proteins are typically denatured using SDS (sodium dodecyl sulfate), which eliminates any conformation differences – effectively “balling” up the proteins so that separation is exclusively based on size and charge
+
+A very common method for separating proteins by electrophoresis uses a discontinuous polyacrylamide gel as a support medium and Sodium Dodecyl Sulfate (SDS) to denature the proteins. The method is called Sodium Dodecyl Sulfate Polyacrylamide Gel Electrophoresis (SDS-PAGE). Alternatively, a chemical denaturant may be added to remove this structure and turn the molecule into an unstructured molecule whose mobility depends only on its length and mass-to-charge ratio. This procedure is called SDS-PAGE. Sodium dodecyl sulfate polyacrylamide gel electrophoresis (SDS-PAGE) is a method of separating molecules based on the difference of their molecular weight.
+
+In a typical PAGE gel, there are many lanes (like swim lanes in a pool). 
+One lane is reserved for the marker, which is a calibrated substance that is used as a size reference
+The other lanes contain various samples
+A stain or dye must be used to visualize the location of the protein bands
+In the “bad” old days radioisotopes were used
+
+Sample preparation begins by treating the protein samples with SDS
+SDS breaks the disulfide bonds that form higher order structure in a protein
+The resulting proteins are all essentially globular
+Samples are then loaded onto the gel and voltage applied
+Proteins move away from the – charged cathode and towards the + charged anode buffer
+After running for the required length of time, the gel is visualized – usually with coomassie blue, which binds the proteins.
+
+Gels can be run in one dimension (separating from top to bottom)
+Gels can optionally be run in 2 dimensions (first do a 1D run as described, then rotate the gel 90 degrees and repeat) for better separation
+When you see that a protein is 65kDa, for example, that means that it is 65 kilo-Daltons in size, and will “run” on the gel to the same distance as the equivalent 65kDa marker
+
+Gel Blotting
+The contents (in this case the proteins) on a gel can be transferred to nitrocellulose filter paper for further analysis
+This simply requires placing the gel and the filter paper in contact under pressure and allowing the contents of the gel to wick into the filter paper
+This can be sped up using an electrical charge system similar to that used for the gel separation
+
+Protein Blots
+Once transferred to the nitrocellulose, additional analysis can be done to see what will bind to the protein bands
+For a protein blot this is typically called a Western, SouthWestern, or Eastern Blot
+Once the proteins are transferred to the nitrocellulose the blot is blocked
+An agent is bound to the rest of the nitrocellulose to prevent the “probe” from absorbing into the blot. Now the blot can be probed. A probe is the desired factor that you want to see if your protein binds, e.g. another protein or an antibody, or even specific DNA fragments if you are looking for a promotor, for example.
+
+ELISA stands for  Enzyme-linked Immunosorbent Assay (ELISA)
+Similar to a Western Blot
+Used to detect either a specific protein OR a specific antibody
+Presence of the protein or antibody in question induces a color change caused by the enzyme used in the assay
+Useful for looking for pathogens
+
+Similar to PAGE, chromatography allows for the separation of proteins based on properties
+Invented in 1900 by Mikhail Semjonowitsch Tswett for the separation of leaf pigments
+Proteins are bound to a solid support and then eluted from the column using methods that separate them based on their properties
+Different types (separation based on):
+Basic (interaction with the stationary and mobile/solvent phase)
+Ion-exchange (charge)
+Gel-filtration (size)
+Hydrophobic-interaction (hydrophobicity)
+Affinity (binding partners/antibody bound to column matrix) - bind/wash(away non-bound proteins)/elute(bound target protein)
+
+Mass spectrometry (MS)
+is an analytical technique that ionizes chemical species and sorts the ions based on their mass-to-charge ratio. In simpler terms, a mass spectrum measures the masses within a sample. It is used in many different fields and is applied to pure samples as well as complex mixtures. In addition to their size and other properties (e.g. hydrophobicity, charge, binding characteristics), we can identify proteins using this method.
+
+Can be used on purified or non-purified protein mixes!
+Identifies proteins based on size of fragments
+
+Types of Mass Spectrometry
+The different types of Mass Spectroscopy are determined based on the type of Mass Analyzers used and are listed below. 
+Magnetic defelection
+Electrostatic
+Time-of-flight (TOF)
+Quadrupole
+
+MALDI-TOF Mass Spectrometry
+In the recent years Matrix Assisted Laser Desorption Ionization-Time Of Flight mass spectrometry (MALDI-TOF MS) has emerged as a potential tool for microbial identification and diagnosis. During the MALDI-TOF MS process, microbes are identified using either intact cells or cell extracts. 
+All protein mass spectroscopy involves ionization of the proteins
+In MALDI-TOF this is accomplished by embedding the proteins in a solid matrix and exciting them with a laser to ionize them
+For mass protein identification, the proteins are first broken into smaller peptide fragments using proteolysis (e.g. trypsin)
+This can be done to a single protein or to a mixture of many different proteins!
+
+Once the proteins are digested into smaller fragments and ionized, they are exposed to an electrical field which literally “shoots” the ions away from the matrix, towards a detector
+This is where the TOF part comes in: Time of Flight
+Heavier fragments travel shorter distances
+Lighter fragments travel longer distances
+A detector identifies how many “hits” at each possible mass there are
+It generates a “mass peptide fingerprint” showing how many hits of each possible mass there were in that sample. The “hard” part of MALDI-TOF is turning the mass numbers back into actual proteins.
+This is called Peptide Mass Fingerprinting
+Computationally intensive
+Looks at all fragments and their frequencies and is able to infer the actual full-size proteins in the original mix based on fragment assembly
+MASCOT: Typically uses SwissProt as the standard protein mass database

@@ -193,7 +193,7 @@ sort_values() lets you sort by value
 df.sort_values('col1') # sorts the df by the value of col1
 
 pd.pivot_table() allows you to pivot your table and summarize/view data the way you want
-pd.pivot_table(values='col4', index=['col1','col2'], columns=['col3']) # summarizes the values of col4 with col3 as columns and multi-indexed by col1 and col2
+pd.pivot_table(values='col4', index=['col1','col2'], columns=['col3']) # summarizes the values of col4, with col3 as columns and multi-indexed by col1 and col2
 # a general form
 df.pivot_table(values = <col which we want to summarize>, index = <col to be rows in the result>, columns = <cols of pivot table>)
 df.pivot_table(values = <col which we want to summarize>, index = <col to be rows in the result>, columns = <cols of pivot table>, aggfunc = [<one or more list of func>]) 

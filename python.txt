@@ -43,8 +43,8 @@ conda:
 # create a new env
 $ conda create --name <name of env>
 # optionally create env with version of python specified and a list of needed libraries
-$ conda create --name <name of env> python=python3.5 <list of libraries needed separated by space>
-eg. $ conda create --name mybioinfo python=python3.5 biopython pandas numpy
+$ conda create --name <name of env> python=3.5 <list of libraries needed separated by space>
+eg. $ conda create --name mybioinfo python=3.5 biopython pandas numpy
 $ conda info --envs # shows all your conda enviroments
 # list all conda envs
 conda env list
@@ -52,6 +52,8 @@ conda env list
 $ source activate <name of env>
 # deactivate/exit conda env
 $ source deactivate
+# delete a conda env
+$ conda remove env --name <name of env>
 ------------------------------------
 # Print formatting
 name = 'San'
@@ -204,6 +206,10 @@ This function calculates the mean squared value of a set of numbers
 ------------------------------------
 
 Date/time modules
+# simple way to find out the time of execution of some code
+t0 = time() # time() fetches current time
+<code to execute>
+print("training time:", round(time()-t0, 3), "s")
 
 import datetime as dt
 import time as tm
