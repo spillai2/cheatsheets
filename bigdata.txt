@@ -1,0 +1,68 @@
+When data is around 8GB or less, it can be processed in your local computer's RAM. But when the data gets larger than can be processed in your RAM or stored in your hard disk, a 'distributed system' comes in. It means distributing your data into multiple computers/nodes. You have a head node controlling a distribution of multiple machines. This means you can add multiple cores to your processing system. After a certain point it is much easier to 'scale out' to many low CPU machines than 'scale up' to single computer with higher CPU.
+
+A key feature of a distributed system is fault tolerance. If one or more nodes in the system fail, the network can still work fine with the working nodes. The data is duplicated across multiple nodes to prevent data loss should a node go down.
+
+Hadoop is an architecture to distribute very large files and datasets across multiple machines. It uses HDFS (Hadoop Distributed File System) for this. It duplicates small blocks of data for fault tolerance and afster processing. It has a main 'name' node which controls multiple 'data' nodes. It uses blocks of data usually 128MB and distributes across nodes. Each block is replcated 3 times for fault tolerance. Smaller blocks provide more parallelization during processing.
+
+MapReduce is the programming model that does the computations on Hadoop. It splits a computation task to a distributed set of files such as HDFS. It has a job tracker that sits in the name node and task trackers that sit on the data/worker nodes. The job tracker sends the code to run on the nodes and the task trackers allocate memory and CPU to the jobs.
+
+Spark is a technology that enables computation and has many advantages over plain MapReduce. Open source project on Apache, created at UC Berkeley in 2013 and exploded in popularity. Spark can use data stored in a variety of data formats besides HDFS - Cassandra, AWS S3 etc. MapReduce requires data in HDFS format. Spark can process data 100x faster than MR because it keeps most of its data in memory whereas MR has to write to disk after each M & R operation.
+
+At the core of spark is the idea of a Resilient Distributed Dataset (RDD). The 4 features of RDD are:
+1) Distributed
+2) Fault tolerant
+3) Partitioned for parallel operation
+4) Ability to use many data sources
+
+A driver program called SparkContext communicates with a Cluster Manager which in turn communicates with worker nodes that execute tasks. 
+a) The RDD objects are transformed using SQL like operations and creates Directed Acyclic Graph (DAG) objects which then goes to a b) DAG scheduler, which splits the graph into tasks which in turn goes to a
+c) Task scheduler that launches the tasks on
+d) Worker nodes which execute the tasks
+
+The data in the DAGs are shareable meaning different operations can act on the same data.
+
+Most development work happens with the RDD objects, the rest occur under the hood. RDD objects are immutable, lazily eavluated and cacheable. Two types of RDD operations:
+1) Transformations
+2) Actions
+A Spark job is a sequence of transformations with a final action.
+
+Basic Actions:
+1) Collect - like SQL Select, returns all elements of an RDD as an array
+2) Count - returns the count of elements in an RDD
+3) First - first element in an RDD
+4) Take - return first n elements as an array
+
+Basic Transformations:
+1) Filter - filters elements by a function and returns those elements that are true.
+2) Map - runs a function on each element, preserves the number of elements. Similar to pandas.apply(). eg. return the first letter of a list of names.
+3) Flatmap - transforms each element into 0-N elements, changes the number of elements in most cases. eg. transform a corpus of text into a list of words, each element is a line of text but after transformation each element is a single word.
+
+Often RDDs hold their elements as key-value tuple pairs (called paired RDD). This offers better partitioning of data.
+Reduce - aggregate RDD elements by a function that returns a single element.
+ReduceByKey - aggregate and return a pair RDD 
+
+Both Reduce and ReduceByKey are similar to a Groupby operation.
+
+Spark and Python:
+To setup install Java, Scala (java-based), Hadoop and Spark on a server (EC2 on aws would work fine since it actually distributes the computing)
+
+from pyspark import SparkContext # SparkContext is what connects you to a Spark cluster.
+sc = SparkContext()
+file = sc.textFile('<path to a text file>') # create an RDD object called file, reading in a text file
+file.count() # counts the number of lines in file
+file.first() # returns the first line
+file.filter(lambda line: 'second' in line) # filters for the occurence of the word 'second' in the file, returns an RDD object on which you have to say 'collect()' to see the content.
+
+file.map(lambda line: line.split()) # transformation to split each line into words, but keep the structure ie same number of lines as in the original file
+file.flatMap(lambda line: line.split()) # transformation to split each line into words, but also flatten it to make it into a sequence of individual words
+
+# get rid of a beginning hash in a line
+file.map(lambda x: x[1:] if x[0]=='#' else x).collect()
+# chaining map functions to get rid of the beginning hash and split the lines
+file.map(lambda x: x[1:] if x[0]=='#' else x).map(lambda x: x.split()).collect()
+
+# gather specific fields from a file as tuples
+file.map(lambda lst: (lst[3],lst[-1])).collect() # grabbing the 4th and last fields as a tuple
+# the second aspect of mapreduce - reduce - acts on tuples of values. For eg. to summarize by one column the values of another (like groupby() in pandas):
+cleanServ.map(lambda lst: (lst[3],lst[-1])).reduceByKey(lambda amt1,amt2 : amt1+amt2).collect()
+# reduceByKey assumes that the first value of the tuple is the key. In the above case it is basically summing up the values of lst[-1] by lst[3], which it takes as the key

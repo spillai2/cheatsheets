@@ -42,6 +42,7 @@ model.score() and model.predict_proba() will show you how close the predictions 
 
 Unsupervised models also come with model.transform() which will transform new data into new basis.
 -------------------------------------------------------
+
 Linear regression:
 Regression in general means regress (move towards) the average. In linear regression we draw a line that fits the data best, in other words a line that minimizes the squared distances between the actual values and the line
 
@@ -77,8 +78,10 @@ np.sqrt(metrics.mean_squared_error(y_test, predictions)) # there is no separate 
 Residuals - difference between actual observed values and predicted ones - give a good idea of how good the model is. Plotting the residuals is the way to find out
 sns.distplot(y_test - predictions, bins=<some value>)
 -------------------------------------------------------
-Variance/bias tradeoff - optimally the model should predict with low variance and low bias, but in practice it is a tradeoff. Depends on the training data. If we try too hard to fit the training data the model will overfit trying to accommodate the outliers and false values in the training set, resulting in errors when trying to predict test data.
+
+Variance/bias tradeoff - optimally the model should predict with low variance and low bias, but in practice it is a tradeoff. Depends on the training data. If we try too hard to fit the training data the model will overfit trying to accommodate the outliers and false values in the training set, resulting in errors when trying to predict test data. A heavy 'bias' model won't learn anything new. A high variance model is the opposite that will react to everything it has learned before, but won't know what to do when confronted with something it hasn't learned before.
 -------------------------------------------------------
+
 Logistic regression:
 Similar to linear regression except that instead of predicting the value of a variable, it calculates the log odds of the variable belonging to a binary category (disease vs non-disease, book smart vs street smart, spam vs ham email). It is a method of classification (though named 'regression') - classifying into catgories.
 
@@ -102,6 +105,19 @@ predictions = model.predict(X_test) # predictions
 from sklearn.metrics import confusion_matrix
 confusion_matrix(y_test,predictions)
 -------------------------------------------------------
+
+Naive Bayes
+Conditional probability (Bayes rule) based binary classification of data. Each observation/data point is assigned to its most likely class given its predictor variables. If the probability is > 0.5 of being Yes/1, then it is assigned to Yes, otherwise to No/0. For the entire data set, it draws a decision boundary that separates the two classes. On this boundary, the probability of belonging to either class is 0.5.
+
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score
+clf = GaussianNB()
+clf.fit(features_train, labels_train)
+pred = clf.predict(features_test)
+
+Bayes error rate is the lowest of all algorithms. In theory this is the best classification algorithm, but in practice computing it is impossible in most cases because we do not know the conditional distribution of the prediction given the predictors. Also it assumes the features are independent which is seldom the case in real-world data. So it serves as an unattainable gold standard against which to compare other methods.
+-------------------------------------------------------
+
 K-Nearest Neighbors (KNN)
 Classification algorithm. Given a set of data points that belong to two or more different categories, predict what category a new unknown point would belong to. For this you choose a distance metric called 'k' and then classify all the points within that distance metric. After that you predict what category the unknown point belongs to depending on what category is most represented in its 'k' nearest neighbors. For eg. k=10 means you choose the 10 nearest points to the unknown point and see what category is most represented, then assign the unknown point to it.
 
@@ -125,14 +141,33 @@ pred = knn.predict(X_test)
 Then evaluate the predictions using classification report and/or confusion matrix
 Now we need to choose an optimal k value since we can't just guess. For this we cycle through a range of k values, do predictions and append the error values (mean of difference between y_test and predicted values) to a list and then plot the list. From the plot we can see around what k value the error rate is the lowest. Pick that k value, redo predictions and evaluate. You'll see the new predictions are better than the previous ones. 
 -------------------------------------------------------
-Decision trees:
-A variety of features determine the end result - Yes/No. Each feature is a node in the tree. Each node splits into the different values for that feature. Then there are edges where the outcomes of one feature connects to the next feature node. For eg. if weather conditions are the features, Temp can be one node and the values (hot, mild, cold) can then split into another feature, say humidity and so on.
-The root node is the one feature that performs the first split. Leaves are the terminal nodes that predict the end result (yes/no). How to best split features to give the best prediction is key and is determined mathematically by entropy and information gain.
-Random forests: Use multiple decision trees where the splits are done based on a random set of 'm' features out of a total of 'p' features. That means - a random feature is chosen for each split in each tree. Each tree will have a total of 'm' features, not all of 'p'. Usually 'm' is the square root of 'p'.
-Why random? When using bagged trees ie using a bootstrap (sampling with replacement), if there is one feature that is a strong predictor, most trees will use that feature and will hence be highly correlated. Random ensures that doesn't happen.
 
+Decision trees:
+An algorithm that works by asking multiple questions on features in a sequential manner with the next question in the sequence depending on the answer to the previous question. The answers are usually yes/no, features are the questions. A variety of features determine the end result. Each feature is a node in the tree. Each node splits into the different values for that feature. Then there are edges where the outcomes of one feature connects to the next feature node. For eg. if weather conditions are the features, Temp can be one node and the values (hot, mild, cold) can then split into another feature, say humidity and so on.
+The root node is the one feature that performs the first split. The answer to the root node question will split the data set linearly. Further nodes/questions will split the selected data linearly until you arrive at an answer. Leaves are the terminal nodes that predict the end result. The overall data itself need not be linearly separable since each feature/question will split the data linearly at each step.
+
+How to best split features to give the best prediction is key and is determined mathematically by entropy and information gain. 
+
+Entropy - measure of impurity in a set of examples. The idea is to split features based on which feature gives the most pure split (as little of the wrong class in it as possible)
+entropy = sum_over_i(-pi * log2(pi))
+where pi is the fraction of examples in class i. A class is a type of value that a feature can take. For eg. if 'speed' is a feature, the classes could be 'slow' and 'fast'. When calculating the entropy of such a variable, you sum the logs of the fraction of examples that belong to the 'slow' class and those that belong to the 'fast' class. If the examples are evenly split between the two classes you get the max entropy of 1.0.
+
+Entropy is 0 when the examples are all in the same class. The max value of entropy is 1 when the examples are evenly split between the available classes.
+
+Information gain: entropy(parent) - weighted avg(entropy(children))
+
+The goal of decision tree is to maximize information gain. During training, the algorithm tries out different features to split by and calculate the info gains and then picks the best path to split by.
+
+///
 from sklearn.tree import DecisionTreeClassifier
 model building etc. same as before
+///
+
+Key parameters:
+min_samples_split - minimum number of samples available to split further, default is 2. Very low min_sample_split will end up overfitting the data.
+
+Random forests: Use multiple decision trees where the splits are done based on a random set of 'm' features out of a total of 'p' features. That means - a random feature is chosen for each split in each tree. Each tree will have a total of 'm' features, not all of 'p'. Usually 'm' is the square root of 'p'.
+Why random? When using bagged trees ie using a bootstrap (sampling with replacement), if there is one feature that is a strong predictor, most trees will use that feature and will hence be highly correlated. Random ensures that doesn't happen.
 
 /// to visualize tree
 from IPython.display import Image  
@@ -148,6 +183,7 @@ Image(graph[0].create_png())
 Random forests
 from sklearn.ensemble import RandomForestClassifier
 -------------------------------------------------------
+
 Support Vector machines:
 SVM builds a model that assigns new data into one of the two classifications, given a set of training data that belongs to one of the two categories. Non-probabilistic binary linear classifier. The categories themselves are divided by a clear gap as wide as possible (meaning the data points in space are clearly divided). New examples are mapped into one of the 2 categories based on which side of the gap they fall on. The gap is called the hyperplane. To overcome the problem that there are many ways to draw a line that separates the two categories, we choose a hyperplane that maximizes the margin between the classes. So it won't be a single line itself, it will have two border lines on each side that maximizes the area of the hyperplane. The points that the margins touch on each side are called the support vectors.
 
@@ -187,6 +223,7 @@ grid_predictions = grid.predict(X_test)
 from sklearn.metrics import accuracy_score
 print(accuracy_score(grid_predictions, y_test))
 -------------------------------------------------------
+
 K means clustering:
 Unsupervised learning algorithm which will attempt to cluster similar groups together in the data. The data will have no labels, hence unsupervised.
 
@@ -221,3 +258,87 @@ kmeans.cluster_centers_
 kmeans.labels_
 
 Test the predicted clusters by doing a scatter plot and setting c=kmeans.labels_
+-------------------------------------------------------
+
+Principal Component Analysis (PCA)
+Unsupervised learning algorithm, also known as general factor analysis. Basically a transformation of the data to find out what features explain the most variation.
+
+Used to stuy the interrelationships between variables to understand the underlying structures. While regression fits a line to the data, PCA fits several orthogonal (perpendicular) lines that together explain most/all of the variance in the data set. The goal is to understand the factors/variables that contribute to most of the variance in the data. This is achieved by understanding 'components' which are linear transformations that chooses a variable system such that the greatest variance in the data set lies on the first axis, second greatest on the second axis etc. This process allows us to reduce the number of variables used in an analysis - dimensionality reduction (dimensions = variables).
+
+The components do not correspond one-to-one with features, the components are actually combinations of features. The idea is to reduce a high-dimensional data set to 2 or 3 components and feed that into an ML algorithm to classify. 
+
+First step is to scale the data so that each feature has single unit variance
+
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+scaler.fit(df) # where df is the dataframe with data that we want to scale
+scaled_data = scaler.transform(df) # transform
+
+# now do PCA on the scaled data
+from sklearn.decomposition import PCA
+pca = PCA(n_components=2)
+pca.fit(scaled_data)
+x_pca = pca.transform(scaled_data) # transform to 2 principal components
+
+At this point x_pca has the same data as scaled_data, but condensed into 2 features/components. The transformed data can now be plotted with the two components as the 2 axis - first PC along the x-axis and second along the y-axis. It is not easy to interpret the 2 components in terms of the features it condensed. For that we can create a heatmap of the components against the features. That will tell correlation exists between individual features and each of the two components. 
+
+In an example cancer dataset with 30 odd features deciding if a tumor is malignant or benign, reducing down to 2 dimensions we can see that some features are strongly correlated to the malignant tumor than to the benign one.
+-------------------------------------------------------
+
+Recommender systems
+Makes recommendations based on available ratings/features. Use pandas corrwith() function for this. First pull out the ratings of a given entity, lets say a movie, from the larger data set that contains user ratings for all entities/movies. Then:
+
+<master data frame>.corrwith(<ratings of individual movie>)
+
+The output will be a pandas series by default, can be converted to a dataframe for ease of use:
+
+df_with_correlations = pd.DataFrame(<master data frame>.corrwith(<ratings of individual movie>), columns=['Correlation'])
+
+From the data frame created this way, it is easy to sort the correlations and pick the top few that are closely correlated to the movie in question.
+-------------------------------------------------------
+
+Natural Language Processing (NLP)
+Extract information from text. Features are words. A collection of features is assembled and then a corresponding count is calculated for each feature/word for each document. A document represented as a vector of word counts is called a 'bag of words'.
+
+Once documents are represented as bags of words, we can use cosine similarity to compare the vectors to see how closely related the documents are. The bag of words can be improved upon by adjusting word counts based on their frequency in the corpus (group of documents)
+
+Term frequency: importance of the term within a document
+tf(d,t) = number of times term t appears in document d
+Inverse document frequency (IDF): importance of the term in the corpus itself
+idf(t) = log(D/t), where D is the total number of documents and t is the number of documents with the term
+
+TF-IDF can then be expressed as:
+tf(x,y) * log (N/df(x))
+where tf(x,y) is the term frequency of term x in document y and df(x) is the number of documents that contain the term x and N is the total number of documents.
+tf(x,y) - number of times x appears in y divided by the total number of
+
+Steps in text processing:
+1) Remove punctuation - use string.punctuation
+2) Tokenization - remove stop words and collect only words we want
+3) Vectorization - convert the tokens (lists of words) to vectors that can be used for ML. Convert a set of documents into a matrix where words are the rows, the document names/ids are the columns and the counts of the word are values.
+
+Many words will have zero counts in most documents, so scikit-learn returns a sparse matrix (most values are zero)
+
+from sklearn.feature_extraction.text import CountVectorizer
+bag_of_words = CountVectorizer(analyzer=<a function that does the above 3 steps>)
+bag_of_words.fit(df['text'])
+
+bag_of_words.vocabulary_ stores the list of words identified
+
+bag_of_words.transform([<document in list format>]) # matches each word in the list with the words in the vocabulary and assigns counts
+
+tf-idf weight is a weight often used in information retrieval and text mining. This weight is a statistical measure used to evaluate how important a word is to a document in a collection or corpus. The importance increases proportionally to the number of times a word appears in the document but is offset by the frequency of the word in the corpus.
+
+from sklearn.feature_extraction.text import TfidfTransformer
+tfidf_transformer = TfidfTransformer().fit(<bag_of_words_transformed_data>)
+tfidf_transformer.transform(<bag_of_words_transformed_data>)
+
+messages_tfidf = tfidf_transformer.idf_[<index of word in transformed bow>]
+
+Train a model:
+from sklearn.naive_bayes import MultinomialNB # or any other NB
+trained_model = MultinomialNB().fit(messages_tfidf, messages['label'])
+
+Test trained model by passing a known 'label' and see it the prediction is correct. Full model evaluation:
+
+predictions = trained_model.predict(messages_tfidf)

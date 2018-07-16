@@ -6,6 +6,12 @@ import matplotlib.pyplot as plt
 plt.plot(x,y) # x and y are lists to display in x and y axis
 plt.hist(x, bins=<#bins>) # x is a list of values
 
+# Plot types (generally done better with Seaborn, but can also be done with Matplotlib)
+Default plotting type is line graph, but many others are possible
+plt.scatter(x,y)
+plt.hist(data) # where data is usually a data frame or list
+plt.boxplot(data)
+
 To actually display the plot after all customizations:
 plt.show()
 
@@ -23,10 +29,19 @@ plt.xscale('log') # converts x-axis to log scale
 plt.scatter(x,y, s=<list with same length as x/y>, c = <list with colors>, alpha=0.8) # makes the scatter size based, s meaning size, c is for color and alpha for opacity value
 
 plt.txt(<x coord>, <y coord>, 'text to display') # displays text in the plot
+
+# setting figure size
+plt.figure(figsize=(10,6)
+
+# turn borders on, off by default
+plt.rcParams["patch.force_edgecolor"] = True # to turn on edge color on bars, off by default
+
+# ggplot style
+plt.style.use('ggplot') # setting this parameter makes the plots look better with ggplot kind of style
 --------------------
 # Multiple plots
 To have more than one plot on a given canvas
-plt.subplot(<num rows>,<num cols>,<plot #>) # the last argument is to specify where the given plot will go, eg.
+plt.subplot(<num rows>,<num cols>,<plot #>) # the last argument is to specify where the plot to be defined next will go, eg.
 plt.subplot(1,2,1) # create a plot with 1 row, 2 cols and put the following plot at column 1
 plt.plot(x,y) # plot as usual
 plt.subplot(1,2,2) # create a plot with 1 row, 2 cols and put the following plot at column 2
@@ -88,28 +103,30 @@ axes.plot(x,y, color='blue',lw=2, alpha=0.5, ls='--', marker=0, markersize=2)
 axes.set_xlim([low,high]) # will show/stretch the x axis between low and high values
 axes.set_ylim([low,high])
 --------------------
-# Plot types (generally done better with Seaborn, but can also be done with Matplotlib)
-Default plotting type is line graph, but many others are possible
-plt.scatter(x,y)
-plt.hist(data) # where data is usually a data frame or list
-plt.boxplot(data)
-#########################################
+
+##########################################################################
+
 SEABORN
 Statistical data visualization tool that works closely with pandas, built on top of matplotlib
 
 import seaborn as sns
+
 #To load a built-in dataset
 tips = sns.load_dataset('tips')
-# to explore the distribution of a single variable
-sns.distplot(tips['one column'])
+
+# Distribution plot of a single variable
+sns.distplot(tips['column'])
 # optional args
 sns.distplot(tips['one column'], kde=False, bins=30)
-# to explore relationship between 2 variables
+
+# Scatterplot 2 variables
 sns.jointplot(x='col1',y='col2',data=df) # plots the relationship as a scatterplot with histograms of individual vars appearing as sidebars along the x and y axis
 sns.jointplot(x='col1',y='col2',data=df, marginal_kws={'hist_kws': {'edgecolor': "black"}}) # edgecolor demarcates the bars in the histogram
 #optional arg 'kind' lets you determine what type of plot to show for relationship
 sns.jointplot(x='col1',y='col2',data=df, kind='hex') # shows hexagons which also display freq of occurennce by darkness of color
 # plot all possible numerical var pairs in a dataframe
+
+# Pairplot - pairs up all variables in a matrix format, shows hist along diagonal 
 sns.pairplot(df) # all vars along x axis and all vars along y axis, var vs samevar show hist along diagonal
 # optional arg 'hue' will allow to pass a categorical variable in the same df, so plot appears colored to distinguish between the different categories in the cat variable. Also 'palette' will hlp you choose color 
 sns.pairplot(df, hue='cat var', palette='coolwarm') # coolwarm is a predefined color palette in matplotlib
@@ -165,24 +182,34 @@ sns.lmplot(x='col1', y='col2', data=df, col='sex', aspect=0.6, size=0.8) # aspec
 --------------------
 Style and color
 sns.set_style('darkgrid') # sets background to dark and shows grids. just dark will get rid of grids
-plt.rcParams["patch.force_edgecolor"] = True # to turn on edge color on bars, off by default
-#########################################
-Pandas built-in data visualization
-#Allows you to call visualization functions on a pandas data frame
+
+##########################################################################
+
+PANDAS built-in data visualization
+# Allows you to call visualization functions on a pandas data frame
+
+# Create a histogram of a column
 df['col'].hist() # create a histogram of the distribution of values in col
-# generic way to call
+# or a more generic way to call .plot(kind=<type>)
 df['col'].plot(kind='hist')
-or
+# or
 df['col'].plot.hist()
+
+# Create a scatterplot of 2 columns/features
 df.plot.scatter(x='col1',y='col2')
 df.plot.scatter(x='col1',y='col2', figsize=(12,2), s=4, c='red') # stretches out figure, changes size and color of dots
 df.plot.scatter(x='col1',y='col2', figsize=(12,2), s=4, c='red', linewidth=1.2, edgecolor='black') # last 2 args defines borders of the bars
-plt.style.use('ggplot') # setting this parameter makes the plots look better with ggplot kind of style
+
+# Create a boxplot of all columns or selected columns
+# all columns
 df.plot.box() # will create boxplots for all cols in data frame
+# selected columns
 df[['c1','c2']].plot.box() # will create boxplots for just those two columns
-#########################################
-Plotly and Cufflinks - for interactive visualization
+##########################################################################
+
+PLOTLY - for interactive visualization
 # Plotly is an interactive visualization library and Cufflinks connects Plotly to Pandas
+
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 import cufflinks as cf
 # For Notebooks
@@ -190,8 +217,12 @@ init_notebook_mode(connected=True)
 # For offline use
 cf.go_offline() # Plotly as a company hosts your plotly apps, to work locally need to use go_offline()
 
+# line plot for all columns(default)
 df.iplot() # plots the values of the df interactively, shows values when mousing over, zoom in-out and a whole set of tools. default is line plots of all columns of the df
+
+# scatter plot of selected columns
 df.iplot(kind='scatter', x='c1', y='c2', mode='markers') # without markers plotly will try to connect all the points and give a messy looking figure.
+
 # Most of the times the data frame will not be in the format in which we can easily call iplot on columns. In those cases, we can call aggregate functions on the df and pass the result to iplot
 df.sum().iplot(kind='bar')
 df.iplot(kind='box') # creates boxplots of all columns

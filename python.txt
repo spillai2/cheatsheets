@@ -145,6 +145,11 @@ filter(lambda num: num%2 == 0, x) # returns just the even numbers from list x, u
 #Usually evaluates only a single expression, so not suited for complex logic, but can effectively do simple data cleaning.
 General form:
 lambda <arg or list of args> : <do something with the args result of which is returned>
+in regular function form this would be:
+def funcname(<arg or list of args>):
+	<do something with the args result>
+	return <result>
+So lambda is way of running a function without a funcname (hence anonymous) and an explicit 'return'
 
 lambda a, b, c : (a + b) * c # takes 3 args and multiplies the sum of the first two with the third. 
 # a lambda function expression can be stored in a variable and called as follows:
