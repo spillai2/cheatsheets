@@ -1,0 +1,34 @@
+Logical steps:
+Imaging and acquisition
+Preprocessing
+Segmentation
+Morphological processing
+Registration/tracking
+Postprocessing
+
+A digital camera attached to a microscope divides the field of view into a grid of pixels. Each pixel is a single value (grayscale image) or a vector of 3 values (RGB, which combine in various proportions to give all the colors). The intensity of the light absorbed by a pixel is recorded as that pixel’s numerical value. The digital image that the computer has to work with for image
+analysis, then, is a grid of numbers, each of which indicates the intensity of light in a small part of the field of view. If different channels are imaged (e.g., for different fluorescent wavelengths), there will be one such grid for each channel. The role of image analysis is to transform these grids of numbers into measurements of biological relevance, such as the number of cells and the number of DNA-damage-induced foci. As we will later see, a wide diversity of phenotypes of biological interest can be measured from images, including the amount of DNA in each nucleus, the degree of cytoplasm-nucleus translocation, and the presence of biologically relevant morphologies.
+
+Segmentation:
+The most challenging part of image analysis is usually determining which pixels in the image belong to each object (e.g., a
+nucleus, cell, or organism). This task is known as segmentation. The first step toward segmentation is to distinguish foreground (objects of interest) from background. Thresholding methods classify a pixel as foreground if it is brighter than a certain threshold intensity value. (Cells appear as bright objects on a dark background in fluorescent microscopy images. Because of variations in staining and illumination, choosing a single threshold for all locations in all images is not always effective. Thus, the challenge is to determine appropriate threshold(s) automatically for each channel in each image. There are two main
+approaches to doing so:
+1) Global thresholding - single threshold for each image. One way is by mixture models, which fit a mixture of two probability density functions, one for the foreground and one for the background to the intensity histogram of the image. Another method proposed by Otsu chooses the threshold that minimizes weighted sum of the intensity variances within each pixel class (fore and back). Later is superior in those cases when the percentage of pixels belonging to the foreground varies substantially from image to image.
+2) Local thresholding - different thresholds for different parts of the image. The threshold for a pixel is based on intensity statistics of a local neighborhood rather than the entire image. Useful when there is uneven illumination. Con - if part of an image contains tightly clustered objects (all foreground) or no objects (all background) then the local area reflects only one class. Also, computationally expensive.
+An alternative to local thresholding is to use illumination correction as a pre-processing step to correct for illumination variations and then apply global thresholding. The intensity of each pixel is divided by the value of the ICF or IC map at that location. ICFs can be per image (one function per image) or per set of images. If the variation in illumination is consistent across images.
+
+Splitting clusters of objects:
+Once objects have been identified it is necessary to separate clusters of objects (all foreground). A 3-step process is usually employed for this. Step 1 determines the centers of the objects - a) using local intensity maxima when objects are bright in the middle and dimmer towards the edges or b) using distance transform when objects are uniformly bright but clearly rounded on the edges - dt computes each pixel's value as the distance to the nearest background pixel, this emaphasizing indentations. Step 2 identifies the dividing lines between touching objects using the seeded watershed algorithm. Step 3 discards or merges objects based on models of what the objects look like.
+
+Identifying Subcellular Compartments:
+Cells are usually stained with mutliple flourescent markers, each of which labels a particular subcellular compartment. Identifying cellular compartments based on these stains is required to obtain measurements that pertain to the process being studied. Nuclei are identified by IC followed by thresholding since DNA stains provide a good contrast between background and foreground. Other organelles like mitochondria, lysozome etc can also be similarly identified. Cytoplasm on the other hand is difficult since contrast is low and cellular boundaries are unclear. An effective strategy is to use region-growing methods around previously identified objects (primary objects). It is sometimes unnecessary to accurately identify cell boundaries.
+
+Measurements:
+Once the cells and subcellular components are identified, they can easily be measured. The features usually measured are:
+1) Counts - count of the number of objects per image
+2) Size - area of an image that is occupied by a cell, nucleus or any labeled compartment. Area is not always a direct reflection of the 3 dimensional size of the object.
+3) Intensity - intensity of a pixel is related to the amount of marker at that location. So a measure of amount of protein, DNA etc.
+4) Shape - there are a number of shape descriptors (elongation for eg.) each of which attempts to reduce an objects shape into one or a few numbers.
+e) Texture - textural descriptors characterize spatial smoothness and regularity for each marker.
+f) Location - The distance of an organelle to the nucleus or cell membrane can be important especially in time-lapse imaging
+g) Clustering - 
