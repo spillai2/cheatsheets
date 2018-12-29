@@ -1,0 +1,87 @@
+# generate normally distributed random numbers
+import numpy as np
+np.random.normal(x,s,n) # generate n normally distibuted numbers with mean x and sd s
+
+# mean, sd of a list - numpy has built-in functions
+np.mean(x)
+np.sd(x)
+np.cov(x,y) # covariance
+
+# Distributions - A prob distribution is the set of possible values and associated probabilities. scipy.stats has functions for all distributions
+from scipy import stats as ss
+
+# ss.<dist>.rvs generates random variables for that particular <dist>, when passed appropriate parameters
+# sns.displot() can plot the data points
+
+# Uniform - all values have the same probability
+ss.uniform.rvs(size=10000, loc=10, scale=20) # loc is mean and scale is sd
+
+# Binomial
+stats.binom.pmf(x, n, p) # probability mass function of getting x successes in n trials where p is the probability of success
+binom.cdf(x, n, p) # probability of getting at least x successes, cdf is the cumulative distribution function 
+
+# Poisson
+The Poisson distribution is the probability distribution of independent event occurrences in an interval. If λ is the mean occurrence per interval, then the probability of having x occurrences within a given interval is given by the mass function. Eg. if 12 cars cross a bridge on average, 12 is λ. Probability of x or more cars is 1 - cdf(x,λ)
+
+stats.poisson.pdf(x,λ)
+stats.poisson.cdf(x,λ)
+
+# Exponential
+The exponential distribution describes the arrival time of a randomly recurring independent event sequence. If μ is the mean waiting time for the next event recurrence, the probability of a wait time of x is given by its pmf. Eg. if mean checkout time in a store is 3 mins (μ), probability of a customer checking out in 2 mins or less is given by cdf(2,1/μ)
+
+# Normal
+# generate 
+norm.rvs(n,m,s) # generate n normally distributed random values with mean m and sd s
+stats.norm.pdf(value, mean, sd) # pd of a value in a distribution with a certain mean and sd 
+
+# Chi-square - distribution of sum of squares of a set of normalized random variables. Number of variables considered in the degrees of freedom. Use this distribution to do a chi-sq test to see if two or more categorical variables are different from each other. For eg. gender based difference in response to a set of questions, color based difference in whether flyers are picked up. Build a contingency table of observed and expected values
+
+stats.chi2.pdf(value, df=x) # calculates the pd of value in a chi2 distribution with x degrees of freedom
+
+# F
+If v1 and v2 are two independent random variables having the Chi-Squared distribution with m1 and m2 degrees of freedom respectively, then the following quantity follows an F distribution with m1 numerator degrees of freedom and m2 denominator degrees of freedom, i.e., (m1,m2) degrees of freedom:
+(v1/m1)/(v2/m2)
+
+ss.f.rvs(loc=m, scale=s, size=n, dfn=m1, dfd=m2) # dfn and dfd stand for numerator and denominator degrees of freedom.
+ss.f.cdf(x, dfn, dfd) # P(F(dfn,dfd) < x) # probability of finding a value < x in the distribution
+ss.f.ppf(0.95, dfn, dfd) # ppf stands for percent point function - gives value at or below which 95% of the values are.
+# in other words
+ss.f.cdf(ss.f.ppf(0.95,dfn,dfd), dfn, dfd) should be 0.95
+# survival function ie 1-cdf, what % of values are above the cdf of a particular value
+ss.f.sf(x, dfn, dfd) # sum of ss.f.sf and ss.f.cdf for a given (x, dfn, dfd) should be 1.
+
+# Students t
+Student t Distribution
+Assume that a random variable Z has the standard normal distribution, and another random variable V has the Chi-Squared distribution with m degrees of freedom. Assume further that Z and V are independent, then the following quantity follows a Student t distribution with m degrees of freedom
+
+Z/sqrt(V/n)
+
+-----------------------------------
+Hypothesis testing
+# One sample t-test - check if an observation comes from a certain population. For eg. given a sample of 15 heights, check if it comes from a population with a known mean height. t-test gives you a t score that can be checked against a t distribution to see if significant or not.
+
+tscore, pval = ss.ttest_1samp(x,1.75) # see if a group of heights comes from a population with mean height 1.75
+
+# Two sample t-test: check if samples are significantly different from each other For eg. heights of two groups of people from different parts of the world. Assumes similar variance in the groups.
+
+tscore, pval = ss.ttest_ind(x,y, equal_var=True) # ind stands for independent. Dependent is call Paired t-test, which refers to testing differences between two sets of observations from the same population (eg. before and after treatment). In that case you do 1-sample test of the difference in the observations.
+
+# Pearsons correlation 
+Calculates the correlation coefficient for 2 quantitative variables. Correlation coefficients range from perfect correlation (1) to perfect inverse correlation (-1).
+
+cor, pval = ss.stats.pearsonr(x,y) # calculates the coefficient and corresponding pvalue between x and y
+
+# ANOVA (F test): compare means of multiple groups (>2) and see if there is any significant difference. Advantage is that one test can tell you whether there is difference between multiple groups (and no need to adjust for multiple comparisons. Disadvantage is that it can't tell you which groups are different. Eg. if a company is pursuing several marketing strategies to see if one or more increase sales significantly.
+
+F statistic = between-groups variability / withing-groups variability
+and it follows an F-distribution with k-1 numerator df and n-k denominator df, where k is the number of groups and n is the total sample size across all the groups.
+
+ss.f_oneway(group1, group2, group3, group4...groupn)
+
+# Chi-square test
+Compares two or more categorical variables and see if there is a difference.
+First create a cross table using pandas crosstab. For eg. if values for 2 categorical variables are stored in two lists
+
+crosstab = pd.crosstab(list1, list2, rownames['list1'], colnames['list2']) # creates a cross table of the observed counts of the two variables split by overlap.
+
+chi2, pval, df, expected = ss.chi2_contingency(crosstab)
