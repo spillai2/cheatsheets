@@ -14,7 +14,7 @@ cut -d',' -f1 file.csv | uniq | wc -l
 
 sort
 # sort numerically by separator '-' first by second column, then by third 
-sort -t - -n -k2 -k3 
+sort -t - -n -k2 -k3 <file name>
 
 # count columns in a csv,tsv
 awk -F'<separator>' '{print NF; exit}' <file> 
@@ -33,3 +33,8 @@ find <path to directory> -type f
 find <path to directory> -type d
 # find files with a certain word or set of characters
 find <path to directory> -name *.txt -exec grep -l 'linear' {} \;
+
+# number of cpus
+sysctl -n hw.ncpu
+sysctl -n hw.physicalcpu # physical CPUs
+sysctl -n hw.logicalcpu # logical CPUs

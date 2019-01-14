@@ -2,13 +2,15 @@ Numpy - linear algebra library for numeric computation.
 Numpy arrays come in both one dimensional vectors and 2-dimensional matrices
 
 Create a numpy array, also called ndarray for n-dimensional array
-
+np.array([1,2,3,4,5]) # converts a list into an numpy array <nparray>.tolist() converts np array back to list
 npa = np.array([[1,2,3],[3,4,5],[6,7,8]]) # creates a 3x3 matrix where each list is a row
 npa.shape() # returns dimensions 
 npa.reshape(x,y) # if npa is a one dimensional array, reshape turns it into a, x,y matrix
 npa.resize(x,y) # changes dimensions of an existing matrix
+npa.flatten() # returns a flattened one dimensional array
 np.ones((x,y)), np.zeros((x,y)), np.eye(4) # creates a matrix of ones, zeros, identity
 np.linspace(0,4,9) # take 9 equidistant values between 0 and 4
+np.logspace(0,3,4) # creates an ndarray of 10^0 to 10^3, 4 values
 
 x*y # element-wise multiplication of 2 matrices of same dimensions
 x.dot(y) # matrix multiplication
@@ -43,8 +45,13 @@ ndarray.max() # gives max value of given ndarray
 ndarray.argmax() # gives the position of the max value
 
 # attributes of arrays, no () after since they are properties, not functions
-ndarray.shape
-ndarray.dtype
+ndarray.shape # shows num rows/columns
+ndarray.dtype # shows data type of ndarray
+ndarray.ndim # shows number of dimensions
+
+# select
+ndarray[0] # get the 0th element in a one dim array, 0th row in a 2 dim array
+ndarray[1,3] # get value of first row, third column
 
 #to slice/subset an np array
 # if a one dimensional array, get value at a certain index by
@@ -122,7 +129,7 @@ np.hstack((arr1,arr2)) # note that hstack (horizontal) takes a single argument w
 #to stack vertical (one on top of the other)
 np.vstack
 #to split array
-np.hsplit(nparray, x) # where is the number of arrays to split into
+np.hsplit(nparray, x) # where x is the number of arrays to split into
 np.vsplit(nparray, x)
 
 #read an image in as a numpy array

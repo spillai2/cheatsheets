@@ -34,3 +34,43 @@ Identify Peptide Spectrum Match (PSM) between acquired spectra and a theoretical
 
 Quantitation (bottoms-up or Peptide centric)
 Proteins labeled with light/heavy isotopes in control/treatment samples. Then samples mixed and total proteins extracted (at that stage differentially tagged) -> digested into peptides -> separation by MS/MS. In a given spectra, the differntially labeled peptides will show up separately and the intensities (peptide count) will show quantities of control and treatment.
+
+---------------------------
+Ions are separated by their mass to charge ratio and that helps determine how many ions there are.
+Two main methods for identifying proteins:
+1) Peptide Mass Fingerprinting - digest a pure protein proteolytically and look at the m/z of all the peptides. Quick, but not used much anymore because it can't handle complex protein mixtures (which is what most biosamples are)
+2) Peptide sequencing by Tandem MS (MS/MS) - first mass analyzer will separate the peptides by m/z, second will analyze specific m/z that have been fragmented. Breaks down the peptide into pieces and deduce sequence from what aa is missing in the fragments.
+
+Top down proteomics - no proteolytic digestion of proteins before MS But this is a relatively small fraction of proteomic analysis. Most MS analyses involve digestion of proteins.
+
+ESI - the peptides coming out of the LC column are pushed through a very fine needle that creates a spray, the droplets are ionized by the voltage applied between the LC and MS and then passes on to the mass analyzer.
+
+Commonly used mass analyzers:
+1) Quadrupole (ions pass through a column which has 4 rods, 2 +ve and 2 -ve, the charges of which can be varied. Basically allows only a certain window of m/z to go through and hit the detector)
+2) Time of Flight (TOF - laser ionized particles travel through a vaccum, smaller m/z travels faster than larger ones and hit the detector)
+3) Ion Trap eg. Orbitrap (ions travel into the orbitrap on a linear velocity and then spins around the core of the orbitrap - the way in which they spin is directly correlated to the m/z ratio)
+
+Fragmentation: Collision induced dissociation
+
+Quantification methods:
+Absolute - abundance of proteins in a given sample
+Relative - difference in abundance between samples. MS is much more reliable for this. The following are some different kinds of relative quantitation
+
+1. Stable isotope labeling methods - label with isotopes that will show a distinct shift in the spectra of labeled vs unlabeled
+	ICAT - Isotope Coded Affinity Tags
+	SILAC - Stable Isotipe Labeling with Amino acids in Cell culture (incubating cells with heavy isotopes of Lysine and Arginine). Single MS.
+	iTRAQ - isobaric Tags for Relative and Absolute Quantitation (in more detail below). MS/MS.
+	TMT - Tandem Mass Tag
+
+2. Selective Reaction monitoring
+	Employed when we already know what proteins we are looking for, hence not applicable in a proteomics setting.
+
+3. Label free methods:
+	Spectral counting - by counting the number of peptides that align to a known protein and using that as a measure of the quantity of the protein.
+	Peak integration - area under the curve. iBAQ - Intensity based absolute quantitation (adjusts for experimental condition based variations in spectral counting)
+
+iTRAQ: Reporter group + Balance group tagged the amino reactive end of peptides (usually onto lysine). R+B groups add upto about the same mass, so those peptides elute together. Multiplexed as 4 or 8. There are usually 4 different reporter groups which increase the mass of the peptide in increments of 1 Dalton each. The balance groups are correspondingly smaller to keep the mass the same. First MS doesn't show any differences - the difference is apparent only when the labeled peptide goes through fragmentation. At that stage the reporters cleave off and their spectra will be 1 Da apart. The intensity of the reporters indicate the amount of peptide.
+
+---------------------------
+SDS-PAGE 
+First step in the whole process - protein samples along with size marker separated on PAGE using 1% SDS buffer, stained using coomassie blue. Top band around 250KDa, bottom is 16KDa. Slices containing the bands are sliced out and further processed by extraction and trypsin digestion. This digested mixture is then passed to an HPLC column from which it is injected into a mass spec through ESI.

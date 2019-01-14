@@ -20,6 +20,12 @@ Ctl-Enter: Just executes cell
 Shift-tab: after the name of a function will show doctring for that function
 
 For Markdown, choose 'Markdown' from drop-down options
+
+# run jupyter notebook on remote server and access locally
+# On remote:
+jupyter notebook --no-browser
+# On local (port forwarding)
+ssh -N -f -L localhost:<port you want on local>:localhost:<port on remote> remoteuser@remotehost
 ------------------------------------
 Virtual Environments:
 virtualenv:
@@ -54,12 +60,18 @@ $ source activate <name of env>
 $ source deactivate
 # delete a conda env
 $ conda remove env --name <name of env>
+# to have conda env show up in jupyter, after activating env do
+conda install ipykernel
+python -m ipykernel install --user --name <name of env> --display-name "<display name in jupyter>"
 ------------------------------------
 # Print formatting
 name = 'San'
 age = 38
 print('{} is {} years old'.format(name,age))
 print('{x} is {y} years old'.format(x=name,y=age)) # dont have to worry about order
+------------------------------------
+Everything is an object, including variables. To see the methods associated with a variable:
+var.__dir__()
 ------------------------------------
 Sequences are data structures that can be iterated over eg. lists, tuples, dictionaries
 list = [1,2,3,4] # mutable
@@ -250,6 +262,7 @@ re.split('@', string) # splits the string into two at @
 
 sub
 re.sub('subsitute this', 'with this, 'in this string') # finds one string and substitutes with another, in a given string/line
+re.sub(r'\\', r'/', x) # substitutes backslashes with forward slashes in string x. prefix 'r' is used whenever escape characters are involved
 -----------------------------
 File operations
 # use 'open' to create a file handle
@@ -267,6 +280,13 @@ with open('newfile.txt', 'w') as handle:
 # close file handle
 f.close()
 # file methods include read(), readlines(), write(string), writelines(strings)
+-----------------------------
+Underscores: 
+Like with many things in Python, we’ll see that different usages of _ are mostly (not always) a matter of convention.
+
+Single underscore denotes previous command executed (in an interpreter), throwaway variable in regular code (when you don't care about the value) or as a function name in internationalisation and localisation string translation lookups.
+
+_name (single underscore before a name): denotes the variable as a private variable
 -----------------------------
 Basic OOP
 #Class definition
@@ -341,4 +361,30 @@ class Motorcycle(Vehicle):
 	def vehicle_type():
 		return 'motorcycle'
 ------------------------------------
+Testing
+# name of testing code file is usually test_<name of code file>
+#####
+import unittest
+from <code file> import <function>
 
+class <code file>TestCase(unittest.Testcase): # create a class extending the unittest.Testcase
+	def test_<some func name>(self): 		
+	self.<some assert>(<function to be tested>(<input>))
+
+if __name__ == '__main__':
+	unittest.main()
+#####
+
+All functions, defined in a class derived from unittest.Testcase, with names that start with test_ will be run when main is called. There are many 'assert' statements to use:
+assertTrue(x)
+assertFalse(x)
+assertEqual(x,y)
+assertNotEqual(x,y)
+
+An optional 'msg' parameter can be passed to the assert statement to display should the assertion be false.
+------------------------------------
+OS (unix) interaction from python prompt
+import os
+os.getcwd() # gets current working directory
+os.chdir('path') # changes directory to path
+os.system('command') # runs command eg. ls

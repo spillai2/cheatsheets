@@ -4,7 +4,7 @@ import pandas as pd
 Series: one dimensional array, somewhere between a list and a dictionary. Like lists (and ndarrays), except they have an associated array of data labels instead of just index locations. Single indexed column of data. Items are stored in an order and there are labels with which they can be retrieved.
 
 a = [1,2,3] # declare a list
-x=pd.series(a, index=['First','Second','Third']) # stores a list of 3 numbers and labels them, so they can be retrieved either by x[index] or x.label.
+x=pd.Series(a, index=['First','Second','Third']) # stores a list of 3 numbers and labels them, so they can be retrieved either by x[index] or x.label.
 
 underneath, pandas stores data in a numpy typed array. Numbers are stored by default as float64, strings as object.
 Dictionaries can also be converted to pandas Series, no need to label.
@@ -35,7 +35,7 @@ In general, you could say that the Pandas data frame consists of three main comp
 df = pd.DataFrame(data=<data as a dict or matrix>, index=<list of index values>, columns=<list of columns in order>)
 
 A dict of equal length lists can be converted to a DataFrame
-data = {'state': ['OH','OH', 'OH', 'NV', 'NV'], 
+data = {'state': ['OH', 'OH', 'OH', 'NV', 'NV'], 
 	'year':[2000,2001,2002,2001,2002], 
 	'pop': [1.5,1.7,3.6,2.4,2.9]}
 
@@ -256,6 +256,98 @@ Timestamps can be added to or subtracted from each other and it gives a Timedelt
 pd.date_range() # creates a date range just like a sequence with intervals etc.
 -----------------------------
 Tricks
-create and populate a new column based on values in another column stored as a dict
+# create and populate a new column based on values in another column stored as a dict
 dict = {'exist_col_val1':'new_col_val1', 'exist_col_val2':'new_col_val2', 'exist_col_val3':'new_col_val3'}
 df['new_column'] = df['exist_column'].map(dict) # creates a new column filling in with values from dictionary
+
+# drop rows with duplicated values in a column, keeping the first
+df.drop_duplicates(subset='<column name', keep='first')
+
+# find 'difference' between 2 data frames, one of which is fully included in the other
+pd.concat([fulldf,partdf]).drop_duplicates(keep=False)
+
+# to convert a list of dictionaries, usually generated from a json file, into a dataframe where the json keys are fields
+pd.DataFrame(list)
+
+pd.concat([Series(row['var2'], row['var1'].split(',')) for _, row in a.iterrows()]).reset_index()
+
+pd.concat([Series(row['ComplexID'], row['ComplexName'], row['subunits(Entrez IDs)'].split(';')) for _, row in a.iterrows()]).reset_index()
+
+-----------------------------
+Summary
+create
+ - pd.Series(<list>) # converts list to Series, default numerical index (row names)
+ - pd.Series(<list>, index=<list with custom indexes>)
+ - pd.DataFrame([<list1>,<list2>,<list3>], columns=<list with column names>) # each <list> should be [..]
+ - pd.DataFrame(<dict>) # column names will be dict keys
+ - pd.DataFrame(<dict>, columns=<list with names>)
+
+append/concat
+ - df1.append(df2) # adds contents of df2 to df1
+ - pd.concat([df1, df2, df3]) # concatenates 3 dfs into one
+
+merge
+ - pd.merge(df1, df2, on='<column or list of columns>', how='<inner/outer etc. inner being default>')
+
+melt
+ - pd.melt(df) # unpivots df into 'variables' and 'values', variables being the column names and values being corresponding values In essence columns are stacked on top of each other into a 2 column df of vars and vals
+ - pd.melt(df, id_vars=<col name>) # will make the column a third column and the var and vals will only be the remaining cols
+
+pivot
+ - df.pivot(index='<column1>', columns='<column2>', values='<column3>') # creates a stacked df with column1 as index/rows, column2 as columns and column3 as the values
+ - df.pivot_table # when there are numerical values to aggregate
+
+summarizing
+ - type(df) # will return DataFrame
+ - df.shape # returns number of rows/columns
+ - df.head()/df.tail() # as the function name suggests, optional numerical argument will return that many rows from the head/tail
+ - df.index # gives row names
+ - df.columns # gives column names
+ - df.dtypes # data type of each column
+ - df.values # returns underlying numpy array
+ - df.info() # concise summary
+
+selecting data
+ - df['column'] or df.column # select the column
+ - df.loc[rowname, colname] # fetches value at that row/column intersection. 'loc' helps fetch based on row/col name
+ - df.loc[:, colname] # all rows for colname, same logic df.loc[rowname,:]. 'loc' should always specify both row/col
+ - df.iloc[0] # first row, all cols. 'iloc' is by index, using the numerical index for rows/cols.
+ - df.iloc[0,0] # first row, first col. Note that you don't need both row and col specs like loc
+
+filtering data
+ - df[df.column == '<some value>'] # selects all rows where column matches value
+ - df[df.column1 == '<some value>'].column2 # selects a column from the filtered results
+
+sorting data
+ - df.sort_values(by='<colname>') # sorts df based on values of the column passed
+ - df.sort_values(by=['col1','col2']) # sorts by col1, then col2
+ - df.col1.sort_values() # sorts the values of col1 and returns as a Series
+
+descriptive statistics
+ - df.describe() # summarizes all the numeric columns - showing mean, std, min, max etc.
+ - df.describe(include='all') # include all columns in the summary
+ - df.groupby('<col>').mean()) # groups by a specific column and sets other columns to their mean.
+
+quality check
+ - df.duplicated() # returns a boolean array for all rows, duplicated rows will be 'True'
+ - df.duplicated().sum() # returns the number of duplicates
+ - df.drop_duplicates() # drops duplicated rows
+
+missing data
+ - df.isnull() # returns dataframe of booleans based on if data is missing from any of the rows/cols
+ - df.dropna() # drops row if any values are missing
+ - df.dropna(how='all') # drops row only if all values are missing
+ - df.ix[df.col1.isnull(), 'col1'] = df.col1.mean() # fill missing values of col1 with mean of the column
+
+rename values
+ - df.col1.map({'val1':'modval1', 'val2':'modval2'}) # map changes the values using a dict, val1 becomes modval1 etc.
+
+file I/O
+ - pd.read_csv('<filename.csv>') # reads a csv
+ - df.to_csv('<filename.csv>') # writes df out to csv
+
+database I/O
+ - engine = create_engine('sqlite:///:memory:') # generic ('<dbtype>:///<db name>')
+ - df.to_sql('my_table', engine) # create a new table called my_table in the database
+ - pd.read_sql('my_table', con=engine) # read a db table into a data frame, with connection being the engine
+ - pd.read_sql_query("select * from table", engine) # executes sql query on db

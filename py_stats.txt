@@ -67,7 +67,7 @@ tscore, pval = ss.ttest_1samp(x,1.75) # see if a group of heights comes from a p
 tscore, pval = ss.ttest_ind(x,y, equal_var=True) # ind stands for independent. Dependent is call Paired t-test, which refers to testing differences between two sets of observations from the same population (eg. before and after treatment). In that case you do 1-sample test of the difference in the observations.
 
 # Pearsons correlation 
-Calculates the correlation coefficient for 2 quantitative variables. Correlation coefficients range from perfect correlation (1) to perfect inverse correlation (-1).
+Calculates the correlation coefficient for 2 quantitative variables when they are normally distributed. Correlation coefficients range from perfect correlation (1) to perfect inverse correlation (-1).
 
 cor, pval = ss.stats.pearsonr(x,y) # calculates the coefficient and corresponding pvalue between x and y
 
@@ -85,3 +85,37 @@ First create a cross table using pandas crosstab. For eg. if values for 2 catego
 crosstab = pd.crosstab(list1, list2, rownames['list1'], colnames['list2']) # creates a cross table of the observed counts of the two variables split by overlap.
 
 chi2, pval, df, expected = ss.chi2_contingency(crosstab)
+
+Non-parametric tests
+
+# Spearman rank-order correlation (quant var vs quant var)
+ss.spearmanr(x,y)
+
+# Wilcoxon signed-rank test - non-parametrics version of paired t-test
+ss.wilcoxon(x,y)
+
+# Mann-Whitney U or Wilcoxon rank-sum test - decide if two samples are from the same population or not without assuming normal distribution. Non-parametric version of two sample t-test
+ss.mannwhitneyu(x,y)
+
+-----------------------------------
+Linear models
+
+# Linear regression - dependent output variable y, independent input variable x
+y = B0 + Bx
+where B0 is the y-intercept and B is the co-efficient/slope of variable x.
+B is Cov(x1,y)/Var(x1), can be mathematically derived
+
+slope, intercept, rvalue, pvalue = ss.linregress(x,y)
+
+Goodness of fit - how well does the model fit the observations
+SS_total (Sum of squares total) = SS_regression + SS_residuals
+SS_total is the total ss (difference between observed values and observed mean) SS_regression is the explained ss (difference between predicted values and observed mean) and SS_residuals is the unexplained ss (difference between observed and predicted values)
+R-squared (Co-efficient of determination) is the proportion of the total ss explained by regression ie 
+SS_regression/SS_total = 1 - SS_residuals/SS_total
+var_residuals = SS_residuals/n-2 ( n-2 because of the two estimated parameters - slope and intercept)
+var_regression = SS_regression/n-1
+
+explained_variance = SS_regression/var_regression (distributed as chi-sq with 1 degree of freedom)
+unexplained_variance = SS_residuals/var_residuals (distributed as chi-sq with n-2 deg of freedom)
+
+F (Fisher) statistic = explained_variance/unexplained_variance (distributed as F(1,n-2) )

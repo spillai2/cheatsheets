@@ -322,3 +322,5 @@ Unhealthy threshold - number of consecutive health checks before an instance is 
 Set it up, attach it to an EC2 instance and then when it is accessed through the console, it will show you the health of that instance. If for eg. the file it is pinging is missing, then it will show that the health check has failed.
 
 ELBs always have a DNS name and when accessed directly will show you the index page of the website.
+
+aws ec2 run-instances --image-id ami-0ff8a91507f77f867 --count 1 --instance-type t2.micro

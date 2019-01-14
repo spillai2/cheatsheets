@@ -112,26 +112,9 @@ content of the second class occupies the first 5 columns. 'sm' is one of the 4 d
 JS basics
 Javascript:
 
-function <name> () {
-    <function body>
-}
 
-or 
 
-var <name> = function () {
-    <function body>
-}
 
-Function scopes:
-1) Global - variables and functions defined here available everywhere
-2) Lexical - vars abd funcs (func within func) available only within the function
-
-Each function invocation creates an Execution context which has the following components:
-    1. Its own variable environment
-    2. Special 'this' object
-    3. Reference to the outer environment within which he function is stored (global has no outer environment since it is the outermost environment)
-
-Scope chain: variable searched for in its current scope first, then outer scopes until global. If not found anywhere it is left as undefined
 
 Built in data types:
 7 types: 6 primitive and one object
@@ -142,7 +125,20 @@ var x= 4, y=5 //can assign multiple variables with one 'var'
 
 Equality === ensures that the types compared are the same (== does not and can compare a string to a number for eg.)
 
-object type -
+Arrays
+var arr = new Array()
+
+To apply an operation to an array without looping:
+
+array.forEach(<function/operation>)
+
+# To check if every element returns true for something
+array.every(<check operation>)
+
+# Apply a function to each element and store result in a new array
+var newarray = array.map(<function>)
+
+Objects
 var company = new Object(); // Object instantiated
 company.name = 'Novartis';
 
@@ -162,15 +158,81 @@ var Novartis = {
 
 The value of a key within an object can be another object (nested as many times as we want)
 
+Every object has a prototype, accessed from the __proto__ property of the object. All objects inherit from the root Object.prototype class.
+------------------------------------------
 Functions are first-class data types: meaning you can do whatever you do with a variable or object with a function. For eg. you can assign an attribute to a function.
+
+function <name> () {
+    <function body>
+}
+
+or 
+
+var <name> = function () {
+    <function body>
+}
+
+The later illustrates that in JS functions are objects, they can be assigned to variables.
 
 Passing arguments by value as opposed to by reference: when passed by value, the original value stays the same. when passed by reference the original value changes since it is pointing to a reference location.
 
+Primitive arguments (numbers, boolean etc) are passed by value, meaning the function cannot change them. For eg.
+function changeX (x) {
+  x = 10
+}
+will not change the value of the passed argument to 10.
+
+Objects are passed by reference and the function can change them.
+
+A function can also be an object property
+
+var person = {
+  firstName : '<first name>',
+  lastName : '<last name>',
+  greeting : function() {
+    return "Hello, nice to meet you"
+  }
+}
+
 'this' in the function execution context refers to the global window object that the function is running in.
-'prototype' is a way to create a function for a general object
+'prototype' is a way to create a function for a general object. Once declared as a prototype, new objects can be created from that function. For eg
 
-var arr = new Array()
+function Person (name, age) {
+  this.name = name;
+  this.age = age;
+  this.greeting = function() {
+    return "Hello, my name is " + this.name;
+}
 
+Now a new Person object can be created using the 'new' keyword as:
+var johnDoe = new Person('John Doe', 44)
+
+'this' is analogous to 'self' in python and prototypes are analogous to classes.
+
+Inheritance can be implemented through prototypes as follows:
+
+function Student (name, age, school) {
+  this.__proto__ = new Person(name, age);
+  this.school = school;
+}
+
+Less elegant than inheritance in python given you have to explicitly create a new Person object within student, but setting the __proto__ property to be Person means, Student will have all the properties of Person.
+
+Properties (attributes and methods) can also be added to the prototype using the 'prototype' property. For eg.
+Person.prototype.planet = 'Earth'
+adds a new property called planet to the Person prototype and sets its values to 'Earth'
+
+Function scopes:
+1) Global - variables and functions defined here available everywhere
+2) Lexical - vars abd funcs (func within func) available only within the function
+
+Each function invocation creates an Execution context which has the following components:
+    1. Its own variable environment
+    2. Special 'this' object
+    3. Reference to the outer environment within which he function is stored (global has no outer environment since it is the outermost environment)
+
+Scope chain: variable searched for in its current scope first, then outer scopes until global. If not found anywhere it is left as undefined
+------------------------------------------
 Closures:
 Functions assigned to a variable that can be passed around as data. Leads to an important feature called memoization.
 When an inner function is returned, JS preserves its outer lexical environment in its memory space - so arguments passed to the outer function are preserved even if the function itself has gone out of scope.
@@ -182,12 +244,87 @@ Immediately Invoked Function Expressions (IIFEs): where you have a () after a fu
 To include a JS script in an HTML document:
 <script src='<path to js file>'></script>
 -------------------------
+Strings
+Strings are character arrays and are immutable. Use <string>.charAt(index) to fetch the character at a specific location. Alternatively, <string>[index]
+
+Though the original strings are immutable, functions can be applied to strings to return new strings.
+string.uppercase()
+string.trim() // removes leading and trailing whitespaces
+string.concat('another string) // adds second string to first
+s.startsWith('something')
+s.endsWith('something')
+s.includes('something')
+s.search('something') // returns index of first character of matched substring, else -1
+-------------------------
+Regex
+The string.search() function can be used by specifying the pattern as /pattern/ for its argument
+var name = 'Sanjeev'
+name.search(/san/i) // searches for san case-insensitive
+a test function can be used to test a regex
+/san/.test(name)
+s.search(/[sje]/) // searches if either of the 3 characters are present, returns the index of the first matched character
+s.search(/[a-z]/) // searches for any lowercase character and returns first match in the string
+s.search(/[\d]/) // any digit
+s.search(/[0-9][a-z][0-9]/ // a digit followed by a character followed by a digit, can use \d in place of 0-9
+// putting a caret notation inside [] creates a negate condition, meaning search if what follows is not present
+s.search(/[^\d]/) // search for anything other than digits
+// regex quantifiers specify how many matches of a certain kind to look for
+s.search(/[\d]?[a-z]/) // searches if the string has 0 or 1 (but not more) digits followed by a lowercase character
+s.search(/[\d]*[a-z]/) // * means look for 0 or more
+// start and end can be specified with ^ and $
+s.search(/^\d[a-z]*/) // starts with a single digit followed by 0 or more characters
+s.search(/[a-z][\d]?$/) // ends with a single lowercase character followed optionally by a digit
+// start and end searches can be combined to look for exact pattern matches
+-------------------------
 
 DOM manipulation:
-Based on the tree structure of an HTML document. Each point is a node, either an element node if it contains an HTML tag or a text node if it contains text. Element nodes can contain text nodes. These nodes can be manipulated by JS. The 'document' object contains the entire HTML page (contained within the 'window' object) eg. window.document. The document object is our stepping stone to get inside and access individual elements of an HTML page. 
+Structure tree representation of the body of an HTML page. Browser turns the HTML into its DOM format for representation. Each point is a node, either an element node if it contains an HTML tag or a text node if it contains text. Element nodes can contain text nodes. The DOM provides us a way to programmatically access the HTML documents using JS. The 'document' object contains the entire HTML page (contained within the 'window' object) eg. window.document. The document object is the root of the DOM and our stepping stone to get inside and access individual elements of an HTML page. 
 
 Fetching an id:
 document.getElementById('<id>')
+
+Data can be persisted across requests using localStorage. A variable attached to localStorage, for eg. a counter will enable us to track how many times a user has accessed the page.
+
+For eg. to see how many times a user accessed a page:
+ <div>
+      You have visited this page <span id=report></span> times
+</div>
+
+// then
+
+<script>
+  var timesVisited = 0;
+  if (localStorage.timesVisited){
+    timesVisited = parseInt(localStorage.timesVisited)
+  }
+
+  timesVisited += 1;
+  localStorage.setItem('timesVisited', timesVisited);
+
+  var report = document.getElementById('report');
+  report.innerHTML = timesVisited;
+
+  if (timesVisited > 10) {
+    report.style.backgroundColor = 'orange'
+  }
+</script>
+
+If contents to store in localStorage is not a scalar variable, but a JS object, we use JSON to store it. JSON is the textual representation of an object.
+
+// To convert an object to JSON:
+JSON.stringify(object)
+// To convert JSON to object
+JSON.parse(json)
+-------------------------
+DOM events
+
+var element = document.getElementById('elementid');
+element.addEventListener('event', handler_function); // 'event' can be click, mouseOver etc
+
+This is called event driven programming (EDP) since the event calls the function. EDP is an example of 'asynchronous' programming.  In synchronous programming, the code is constantly checking for user input and updating as needed. In asynchronous, the code tells the browser to let it know if some event happens and then updates, while running other code at the same time.
+
+The 'handler_function' above is called a 'callback' function - meaning it is triggered in response to a user action (event).
+-------------------------
 
 To assign a task to a button:
 <button onclick=sayHello()>...</button>
@@ -748,3 +885,144 @@ $("<id of the table>").tablesorter({
     sortList: [[1,0]], // applies an ascending sort (0) on the second column (1)
     widgets: ["zebra"]
 });
+---------------------------------------------------------------------------
+React:
+Client-side library for building user unterfaces. Based on the concept that an HTML page consists of reusable interactive components that have a lifecycle during which the state of the component changes. Notion of VirtualDOM. Created and maintained by Facebook.
+
+3 importants features:
+1) Modularity - organize code into reusable components that can be connected together.
+2) Lifecycle maintenance - modifying components based on state, adding event listeners and simplifying the way components are rendered.
+3) JSX: Javascript XML syntax transform. Allows user to write HTML within Javascript! Then transforms the text (HTML code) to React code.
+
+Components are the building blocks of React. They make up the nodes of the VirtualDOM, includes and maintains state that changes with events. Each component maintains state independently. Apps can be configured to respond to component level events.
+
+The VirtualDOM is a node tree that represents the HTML elements, attributes and content as objects and properties. It selectively renders and re-renders 'subtrees' of nodes based on state changes. It is efficient because it does the least amount of DOM manipulation to update components. It provides a layer of abstraction for the developer, a simpler programming model and better performance.
+
+In a normal DOM, all nodes are re-rendered even if only one changes. In VirtualDOM, React fifures out what nodes have changed - it makes 2 things happen 1) diff - which node(s) changed? 2) reconciliation - what other nodes need to change because of that. In the end it will re-render only those nodes that need to change.
+
+Developing with React:
+1) Within the HTML page, allocate a position/div to render the React component.
+2) Create the React component in JS
+3) Drop the component into its allocated position
+
+<html>
+<head>
+<title></title>
+<script src='<local react.js or CDN'></script>
+<script src='<local react-dom.js or CDN'></script>
+</head>
+<body>
+<div id='<some id for this container'> 
+<script>
+	<React code here>
+</script>
+</body>
+</html>
+
+Rendering elements using JSX
+ReactDOM.render('<some HTML code>', document.getElementById('<some html container id>')
+renders the HTML code in the given HTML container ID.
+
+React allows us to create custom components and insert them into the VirtualDOM of an HTML page. This allows for selective rendering and modular development of dynamic behavior.
+
+Components are Javascript objects based off the React.Component prototype. Components define 1) properties, 2) event-based state variables, 3) callback functions and 4) a render function. The VirtualDOM manages each components lifecycle and calls its render function as needed.
+
+A component is created using the React.createClass function. The component itself is a JS object that has a render function as one of its keys. The component (which can be described as a custom HTML element) is then rendered by the VirtualDOM.
+
+var component = React.createClass ({
+	render: function() {
+		return (<h1>Hello there</h1>); // this is JSX, embedding of HTML in JS
+		}
+	});
+
+ReactDOM.render(<component/>, document.getElementById('container')
+
+However, following ES6 (recent JS syntax standard), instead of creating an object, the component is a class that extends React.component
+
+class component extends React.Component {<...rest same as above...>}
+
+Other than the render function, each component has properties and state. Properties are attributes and values initialized when a component is created and are never modified afterwards. State are attributes and values that represent the current state of the component and can be modified during a component's lifecycle.
+
+Properties are assigned by the renderer when an object is initialized.
+ReactDOM.render(<component name=<value>, document.getElementById('container')
+assigns a value to the 'name' property. A component accesses its properties through this.props.<property name>
+return(<h1>Hello {this.props.name}</h1>)
+
+State is intialized in the constructor of the component.
+
+class component extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state {key:value, key:value...} // these reflect the current state and changes
+		
+	}
+	render() {
+		return(<h1>{this.state.key}</h1>)
+	}
+}
+
+Component lifecycle falls into 3 categories
+1) When it is created
+2) when it is updated
+3) when it is destroyed
+
+React invokes callback functions on components during their lifecycle.
+
+Creation or mounting phase of component and its callbacks
+constructor
+componentWillMount - invoked before component is added to DOM
+componentDidMount - invoked after adding to DOM, the comp then has access to other parts of the DOM.
+
+
+Updating phase and its callbacks
+componentWillReceiveProps
+shouldComponentUpdate
+componentWillUpdate
+componentDidUpdate
+
+Destruction phase
+componentWillUnmount
+
+The component's state usually changes in response to some user action or event. The event can be bound to a callback function within the component that will change the corresponding state variables. This automatically re-renders the component.
+
+Example of a component that responds to a button click and increments a counter
+
+	    // define the component as a class
+            class Counter extends React.Component { 
+		
+		// with a constructor
+                constructor(props) { 
+                    super(props);
+                    this.state = { count : 0 };
+                }
+
+		// callback function when button is clicked
+                incrementCount () { 
+                    this.setState({ 
+                            count: this.state.count + 1
+                    })
+                }
+                
+		// render is invoked by the callback when setState is executed    
+                render () { 
+                    return ( 
+                        <div>
+                            Count: {this.state.count}
+				<button type = "button" onClick = { this.incrementCount.bind(this) }> Increment </button>
+                        </div>
+                    );
+                } 
+            }; 
+
+	    // VirtualDOM renders the component
+            ReactDOM.render(<Counter />, document.getElementById('container'))
+
+The key part here is the event handling that happens when the button is clicked:
+<button type = "button" onClick = { this.incrementCount.bind(this) }> Increment </button>
+basic format is:
+input type - event - binding 
+binding done by this.<callback function>.bind(this)
+For a search box that filters a list by what you type in, if will be
+<input type='text' onChange={ this.<callback>.bind(this) }> 
+
+For React components to call other components, one component needs to contain another. The main concept of React is to use reusable modular components that can be used in other apps.

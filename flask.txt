@@ -12,7 +12,7 @@ app = Flask(__name__)
 def <any func name>():
     return "<some string>"
     
-if __name__ == "__main__"
+if __name__ == "__main__":
     app.run()
     # runs on localhost:5000
     # app.run also takes parameters
@@ -37,7 +37,7 @@ app = Flask(__name__, template_folder='<path to templates folder>')
 @app.route(<end point>)
 def <func name>():
     <some logic>
-    return render_template('<template html file>', <param>=<value> # <param> should exist in html
+    return render_template('<template html file>', <param>=<value>) # <param> should exist in html
 --------------
 
 Styling pages

@@ -342,3 +342,121 @@ trained_model = MultinomialNB().fit(messages_tfidf, messages['label'])
 Test trained model by passing a known 'label' and see it the prediction is correct. Full model evaluation:
 
 predictions = trained_model.predict(messages_tfidf)
+-------------------------------------------------------
+
+Neural networks and Deep learning
+Neural networks are modeled after biological neural networks and attempt to allow computers to learn in a similar manner to humans - reinforcement learning. Use cases: Pattern recognition, Time Series Predictions, Signal processing, Anomaly detection, Control.
+
+The human brain has interconnected neurons with dendrites that receive inputs and then based on those inputs produce an electrical signal output through the axon which is transmitted to the adjacent neuron.
+
+Neural networks attempt to solve problems that would normally be easy for humans but hard for computers (like recognizing a person from a picture).
+
+Simplest neural network possible: the perceptron. It consists of one or more inputs, a processor and a single output. It follows the feed forward model meaning inputs are fed into the neuron, are processed and results go to the output. It has 4 main steps:
+1) Receive inputs
+2) Weight inputs
+3) Sum inputs
+4) Generate output
+
+Each input has a weight associated with it (between -1 and 1) and it is the weighted input that is received at the processor. The processor sums them up and sends it to an activation function which tells the neuron to fire or not. In case of a simple binary function the output is either -1 or 1. The job of the activation function is to introduce non-linearity into the output of the node (since most real world data is non-linear, it would help to train the neuron on non-linear data)
+
+The activation function can be logistic, sigmoid, trignometric, step etc. 
+
+To prevent a 0 output, an additional input of 1 with an associated weight called bias is added to the sum. The main function of Bias is to provide every node with a trainable constant value (in addition to the normal inputs that the node receives). Akin to the y-intercept in the equation for a line.
+
+To train a perceptron the following steps are followed:
+1) Provide the perceptron with inputs for which there is a known answer.
+2) Ask the perceptron to guess the answer.
+3) Compute the error - how far off is the answer from the real answer.
+4) Adjust all weights according to the error
+5) Return to step 1 and repeat.
+
+This layers a set of perceptron one after the other until we arrive at the correct answer and that is what creates a 'neural net'. This is how a single perceptron would work. To create a neural network, link many perceptrons/nets together.
+
+Neural networks have an input layer and an output layer. Any layers in between are known as hidden layers because you don't see anything directly except the input and output layers.
+
+Deep learning refers to a neural network with many hidden layers, causing it to be deep. For eg. Microsoft's state of the art vision recognition uses 152 layers.
+-------------------------------------------------------
+
+TensorFlow
+One of the most popular deep learning libraries, developed by Google. It can run on either the CPU or GPU. In general, deep neural networks run faster in GPU. The basic idea is to be able to create data flow graphs which have nodes and edges. The data passed from a layer of nodes to another is called the Tensor.
+
+Two ways to use TensorFlow:
+1) Customizable Graphics session
+2) SciKit-learn type interface with Contrib.Learn
+
+import tensorflow as tf
+# tf constants
+x = tf.constant(10) # creates a tensor object, in this case a constant integer
+
+# tf sessions
+sess = tf.session() # creates a 'session' object to execute operation objects
+sess.run(x) # will print out 10
+
+# tf operations
+x = tf.constant(2)
+y = tf.constant(3)
+with tf.Session() as sess:
+    print('Addition',sess.run(x+y))
+
+# tf placeholders for future use - for eg. for a 1024 x 1024 matrix
+x = tf.placeholder(tf.float32, shape=(1024, 1024))
+# or for an operation 
+x = tf.placeholder(tf.int32)
+y = tf.placeholder(tf.int32)
+
+# to multiply 2 matrices
+1. Create the matrices in tf
+mat1 = tf.constant(np.array([[5.0,5.0]])) # create a 1x2 array
+mat2 = tf.constant(np.array([[2.0],[2.0]])) # create a 2x1 array
+2. Create the matrix multiplication object
+matrix_multi = tf.matmul(mat1,mat2)
+3. Execute the operation in a session
+with tf.Session() as sess:
+    result = sess.run(matrix_multi)
+    print(result)
+
+# MNIST example - classic dataset of handwritten numbers
+# consists of images of 55000 handwritten digits and corresponding labels. The goal is to iterate through the images and adjust the error/weights until we start to get the best predictions. Then predict test images.
+
+# Import MINST data
+from tensorflow.examples.tutorials.mnist import input_data
+mnist = input_data.read_data_sets("/tmp/data/", one_hot=True) # downloads the data into /tmp/data
+
+Data Format
+The data is stored in a vector format, although the original data was a 2-dimensional matrix with values representing how much pigment was at a certain location. Values range from 0 (white) to 1 (black). Each vector is an image with 784 values, there are 55000 such vectors. The individual vectors can be 'reshaped' into 28x28 matrices, which are numpy arrays holding values of the individual images.
+
+sample = mnist.train.images[2].reshape(28,28) # fetches a single image as a numpy array
+plt.imshow(sample, cmap='gray') # display image in grayscale
+
+Parameters
+Need to define 4 parameters, it is really hard to know what good parameter values are on a data set for which you have no experience with, however since MNIST is pretty famous, we have some reasonable values. The parameters here are:
+
+Learning Rate - How quickly to adjust the cost function.
+Training Epochs - How many training cycles to go through (how many times to check for error and rerun)
+Batch Size - Size of the 'batches' of training data
+
+# Network Parameters
+n_hidden_1 - num features/nodes in first layer
+n_hidden_2 - num features/nodes in second layer
+n_input = number of values in an input (single image - 784 or 28*28)
+n_classes = 10 # MNIST total classes (0-9 digits)
+n_samples = mnist.train.num_examples (total size of the training data 55000 images in this case)
+
+MultiLayer Model
+First we receive the input data array and then to send it to the first hidden layer. Then the data will begin to have a weight attached to it between layers (this is initially a random value) and then sent to a node to undergo an activation function along with a Bias. Then it will continue on to the next hidden layer, and so on until the final output layer. In our case, we will just use two hidden layers, the more you use the longer the model will take to run (but it has more of an opportunity to possibly be more accurate on the training data).
+
+Once the transformed "data" has reached the output layer we need to evaluate it. Here we will use a loss function (also called a cost function) to evaluate how far off we are from the desired result. In this case, how many of the classes we got correct.
+
+Then we will apply an optimization function to minimize the cost (lower the error). This is done by adjusting weight values accordingly across the network. We can adjust how quickly to apply this optimization by changing our earlier learning rate parameter. The lower the rate the higher the possibility for accurate training results, but that comes at the cost of having to wait (physical time wise) for the results. Of course, after a certain point there is no benefit to lower the learning rate.
+.
+.
+.
+-------------------------------------------------------
+ContribLearn - scikit-learn like interface to tensorflow
+
+Import and do train/test split as you would do with a regular scikit-learn workflow. To train the model:
+
+import tensorflow.contrib.learn.python.learn as learn
+classifier = learn.DNNClassifier(hidden_units=[x, y, z], n_classes=<num classes>)
+classifier.fit(X_train, y_train, steps=<num of iterations>, batch_size=<size of each batch of data>)
+classifier.predict(X_test)

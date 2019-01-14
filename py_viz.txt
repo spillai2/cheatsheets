@@ -55,6 +55,8 @@ axes.plot(x,y)
 axes.set_xlabel('blah')
 axes.set_ylabel('blah')
 axes.set_title('blah')
+#Alternatively use axes.set to set multiple parameters
+axes.set(title='', xlabel='', ylabel='') # set allows you to follow matlab style syntax in OO
 
 # Putting 2 sets of figure on one canvas
 Can be done by defining 2 axes with different dimensions
@@ -103,11 +105,34 @@ axes.plot(x,y, color='blue',lw=2, alpha=0.5, ls='--', marker=0, markersize=2)
 axes.set_xlim([low,high]) # will show/stretch the x axis between low and high values
 axes.set_ylim([low,high])
 --------------------
+##########################################################################
+
+PANDAS built-in data visualization
+# Allows you to call visualization functions on a pandas data frame
+
+# Create a histogram of a column
+df['col'].hist() # create a histogram of the distribution of values in col
+# or a more generic way to call .plot(kind=<type>)
+df['col'].plot(kind='hist')
+# or
+df['col'].plot.hist()
+
+# Create a scatterplot of 2 columns/features
+df.plot.scatter(x='col1',y='col2')
+df.plot.scatter(x='col1',y='col2', figsize=(12,2), s=4, c='red') # stretches out figure, changes size and color of dots
+df.plot.scatter(x='col1',y='col2', figsize=(12,2), s=4, c='red', linewidth=1.2, edgecolor='black') # last 2 args defines borders of the bars
+df.plot.scatter(x='col1', y='col2', s='<col3>', c='<col4>', cmap=plt.get_cmap(<some cmap>), colorbar=True) # size the dots based on values of col3 and color the dots based on values of col4 and show a color bar denoting the scale
+
+# Create a boxplot of all columns or selected columns
+# all columns
+df.plot.box() # will create boxplots for all cols in data frame
+# selected columns
+df[['c1','c2']].plot.box() # will create boxplots for just those two columns
 
 ##########################################################################
 
 SEABORN
-Statistical data visualization tool that works closely with pandas, built on top of matplotlib
+Seaborn provides an API on top of Matplotlib that offers sane choices for plot style and color defaults, defines simple high-level functions for common statistical plot types, and integrates with the functionality provided by Pandas DataFrames
 
 import seaborn as sns
 
@@ -140,10 +165,18 @@ Categorical plotting
 sns.barplot(x='cat col', y='num col', data=df) # bar plot showing average for each category. Default is mean/avg, but can be changed with the 'estimator' paremeter eg. estimator=std
 # to count the cat variable
 sns.countplot(x='cat col', data=df)
+
 #Boxplot to see the distribution of different values of a categorical variable against a numerical variable
 sns.boxplot(x='cat col', y='num col', data=df) # optional argument 'hue' will let you subdivide even further
-#Violinplot to see kde of different values of a categorical variable against a numerical variable
-sns.violinplot(x='cat col', y='num col', data=df) # optionally 'hue' and 'split=True' would split the plot among 2 categories in hue on either side
+
+# Violinplot to see kde of different values of a categorical variable against a numerical variable
+sns.violinplot(x='cat col', y='num col', data=df) 
+# optionally 'hue' and 'split=True' would split the plot among 2 categories in hue on either side. If split is left out, it will create two violin plots for each of the two categories.
+sns.violinplot (x='cat col', y='num col', data=df, hue='another cat col', split=True)
+# to make it a horizontal plot, switch axes of the numerical and categorical variables
+sns.violinplot(x='cat col', y='num col', data=df)
+
+
 #Scatterplot to see a scatter plot of a num variable for different values of a cat variable
 sns.stripplot(x='cat col', y='num col', data=df) # optional argument 'jitter=True' will add separation between the points using randomization
 # combine a stripplot with a violinplot
@@ -185,28 +218,6 @@ sns.set_style('darkgrid') # sets background to dark and shows grids. just dark w
 
 ##########################################################################
 
-PANDAS built-in data visualization
-# Allows you to call visualization functions on a pandas data frame
-
-# Create a histogram of a column
-df['col'].hist() # create a histogram of the distribution of values in col
-# or a more generic way to call .plot(kind=<type>)
-df['col'].plot(kind='hist')
-# or
-df['col'].plot.hist()
-
-# Create a scatterplot of 2 columns/features
-df.plot.scatter(x='col1',y='col2')
-df.plot.scatter(x='col1',y='col2', figsize=(12,2), s=4, c='red') # stretches out figure, changes size and color of dots
-df.plot.scatter(x='col1',y='col2', figsize=(12,2), s=4, c='red', linewidth=1.2, edgecolor='black') # last 2 args defines borders of the bars
-
-# Create a boxplot of all columns or selected columns
-# all columns
-df.plot.box() # will create boxplots for all cols in data frame
-# selected columns
-df[['c1','c2']].plot.box() # will create boxplots for just those two columns
-##########################################################################
-
 PLOTLY - for interactive visualization
 # Plotly is an interactive visualization library and Cufflinks connects Plotly to Pandas
 
@@ -230,3 +241,7 @@ df.iplot(kind='box') # creates boxplots of all columns
 df.iplot(kind='surface') # creates 3D plots of dataframes with 3 cols
 df.iplot(kind='bubble', x='c1', y='c2', size='c3') # plot x1 on x, c2 on y and make the size of the bubbles correspond to values of c3
 df.scatter_matrix() # similar to sns.pairplot (plots columns against each other)
+##########################################################################
+Holoviews
+import holoviews as hv
+hv.extension('bokeh') # renders on the browser as bokeh but is a holioviews object
