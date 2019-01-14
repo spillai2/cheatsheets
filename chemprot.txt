@@ -1,13 +1,18 @@
 Chemical Proteomics: process of identifying protein targets by treating with modified small molecules (probes) which come from libraries or from phenotypic screens.
 
-Two basic types:
-1) Classic - cell lysates incubated withg either (a) bead immobilized or (b) biotinylated probes. (a) is washed to remove non-specific binding and then subjected to LC/MS-MS. (b) is affinity enriched where the biotin binds to beads and then LC-MS/MS. 
+Probe: original small molecule modified with a sorting entity (eg. biotin) and a linker that connects the two.
 
-2) Covalent or Activity based probes (ABPs) - live cells incubated with ABPs. The reactive group in the ABP will bind to specific proteins. The cells are then lysed and the probes are tagged with biotin through a 'click' reaction, affinity enriched and LS/MS-MS.
+Two basic types:
+1) Classic/affinity pulldown - cell lysates incubated with either (a) bead immobilized or (b) biotinylated small molecules. (a) is washed to remove non-specific binding and then subjected to LC/MS-MS. (b) is passed through an affinity column of streptavidin beads where the biotin binds to beads and then LC-MS/MS. Success depends on the design of the probes and selection of the site on the small molecule that can withstand modification with biotin without affecting the functionality. Usually done in-vitro since the probe can't permeate the cell membrane.
+
+2) Covalent - in the classic case above the interaction between the probe and the protein is equilibrium based and is thus prone to dissociation-based losses during affinity purification. Attaching a reactive group that can enable covalent linking of the probe to the protein stabilizes the interaction and prevents equilibrium based losses. Such probes have 3 elements - a reactive group, a selective group (small mol) and a sorting group (biotin)
+
+3) Activity based probes (ABPs) - Enables in-vivo treatment, live cells incubated with the probes. These probes have two elements when incubated - the selective group (small mol) and a functional reporter for visualization and enrichment. The cells are then lysed and the probes are tagged with biotin through a 'click' reaction, affinity enriched and LS/MS-MS.
+
 Details: ABPs consist of 3 basic elements: 1) a tag - to help separate and purify the bound protein. Usually biotin to enable affinity purification, but can be flourescent or radioactive. Attached through a click reaction. 2) a linker - connects 1 to 3 to prevent steric congestion and 3) a warhead - most important element (often derived from enzyme inhibitors) covalently binds to the nucleophile amino acid (usually serine or cysteine) in an enzyme's active site. 
 PS: An enzymes active site usually consists of a catalytic triad - 3 amino acids, one acidic, one base and one nucleophile. The nucleophile is what attacks the substrate.
 
-Chem Prot by itself is limited due to non-specific binding to the beads that is hard to get rid of even with washes. That is where quantitative chemical proteomics steps in.
+Non-specific binding is a problem in chem prot assays. One way to cut down on this is my competition - using a control where the  unmodified compound is incubated along with the probe. In bead immobilized cases, competitive elution can be done with the unmodified compound. The unmodified compound will compete with the probe and reduce the amount of protein available for the probe. Those proteins that show up in high levels in the treatment, but not in the control indicates proteins on interest. Non-specifically bound proteins will show up in more or less equal amounts in both control and treatment.
 
 Quantitative Chemical Proteomics: by quantifying the amount of proteins bounds by the probes, eliminate non-specific binding as those will be much lower than real targets. Usually relative quantitation - probe vs control, different concentrations of probe etc. The most common method of quantitation is by labeling the proteins (certain amino acids) either by isotopes or tags. The labeling can be done either metabolically (culture cells with the labeled amino acids) or chemically after extracting the proteins. 
 
