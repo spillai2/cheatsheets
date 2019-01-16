@@ -176,7 +176,6 @@ sns.violinplot (x='cat col', y='num col', data=df, hue='another cat col', split=
 # to make it a horizontal plot, switch axes of the numerical and categorical variables
 sns.violinplot(x='cat col', y='num col', data=df)
 
-
 #Scatterplot to see a scatter plot of a num variable for different values of a cat variable
 sns.stripplot(x='cat col', y='num col', data=df) # optional argument 'jitter=True' will add separation between the points using randomization
 # combine a stripplot with a violinplot

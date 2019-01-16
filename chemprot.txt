@@ -19,7 +19,7 @@ Quantitative Chemical Proteomics: by quantifying the amount of proteins bounds b
 Commonly used methods of quant chem prot:
 1) SILAC - stable isotope labeling in cell culture: 
 a) Classic treatment: Cells grown in medium containing light (treatment) and heavy (control) isotopes of amino acids. Then lysed and lysate treated with free/soluble compound (treatment) or DMSO (control). Then they are combined and passed through affinity matrix that has the immobilized compound bound to the beads. The beads are then washed to release the bound proteins which are then subjected to LC-MS/MS. Peptides from both treatment and control will elute together as they are mixed and show up side by side on the spectra due to the small difference in mol wt, but the peptides that were bound by treatment with the free compound will not bind to the immobilized column and hence those will be lower in intensity when compared to control. This helps differentiate non-specific binding from specific and the difference in intensity is the relative quantity of the peptide.
-b) Covalent/ABP - same as above except treatment happens in-vitro with the activiy based probe.
+b) ABP - same as above except treatment happens in-vitro with the activiy based probe.
 
 Multiple treatments or varying concentrations can be tried together with a 'spike-in' standard. The treatments are combined separately with the standard, click labeled, affinity pulled down and then LC-MS/MS. The difference in intensity can be seen to be more marked as the concentration of the compound increases.
 
@@ -28,3 +28,11 @@ a) The treatment and control are not mixed, they are affinity pulled down separa
 b) iTRAQ can also be performed on live cells using a clickalble ABP on the cells and then click in the tag after lysis. The control in this case is either DMSO or a mix of the probe and the unmodified compound. The unmodified compound will compete with the probe  thus lowering the number of proteins that can be tagged. The treatment will be the probe (only). The lysates are tagged - the control will have a much lower number of tagged protein than the treatment. On-beads trypsin digestion is performed, peptides iTRAQ labeled and then LC-MS/MS. In this case the reporters from the control will be higher than the treatment.
 
 Another application of quantitative chem prot is to identify the binding sites of compounds. The tag is cleaved off and then subjected to LC-MS/MS to identify the binding site.
+
+--------------------------------------------
+CBT Chem Prot notes
+1) Classic / Affinity pulldown (most basic) - cells/lysates are treated with probes (modified small molecules), then affinity purified (pulldown) and quantified by MS.
+
+2) Competition - same pulldown as above but a free compound is added during the pulldown (in the control) to compete with the immobilized compound.
+
+3) Covalent - probing with a covalently reactive compound/probe, except instead of the free compound a promiscuous reactive reagent (reactive part of the probe?) is used for competition.

@@ -38,3 +38,7 @@ find <path to directory> -name *.txt -exec grep -l 'linear' {} \;
 sysctl -n hw.ncpu
 sysctl -n hw.physicalcpu # physical CPUs
 sysctl -n hw.logicalcpu # logical CPUs
+
+# list files sorted by size 
+ls -lS # from largest to smallest
+ls -lSr # from smallest to largest
