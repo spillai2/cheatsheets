@@ -30,9 +30,3 @@ b) iTRAQ can also be performed on live cells using a clickalble ABP on the cells
 Another application of quantitative chem prot is to identify the binding sites of compounds. The tag is cleaved off and then subjected to LC-MS/MS to identify the binding site.
 
 --------------------------------------------
-CBT Chem Prot notes
-1) Classic / Affinity pulldown (most basic) - cells/lysates are treated with probes (modified small molecules), then affinity purified (pulldown) and quantified by MS.
-
-2) Competition - same pulldown as above but a free compound is added during the pulldown (in the control) to compete with the immobilized compound.
-
-3) Covalent - probing with a covalently reactive compound/probe, except instead of the free compound a promiscuous reactive reagent (reactive part of the probe?) is used for competition.

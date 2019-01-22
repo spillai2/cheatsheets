@@ -241,6 +241,66 @@ df.iplot(kind='surface') # creates 3D plots of dataframes with 3 cols
 df.iplot(kind='bubble', x='c1', y='c2', size='c3') # plot x1 on x, c2 on y and make the size of the bubbles correspond to values of c3
 df.scatter_matrix() # similar to sns.pairplot (plots columns against each other)
 ##########################################################################
-Holoviews
+
+Holoviews - enables simpler more intuitive way of viewing data. The key feature is that it enables you to work with your data numerically as we as plot it, not one or the other. Other libraries will only enable you to do one or the other 
+
 import holoviews as hv
-hv.extension('bokeh') # renders on the browser as bokeh but is a holioviews object
+hv.extension('bokeh') # renders on the browser as bokeh but is a holoviews object
+
+plot = hv.Curve(df, 'x','y') # where y is a quadratic function of y (hence the 'Curve). 'plot' is an hv object, which is a wrapper around the data in df but the metadata contained in the object enables for it to be rendered as a plot in bokeh
+
+plot.data() # the dataframe in plot
+
+'Curve' above is one of HoloViews 'Elements'. Elements are HoloViews' most basic, core primitives. Elements allows to give a dataset a semantically meaningful visual representation, while preserving the raw data supplied and allowing various analysis operations to be applied to it. 
+
+#Most elements can be created as:
+hv.<Element>(data, kdims=None, vdims=None, **kwargs)
+
+Element: any of the dozens of element types (Curve, Histogram, Bar etc).
+data: data in one of a number of formats, such as pandas dataframes, Numpy arrays, lists or dicts.
+kdims: "key dimension(s)", independent variables or 'x', the values for which data was measured.
+vdims: "value dimension(s)", dependent variables or measurements - what was measured or recorded for each value of the key dimensions.
+kwargs: optional keyword arguments specific to that Element type (rarely needed).
+
+Metadata can be added directly to the plot object
+hv.<Element>(df, (<kdims col>, '<descriptor of kdim col>'), (<vdims col>, '<descriptor of vdim col>'))
+# the descriptor will show up on the plot as axis labels
+
+The type of an element is a declaration of important facts about the data, which gives HoloViews the hint required to generate a suitable visual representation from it. Calling it a Curve is a declaration from the user that the data consists of samples from a continuous function, which is why HoloViews plots it as a connected object. 
+
+An object created with a certain element can be cast into another element. For eg. hv.Scatter(<obj created with Curve>) will display the object as a scatterplot.
+
+A grid data structure can be created as an Image object where the colors convey the magnitude of the values. All holoviews objects can call the hist() method which will show the distribution of the values. 
+
+# to add labels after the object has been created
+object.redim.label(var1='New label', var2='New label')
+
+# to add a unit
+object.redim.unit(var1='%') # adds % as the unit for var1 (will be displayed in the plot)
+
+# Statistical elements
+# to draw a histogram
+hv.Distribution(data, '<col>')
+
+# Multiple plots side by side:
+layout = hv.<Element1>(...) + hv.<Element2>(...) + hv.<Element3>(...) + hv.<Element4>(...)
+layout.cols(2) # displays above objects in 2 cols ( 2 rows/2 cols)
+print(layout) # displays the 4 different components above
+layout.<component1> + layout.<component4> # displays just the first and fourth component
+
+# cloning - clone one object into another with or without changes
+objclone = obj.clone((x, sin(x)), label='Sine of x') # clones an obj and changes y to sine of x in the clone
+
+# Overlays
+The operator '*' enables overlaying elements into a single plot, if they live in the same space (with matching dimensions, and preferably with similar ranges over those dimensions). Overlays also use colors to differentiate between elements of the same group
+
+curve_obj_cannonball * curve_obj_tennisball # will draw two curves with different colors and the title will just be the group title (say 'Trajectory'), with a legend on the side that labels tennisball and cannonball
+
+# slicing and selecting
+Holoviews objects can be sliced using array like syntax or using the 'select' method
+
+obj[-10:5] # slices obj where x values are from -10 to 0.5
+obj[-10:5, 0:60] # slices obj where x values are from -10 to 0.5 *and* y values are from 0-60
+# same slices as above using 'select'
+obj.select(x=(-10,0.5))
+obj.select(x=(-10,0.5), y=(0,60))
