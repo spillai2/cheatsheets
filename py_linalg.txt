@@ -1,0 +1,61 @@
+Vector norms/lengths refer to the magnitude of a vector, which is the distance of the vector co-ordinate from origin in a vector space - denoted by ||v|| where v is a vector of elements a1, a2, a3 etc. Norms are used as regularization methods when fitting an ML algorithm to keep the co-efficients small.
+1) L1 norm (1 is superscript of L) - Manhattan distance is the sum of the absolute values of the elements of a vector. 
+||v||1 = |a1| + |a2| + |a3|
+2) L2 norm (2 is superscript of L) - Euclidean distance. ||v||2 = square root of (a1 squared + a2 squared + a3 squared). Most commonly used in regularization.
+3) Linf aka max norm - maximum value of the vector. Used mainly for regularizing neural networks. 
+
+--------------------------------------
+Matrix multiplication - Hadamard product - two matrices of the same dimensions can be multiplied just like they can be added/subtracted.
+
+Symmetric matrix - square matrix where the top right triangle is the same as the bottom left. Transpose is the same as the original matrix.
+
+Triangular matrices are those where all the values are either in the top-right (upper triangular) or lower-left (lower triangular), other values are all zeros.
+
+Diagonal matrices have all the values along the diagonals, rest are zeros.
+
+Identity matrices have 1 across the diagonal and 0 everywhere else. Equivalent of 1 in scalar multiplication, gives the same matrix when multiplied. A matrix when multiplied by its inverse gives an identity matrix (same as 2 * 1/2 gives 1 in scalar)
+
+Orthogonal matrices are those where the inverse is equal to the transpose, so the dot product of the matrix and its transpose is an identity matrix.
+
+The inverse of a matrix is a matrix which when multiplied with the original matrix will give an identity matrix, like a reciprocal in scalar calculations. Not all matrices has inverses, those that don't have inverses are called singular matrices.
+
+Trace of a matrix is the sum of its diagonal elements.
+
+Determinant
+
+Rank of a matrix - the number of linearly independent directions in the matrix
+
+Sparse matrix - matrix where majority of the values are zeros. As opposed to dense matrices which have values in most of the cells. Of great interest in ML because sparsity can result in enormous computational savings since large matrix problems are usually sparse. Sparsity = # of zeros/# of total elements.
+
+Sparse matrices come up in encoding schemes used in the preparation of data. Three common examples include:
+One hot encoding, used to represent categorical data as sparse binary vectors.
+Count encoding, used to represent the frequency of words in a vocabulary for a document
+TF-IDF encoding, used to represent normalized word frequency scores in a vocabulary
+
+Some areas of study within machine learning must develop specialized methods to address sparsity directly as the input data is almost always sparse. Three examples include:
+Natural language processing for working with documents of text.
+Recommender systems for working with product usage within a catalog.
+Computer vision when working with images that contain lots of black pixels.
+
+The solution to representing and working with sparse matrices is to use an alternate data structure to represent the sparse data. The zero values can be ignored and only the data or non-zero values in the sparse matrix need to be stored or acted upon. There are multiple data structures that can be used to efficiently construct a sparse matrix; three common examples are listed below:
+􏰀Dictionary of Keys. A dictionary is used where a row and column index is mapped to a value.
+􏰀List of Lists. Each row of the matrix is stored as a list, with each sublist containing the column index and the value.
+􏰀Coordinate List. A list of tuples is stored with each tuple containing the row index, column index, and the value.
+
+The solution to representing and working with sparse matrices is to use an alternate data structure to represent the sparse data. The zero values can be ignored and only the data or non-zero values in the sparse matrix need to be stored or acted upon. There are multiple data structures that can be used to efficiently construct a sparse matrix; three common examples are listed below.
+Dictionary of Keys. A dictionary is used where a row and column index is mapped to a value.
+List of Lists. Each row of the matrix is stored as a list, with each sublist containing the column index and the value.
+Coordinate List. A list of tuples is stored with each tuple containing the row index, column index, and the value.
+
+There are also data structures that are more suitable for performing efficient operations; two commonly used examples are listed below.
+􏰀Compressed Sparse Row. The sparse matrix is represented using three one-dimensional arrays for the non-zero values, the extents of the rows, and the column indexes.
+􏰀Compressed Sparse Column. The same as the Compressed Sparse Row method except the column indices are compressed and read first before the row indices.
+The Compressed Sparse Row, also called CSR for short, is often used to represent sparse matrices in machine learning given the efficient access and matrix multiplication that it supports.
+--------------------------------------
+Tensors
+Vectors are 1-dimensional, matrices are 2-dimensional, tensors are 'n' dimensional arrays.
+In the general case, an array of numbers arranged on a regular grid with a variable number of axes is known as a tensor. A vector is a one-dimensional or first order tensor and a matrix is a two-dimensional or second order tensor. Tensor notation is much like matrix notation with a capital letter representing a tensor and lowercase letters with subscript integers representing scalar values within the tensor.
+
+Tensor addition and subtraction works the same way as matrices, so does the hadamard product (element-wise multiplication) and element-wise division.
+
+The tensor product operator is often denoted as a circle with a small x in the middle. Given a tensor A with q dimensions and tensor B with r dimensions, the product of these tensors will be a new tensor with the order of q + r or, said another way, q + r dimensions. The tensor product is not limited to tensors, but can also be performed on matrices and vectors. Basically each element of the first tensor is multiplied with the entire second tensor.
