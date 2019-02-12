@@ -41,7 +41,12 @@ All cars can make the same sound.
 Adding an __str__ method in the class overrides the object's default str method when print(obj) is called and can give whatever details of the object the user wants to.
 
 def __str__(self):
-    return "The object has a attribute x that has the value {} and an attribute y that is {}".format(self.x, self.y 
+    return "The object has a attribute x that has the value {} and an attribute y that is {}".format(self.x, self.y
+
+Class vs instance variables:
+When the interpreter sees an expression of the form <obj>.<varname>, it checks if the object has an instance variable set. If so, it uses that value. If it doesn’t find an instance variable, it checks whether the class has a class variable. If it doesn't find the variable in either of these places it issues a runtime error.
+
+Method definitions also create class variables, when the interpreter sees function calls within the instance, they are interpreted as variables first and then executed.
 
 Class methods are variants of static methods. Instead of no parameter or self/object parameter, this method receives a 'cls' parameter, meaning the class itself. Decoarated with @classmethod.
 
