@@ -490,5 +490,3 @@ Called n-fold cross validation, where n is the number of chunks of the training 
 Another way to improve on 1-nn is to change the distance function. Euclidean in general is not a great distance method in some cases, for eg. image identification (say hand written digits). A slight curve or rotation gives a much higher distance than it actually is. Other methods that are more stable under small translations and rotations (eg. tangent distance) or a broader family of natural deformations (shape context). Domain knowledge can help determine the best distance method. Feature selection also helps immensely - from the available data, choose only features that are relevant for classification.
 
 The speed of NN is influenced directly by the size of the training set - the larger they are, the longer it takes to train them. Luckily there are data structures available and included in standard python libraries, that speed up NN significantly.
-
-The wide open office space in 186 is a big source of distraction for many with people talking loud, taking long meetings from their desks etc. Are there any plans to address this?  
