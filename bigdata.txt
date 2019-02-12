@@ -2,7 +2,7 @@ When data is around 8GB or less, it can be processed in your local computer's RA
 
 A key feature of a distributed system is fault tolerance. If one or more nodes in the system fail, the network can still work fine with the working nodes. The data is duplicated across multiple nodes to prevent data loss should a node go down.
 
-Hadoop is an architecture to distribute very large files and datasets across multiple machines. It uses HDFS (Hadoop Distributed File System) for this. It duplicates small blocks of data for fault tolerance and afster processing. It has a main 'name' node which controls multiple 'data' nodes. It uses blocks of data usually 128MB and distributes across nodes. Each block is replcated 3 times for fault tolerance. Smaller blocks provide more parallelization during processing.
+Hadoop is an architecture to distribute very large files and datasets across multiple machines. It uses HDFS (Hadoop Distributed File System) for this. It duplicates small blocks of data for fault tolerance and faster processing. It has a main 'name' node which controls multiple 'data' nodes. It uses blocks of data usually 128MB and distributes across nodes. Each block is replcated 3 times for fault tolerance. Smaller blocks provide more parallelization during processing.
 
 MapReduce is the programming model that does the computations on Hadoop. It splits a computation task to a distributed set of files such as HDFS. It has a job tracker that sits in the name node and task trackers that sit on the data/worker nodes. The job tracker sends the code to run on the nodes and the task trackers allocate memory and CPU to the jobs.
 
@@ -22,8 +22,9 @@ d) Worker nodes which execute the tasks
 The data in the DAGs are shareable meaning different operations can act on the same data.
 
 Most development work happens with the RDD objects, the rest occur under the hood. RDD objects are immutable, lazily eavluated and cacheable. Two types of RDD operations:
-1) Transformations
-2) Actions
+1) Actions
+2) Transformations
+
 A Spark job is a sequence of transformations with a final action.
 
 Basic Actions:
@@ -44,10 +45,21 @@ ReduceByKey - aggregate and return a pair RDD
 Both Reduce and ReduceByKey are similar to a Groupby operation.
 
 Spark and Python:
-To setup install Java, Scala (java-based), Hadoop and Spark on a server (EC2 on aws would work fine since it actually distributes the computing)
+To setup install Java, Scala (java-based), Hadoop and Spark on a server (EC2 on aws would work fine since it actually distributes the computing).
+
+The first step is to create a spark context that lets the user interact with a cluster
 
 from pyspark import SparkContext # SparkContext is what connects you to a Spark cluster.
 sc = SparkContext()
+
+Create an RDD
+There are two ways to create RDDs: a) parallelizing an existing collection in your driver program, or b) referencing a dataset in an external storage system, such as a shared filesystem, HDFS, HBase, or any data source offering a Hadoop InputFormat.
+
+a)
+a = [1,2,3,4]
+rdd = sc.parallelize(a)
+
+b)
 file = sc.textFile('<path to a text file>') # create an RDD object called file, reading in a text file
 file.count() # counts the number of lines in file
 file.first() # returns the first line
@@ -173,7 +185,11 @@ df = table.to_pandas()
 ----------------------------------------------
 #The first operation is to get the sparkcontext which is what connects your code to all things spark
 import pyspark
-sc = pyspark.SparkContext(master='local[4]') # means run spark locally on 4 cores of your CPU
+sc = pyspark.SparkContext(master='local[4]') # means run spark locally with 4 workers
+
+You can only have one spark context per user since spark is a user-based system. A single user can use one context to communicate with their cluster.
+
+sc.stop() # stops the current context
 
 # next step is to create an RDD
 a = sc.parallelize(range(3)) # now a is an rdd. 
@@ -187,3 +203,76 @@ a.collect() # returns a list [0,1,2], opposite of parallelize that distributes t
 a.map(lambda x: x**2).collect() # square all the elements in a and collect back the list of squares
 a.reduce(lambda x,y: x+y).collect() # reduce calculates sum of all numbers
 
+# reduce returns a single element from a list
+a.reduce(lambda x,y: x+y) # sums up the elements of a list and returns the sum
+
+reduce should not do operations based on order (like minus).
+While using lambdas is convenient, any regular python function can be used for Map and reduce operation
+----------------------------------------------
+sudo hostname -s 127.0.0.1
+----------------------------------------------
+Sparkcontext can be initiated with a certain number of workers/worker nodes
+
+sc = pyspark.SparkContext(master='local[4]') # spawns 4 workers
+
+The number of workers is ideally equal to the number of cores available. Increasing the workers beyond that will not result in much improvement in performance since multiple workers will be competing for the same core and basically just switch context between them. This can be checked by repeating the same operation looping through a range (say 1-10) and checking the times of execution. For a 4-core machine, the time plateaus around 4 workers.
+
+Spark uses lazy evaluation (compute only when needed, otherwise generate an execution plan) to save space and time. If an RDD is needed for many computations, it can be cached to speed up the computations.
+
+RDD.map(<some function>).cache() # caches the result of running <some function>
+
+RDDs by default contains the same number of partitions as the number of workers it was initiated with. But that can be changed.
+
+You should have at least the same number of partitions as workers. At times more (smaller) partitions than workers is beneficial.
+
+rdd.repartition(n) # changes rdd to use n partitions
+rdd.map(lambda x: (x,x)).partitionBy(n) # method partitionBy expects a key-value RDD, hence the lambda that returns (x,x) tuple.
+
+When partitioned as above, one issue that arises is that another operation can render one or more of the partitions useless for further operations since they dont have any elements left after the previous operation. This happens because the keys and values are the same. To rectify this, the once operated on RDDs can be repartitioned with keys can be altered to be different. For eg. the key can be value/# of partitions.
+
+rdd.map(lambda x: (x[1]/n,x)).partitionBy(n)
+
+Another option is to use 'repartition(n)' which will randomnly distribute the RDD among n partitions. In this case there is no need for a key, but you have less control over partitioning.
+
+rdd.repartition(n)
+
+In general, spark does not allow workers to access specific elements in an RDD, whatever function needs to run on the whole RDD. This can be a limitation. One way around is to use the glom() function that splits a partition into a tuple of elements. While the values themselves are immutable, they can be accessed by index and properties like length can be calculated. 
+
+rdd.glom().map(len).collect() # 
+
+Chaining:
+# A sequential operation to find the sum of squares of a list
+rdd = sc.parallelize([1,2,3,4])
+sq = rdd.map(lambda x: x*x)
+sum = sq.reduce(lambda x,y: x+y)
+
+# chaining operation to do the same
+sum = rdd.map(lambda x: x*x).reduce(lambda x,y: x+y)
+
+chaining avoids the need to create intermediate rdds thereby saving memory and time. It is a model of lazy evaluation.
+
+Basic operations on RDDs
+
+rdd.count() # number of elements in the RDD
+rdd.first() # fetch the first element
+rdd.take(n) # fetch the first n elements
+
+# Sampling an RDD - since RDDs are usually very large, it is common to take a sample from it
+rdd.sample(<with replacement boolean>, <fraction>).collect() # first flag says if it should sample with replacement or not and the second says what fraction of the total to sample
+
+# filter an RDD
+rdd.filter(lambda x: x > 5).collect() # returns all elements > 5
+
+# distinct - get rid of duplicates
+rdd.distinct().collect()
+
+# flatmap - acts on elements of a lists of lists and returns a flat list. For eg. given a list of sentences, returns individual words as a single list
+rdd.flatmap(lambda x: x.split(" ")).collect()
+
+# Set operations - acting on multiple RDDs to find unions, intersections, complements etc
+rdd1.union(rdd2).collect() # get a union of the 2 rdds
+rdd1.union(rdd2).distinct().collect() # get a merged distinct list of elements from the 2 rdds
+
+rdd1.intersection(rdd2).collect() # fetch elements in common
+rdd1.subtract(rdd2).collect() # fetch elements in rdd1 not present in rdd2
+rdd1.cartesian(rdd2).collect() # give all combinations of elements in the 2 rdds, as tuples
