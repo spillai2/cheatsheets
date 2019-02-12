@@ -118,6 +118,11 @@ pred = clf.predict(features_test)
 Bayes error rate is the lowest of all algorithms. In theory this is the best classification algorithm, but in practice computing it is impossible in most cases because we do not know the conditional distribution of the prediction given the predictors. Also it assumes the features are independent which is seldom the case in real-world data. So it serves as an unattainable gold standard against which to compare other methods.
 -------------------------------------------------------
 
+1-Nearest neighbor
+Classification of data based on euclidean distance in vector space. For eg. classification of hand written digits. A set of training data will have a large number of hand-written digits and associated labels. Training on this data, the algorithm outputs a model (classifier) that can predict a newly supplied input associating it with one of the labels from the training data. This is done by calculating the euclidean distance between points in the 2 vector spaces - one of the input data and one of the training data. In the case of an image of 784 pixels (28x28) the vector is a concatenation of the 28 rows  (each pixel is an element of such a vector) and the distnace is calculated between corresponding pixels of the input and training data. The distances are summed up and the label that correponds to the image that has the lowest distances (nearest neighbor) is output as the prediction.
+
+Euclidean distance of a vector is denoted by ||V|| and is the square root of the sum of the squares of the sides of a right angle triangle that joins the two points. That is in case of a two dimensional space. In case of 784 dimensions, we take the sqrt of the sum of the squared sum of the difference between the two vectors.
+
 K-Nearest Neighbors (KNN)
 Classification algorithm. Given a set of data points that belong to two or more different categories, predict what category a new unknown point would belong to. For this you choose a distance metric called 'k' and then classify all the points within that distance metric. After that you predict what category the unknown point belongs to depending on what category is most represented in its 'k' nearest neighbors. For eg. k=10 means you choose the 10 nearest points to the unknown point and see what category is most represented, then assign the unknown point to it.
 
@@ -349,7 +354,15 @@ Neural networks are modeled after biological neural networks and attempt to allo
 
 The human brain has interconnected neurons with dendrites that receive inputs and then based on those inputs produce an electrical signal output through the axon which is transmitted to the adjacent neuron.
 
-Neural networks attempt to solve problems that would normally be easy for humans but hard for computers (like recognizing a person from a picture).
+Neural networks attempt to solve problems that would normally be easy for humans but hard for computers (like recognizing a person from a picture). The key feature of NN when compared to other algorithms is that it also takes into account the interactions between the different parameters (where as algorithms like linear regression take each parameter separately and do not consider how they could be interactiing with each other). The input to an NN is called the input layer and the final output is the output layer. In between are hidden layers (one or more) that are interactions between the different nodes in the input layer. The whole system with all the layers is called a network (just like network of neurons).
+
+For eg. lets say the goal is to calculate how many transactions a customer would make in a year at a bank based on input data that includes the persons age, number of children and number of accounts. Note that each of these parameters could be interacting with each other, so a straight prediction will not give an accurate result. The parameters form the nodes of the input layer. The 'forward propagation' algorithm will pass this information through the network to make a prediction. Lets say we consider only the number of children and accounts. A given customer has 2 children and 3 accounts. Lines connect the input to the hidden layer. Each line has associated with it a 'weight' that indicates how strongly that input affects the hidden node. The value at each node is the sum of the (weight * value) of each input node that is connected to it. The hidden layer is then connected to the output node by lines which also come with weights and follow the same protocol for calculation. The multiply-add process is similar to the dot product in lin algebra (product of two matrices).
+
+The dot product of input and weights is only half of the story. To get to the full power of NNs, there is an 'activation function' that is applied to the dot product at each node to give the node's value. This function calculates non-linear relationships in the interactions - for eg. how does going from 2 children to 3 change behavior as opposed to going from 3 to 4. The accepted activation function is ReLU (Rectified Linear Unit) function which takes a single number input and returns the number if positive and 0 if negative.
+
+Deep networks build patterns of representations of the data which gets increasingly complex as it goes through the layers. This partiallyb replaces the need for feature engineering which extracts the most useful features.
+
+Deep learning - use of many successive hidden layers (as opposed to one in classic NNs) resulting in a 'deeper' network. Used to be 5-10-15 layers but can now go into the thousands.
 
 Simplest neural network possible: the perceptron. It consists of one or more inputs, a processor and a single output. It follows the feed forward model meaning inputs are fed into the neuron, are processed and results go to the output. It has 4 main steps:
 1) Receive inputs
@@ -460,3 +473,22 @@ import tensorflow.contrib.learn.python.learn as learn
 classifier = learn.DNNClassifier(hidden_units=[x, y, z], n_classes=<num classes>)
 classifier.fit(X_train, y_train, steps=<num of iterations>, batch_size=<size of each batch of data>)
 classifier.predict(X_test)
+
+--------------------------------------------------------
+ML edx course
+
+1-Nearest neighbor
+Classification of data based on euclidean distance in vector space. For eg. classification of hand written digits. A set of training data will have a large number of hand-written digits and associated labels. Training on this data, the algorithm outputs a model (classifier) that can predict a newly supplied input associating it with one of the labels from the training data. This is done by calculating the euclidean distance between points in the 2 vector spaces - one of the input data and one of the training data. In the case of an image of 784 pixels (28x28) the vector is a concatenation of the 28 rows  (each pixel is an element of such a vector) and the distnace is calculated between corresponding pixels of the input and training data. The distances are summed up and the label that correponds to the image that has the lowest distances (nearest neighbor) is output as the prediction.
+
+Euclidean distance of a vector is denoted by ||V|| and is the square root of the sum of the squares of the sides of a right angle triangle that joins the two points. That is in case of a two dimensional space. In case of 784 dimensions, we take the sqrt of the sum of the squared sum of the difference between the two vectors.
+
+k-nearest neighbors
+To improve upon 1-nn, instead of taking just one closest neighbor we take a few (k) closest neighbors and return the label that occurs most frequently in those closest neighbors. To choose the optimum k by calculating the error rates for a range of ks, use a method called cross validation. The error rates (wrong classifications) will need to be calculated in the training data itself. For this, the training data is chunked into equal size chunks - one of the chunks is considered test data and the others are used to train the data. This is done iteratively for all the chunks ie each chunk will get to be test data at one point and training data at all other points. The error rates thus obtained are then averaged.
+
+Called n-fold cross validation, where n is the number of chunks of the training data.
+
+Another way to improve on 1-nn is to change the distance function. Euclidean in general is not a great distance method in some cases, for eg. image identification (say hand written digits). A slight curve or rotation gives a much higher distance than it actually is. Other methods that are more stable under small translations and rotations (eg. tangent distance) or a broader family of natural deformations (shape context). Domain knowledge can help determine the best distance method. Feature selection also helps immensely - from the available data, choose only features that are relevant for classification.
+
+The speed of NN is influenced directly by the size of the training set - the larger they are, the longer it takes to train them. Luckily there are data structures available and included in standard python libraries, that speed up NN significantly.
+
+The wide open office space in 186 is a big source of distraction for many with people talking loud, taking long meetings from their desks etc. Are there any plans to address this?  
